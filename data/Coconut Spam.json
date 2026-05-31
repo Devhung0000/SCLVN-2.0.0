@@ -1,0 +1,43 @@
+{
+    "id": 64189690,
+    "name": "Coconut Spam",
+    "author": "Needless",
+    "creators": ["DrCuber"],
+    "verifier": "JoinMolten",
+    "verification": "https://youtu.be/6UM9FOkqjy4",
+    "percentToQualify": "100",
+    "password": "Alternating/CBF",
+    "records": [
+       
+        {
+            "user": "AstroGuy", 
+            "link": "240fps",
+            "hz": 240,
+            "percent": 100
+         },
+        {
+            "user": "shafikdabest",
+            "link": "https://www.youtube.com/watch?v=lA4LR3OtOi0",
+            "hz": 240,
+            "percent": 100
+         },
+        {
+            "user": "Blessed",
+            "link": "https://discord.com/channels/1420111313220403444/1491823933605806210/threads/1498668740689006622",
+            "hz": 240,
+            "percent": 100
+          },
+        {
+            "user": "smelly bandi",
+            "link": "no link cuz im to lazy to put it",
+            "hz": 240,
+            "percent": 100
+        },
+        {
+            "user": "grassydash",
+            "link": "https://www.youtube.com/watch?v=m8Yj4OIPER0",
+            "hz": 60,
+            "percent": 100
+        }
+    ]
+}
