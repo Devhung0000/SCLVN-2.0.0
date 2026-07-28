@@ -1,0 +1,20 @@
+{
+    "id": 69599392,
+    "name": "quyetgd challenge",
+    "author": "HyperVN",
+    "creators": ["HyperVN"],
+    "verifier": "HyperVN",
+    "verification": "https://youtu.be/WefHSrsuubg",
+    "percentToQualify": 100,
+    "fps": "60",
+    "handcam": "recommended",
+    "device": "All",
+    "method": "Alternate",
+    "records": [
+        {
+        "user": "giangdelt",
+        "hz": "60",
+        "percent": 100
+        }
+    ]
+}
