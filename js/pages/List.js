@@ -67,17 +67,21 @@ export default {
                             <p>{{ level.id }}</p>
                         </li>
                         <li>
+                            <div class="type-title-sm">FPS</div>
+                            <p>{{ level.fps || 'n/a' }}</p>
+                        </li>
+                        <li v-if="level.method">
                             <div class="type-title-sm">Method</div>
-                            <p>{{ level.password || 'Free to Copy' }}</p>
+                            <p>{{ level.method }}</p>
                         </li>
                     </ul>
                     <h2>Records ({{ level.records.length }})</h2>
-                    <p v-if="selected + 1 <= 200"><strong>{{ level.percentToQualify }}%</strong> or better to qualify</p>
-                    <p v-else-if="selected +1 <= 500"><strong>100%</strong> or better to qualify</p>
+                    <p v-if="selected + 1 <= 75"><strong>{{ level.percentToQualify }}%</strong> or better to qualify</p>
+                    <p v-else-if="selected +1 <= 150"><strong>100%</strong> or better to qualify</p>
                     <p v-else>This level does not accept new records.</p>
-                    <p v-if="level.legacy">This level should be beaten with legacy hitboxes</p>
-                    <p v-else-if="level.legacy == false">This level must be beaten using the new hitboxes</p>
-                    <p v-if="level.twoplayer">This level must be beaten solo to qualify</p>
+                    <p v-if="level.handcam"><strong>Handcam is {{ level.handcam }} for this level.</strong></p>
+                    <p v-if="level.device"><strong>Device: {{ level.device }}</strong></p>
+                    <p v-else>This level does not accept new records.</p>
                     <table class="records">
                         <tr v-for="record in level.records" class="record">
                             <td class="percent">
@@ -109,7 +113,7 @@ export default {
                         	    <option class="type-label-lg" value="All" selected>Any Method</option>
                                 <option class="type-label-lg" value="Alternating">Alternating</option>
                                 <option class="type-label-lg" value="Jitter">Jitter</option>
-                                <option class="type-label-lg" value='["Altjitter","Alterjitter","Ludwig"]'>Alterjitter/Ludwig</option>
+                                <option class="type-label-lg" value='["Altjitter","Alterjitter"]'>Alterjitter</option>
                                 <option class="type-label-lg" value="Rake">Rake</option>
                                 <option class="type-label-lg" value='["G502","G512","K55","K70"]'>Capped Devices</option>
                                 <option class="type-label-lg" value='["Scroll Clicking","Geode Scroll","FlyHec","Lip Spam"]'>Others</option>
@@ -118,12 +122,12 @@ export default {
 					        <button class="btn" type="button" @click="applyFilters()">Filter!</button>
                         </div>
 					</form>
-                    <a class="nav__icon" href="https://discord.gg/d47pcnV7Fg">
+                    <a class="nav__icon" href="https://discord.gg/Qcj5JSRKa">
                         <img src="../assets/discord.svg" alt="Discord Logo" />
                     </a>
                     <p>
-                    	<a href="https://discord.com/invite/d47pcnV7Fg">
-                        	join our discord please
+                    	<a href="https://discord.gg/Qcj5JSRKa">
+                        	Join the Discord server for more information about the list and Rules!
                         </a>
                     </p>
 					<h2>Changelog</h2>
@@ -165,31 +169,10 @@ export default {
                     </template>
                     <h2>Submission Requirements</h2>
                     <h3 style="font-weight: 550;">
-                        Record submission:
+                        Submission Rules:
                     </h3>
                     <p>
-                        - Achieved the record without using hacks, Footage must not be cropped
-                    </p>
-                    <p>
-                        - Completions done after 5/30/26 must have a previous death in the recording
-                    </p>
-                    <p>
-                        - Use of bots or autoclickers will result in a permanent list ban
-                    </p>
-                    <p>
-                        - Levels must be made ON SCRATCH, levels on CodeTorch are also allowed
-                    </p>
-                    <h3 style="font-weight: 550;">
-                        Level requirement:
-                    </h3>
-                    <p>
-                        - Levels must be more than 5 clicks in length
-                    </p>
-                    <p>
-			- Bug fixes will not place seperately
-                    </p>
-                    <p>
-                        - Lazily modified levels will be taken on a case by case basis
+                        -The Website cannot displays the entire rules here, Join the server <a href="https://discord.gg/Qcj5JSRKa" target="_blank">here</a> to view the full rules!
                     </p>
                 </div>
             </div>
