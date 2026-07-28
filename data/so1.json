@@ -1,0 +1,20 @@
+{
+    "id": 119443950,
+    "name": "so1",
+    "author": "finaliteration",
+    "creators": ["finaliteration"],
+    "verifier": "chillguy73",
+    "verification": "https://www.youtube.com/watch?v=7Va_mCR80XI",
+    "percentToQualify": 100,
+    "fps": "Any",
+    "handcam": "necessary",
+    "device": "All",
+    "method": "Jitter",
+    "records": [
+        {
+        "user": "HGL2",
+        "hz": "60",
+        "percent": 100
+        }
+    ]
+}

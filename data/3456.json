@@ -1,0 +1,26 @@
+{
+    "id": 72393407,
+    "name": "3456",
+    "author": "TipsX",
+    "creators": ["TipsX"],
+    "verifier": "TipsX",
+    "verification": "https://youtu.be/8aAxPD1XOs8",
+    "percentToQualify": 100,
+    "fps": "60",
+    "handcam": "recommended",
+    "device": "All",
+    "method": "Alternate",
+    "records": [
+        {
+        "user": "giangdelt",
+        "hz": "60",
+        "percent": 100
+        },
+        {
+        "user": "Baominh",
+        "hz": "60",
+        "percent": 100,
+        "link": "https://youtu.be/cJAhP4Sr15s"
+        }
+    ]
+}

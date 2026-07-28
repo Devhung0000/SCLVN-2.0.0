@@ -1,0 +1,20 @@
+{
+    "id": 144416025,
+    "name": "60hz spam III",
+    "author": "baominh",
+    "creators": ["baominh"],
+    "verifier": "baominh",
+    "verification": "https://www.youtube.com/watch?v=WTdt19Yd35Q",
+    "percentToQualify": 100,
+    "fps": "60",
+    "handcam": "recommended",
+    "device": "All",
+    "method": "Alternate",
+    "records": [
+        {
+        "user": "HGL2",
+        "hz": "60",
+        "percent": 100
+        }
+    ]
+}

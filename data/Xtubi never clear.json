@@ -1,0 +1,21 @@
+{
+    "id": 144780269,
+    "name": "Xtubi never clear",
+    "author": "JunhaHoangGD",
+    "creators": ["JunhaHoangGD"],
+    "verifier": "JunhaHoangGD",
+    "verification": "https://youtu.be/38mZaUfiRHo?si=oLALKSxRo8yD_Ccx",
+    "percentToQualify": 100,
+    "fps": "CBF",
+    "method": "Alternate",
+    "handcam": "recommended",
+    "device": "All",
+    "records": [
+        {
+        "user": "Baominh",
+        "hz": "60",
+        "percent": 100,
+        "link": "https://youtu.be/0POCq0HxrEA"
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "id": 145196786,
+    "name": "sabubu lex challeng",
+    "author": "sakiraGMD",
+    "creators": ["sakiraGMD"],
+    "verifier": "sakiraGMD",
+    "verification": "https://youtu.be/_dMAp0rv-mk?si=WvgiurNb7zlV8IMo",
+    "percentToQualify": 100,
+    "fps": "Any",
+    "handcam": "recommended",
+    "device": "All",
+    "method": "Alternate",
+    "records": [
+        {
+        "user": "chillguy73",
+        "hz": "60",
+        "percent": 100
+        },
+        {
+        "user": "giangdelt",
+        "hz": "240",
+        "percent": 100
+        },
+        {
+        "user": "finaliteration",
+        "hz": "240",
+        "link": "https://youtu.be/Lc2NU7kaSJE",
+        "percent": 100
+        },
+        {
+        "user": "HGL2",
+        "hz": "CBF",
+        "percent": 100
+        },
+        {
+        "user": "NookGD",
+        "hz": "CBF",
+        "percent": 100
+        },
+        {
+        "user": "Baominh",
+        "hz": "CBF",
+        "percent": 100,
+        "link": "https://youtu.be/_glBepdfUN8"
+        }
+    ]
+}

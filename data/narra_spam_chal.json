@@ -1,0 +1,25 @@
+{
+    "id": 143621505,
+    "name": "narra spam chal",
+    "author": "vphogn69",
+    "creators": ["vphogn69"],
+    "verifier": "vphogn69",
+    "verification": "https://www.youtube.com/watch?v=bqFY5Quktdc",
+    "percentToQualify": 100,
+    "fps": "CBF",
+    "handcam": "necessary",
+    "device": "All",
+    "method": "Rake",
+    "records": [
+        {
+        "user": "QuyetDat",
+        "hz": "CBF",
+        "percent": 100
+        },
+        {
+        "user": "giangdelt",
+        "hz": "CBF",
+        "percent": 100
+        }
+    ]
+}
