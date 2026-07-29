@@ -201,38 +201,26 @@
    PLAYER TITLE - TOP 1 / 2 / 3
    ========================================= */
 
-.page-leaderboard .player-title.top-1 {
-    background: linear-gradient(
-        135deg,
-        #f6d365,
-        #dca928
-    );
-
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+.page-leaderboard .player .player-title.top-1 {
+    color: #dca928 !important;
+    background: linear-gradient(135deg, #f6d365, #dca928) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
 }
 
-.page-leaderboard .player-title.top-2 {
-    background: linear-gradient(
-        135deg,
-        #cfd4d6,
-        #8e969a
-    );
-
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+.page-leaderboard .player .player-title.top-2 {
+    color: #8e969a !important;
+    background: linear-gradient(135deg, #cfd4d6, #8e969a) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
 }
 
-.page-leaderboard .player-title.top-3 {
-    background: linear-gradient(
-        135deg,
-        #d18a5a,
-        #a8582e
-    );
-
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+.page-leaderboard .player .player-title.top-3 {
+    color: #a8582e !important;
+    background: linear-gradient(135deg, #d18a5a, #a8582e) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
 }
