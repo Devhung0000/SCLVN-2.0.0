@@ -33,7 +33,7 @@
 .page-leaderboard .board {
     table-layout: auto;
     display: block;
-    width: 100%;
+    width: 80%;
 }
 .page-leaderboard .board .rank .flag {
     padding-block: 1rem;
@@ -139,34 +139,30 @@
     font-weight: 800;
 }
 /* TOP 1 */
-.page-leaderboard .board tr.top-1 {
+.page-leaderboard .board tr.top-1 td {
     background: linear-gradient(135deg, #f6d365, #dca928);
 }
 
-.page-leaderboard .board tr.top-1 .user button,
-.page-leaderboard .board tr.top-1 .user.active button {
-    background: transparent;
-    color: inherit;
-}
-
 /* TOP 2 */
-.page-leaderboard .board tr.top-2 {
+.page-leaderboard .board tr.top-2 td {
     background: linear-gradient(135deg, #cfd4d6, #8e969a);
 }
 
-.page-leaderboard .board tr.top-2 .user button,
-.page-leaderboard .board tr.top-2 .user.active button {
-    background: transparent;
-    color: inherit;
-}
-
 /* TOP 3 */
-.page-leaderboard .board tr.top-3 {
+.page-leaderboard .board tr.top-3 td {
     background: linear-gradient(135deg, #d18a5a, #a8582e);
 }
 
-.page-leaderboard .board tr.top-3 .user button,
-.page-leaderboard .board tr.top-3 .user.active button {
-    background: transparent;
-    color: inherit;
+/* Bo góc bên trái */
+.page-leaderboard .board tr.top-1 td:first-child,
+.page-leaderboard .board tr.top-2 td:first-child,
+.page-leaderboard .board tr.top-3 td:first-child {
+    border-radius: 12px 0 0 12px;
+}
+
+/* Bo góc bên phải */
+.page-leaderboard .board tr.top-1 td:last-child,
+.page-leaderboard .board tr.top-2 td:last-child,
+.page-leaderboard .board tr.top-3 td:last-child {
+    border-radius: 0 12px 12px 0;
 }
