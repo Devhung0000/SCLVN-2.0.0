@@ -188,7 +188,9 @@ export default {
                                     class="type-label-lg link"
                                     :class="{
                                         'owner-name': editor.role === 'owner',
-                                        'dev-name': editor.role === 'dev'
+                                        'dev-name': editor.role === 'dev',
+                                        'helper-name': editor.role === 'helper',
+                                        'admin-name': editor.role === 'admin'
                                     }"
                                     target="_blank"
                                     :href="editor.link"
