@@ -246,3 +246,28 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+/* =========================================
+   BACK TO LIST BUTTON
+   ========================================= */
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--color-primary);
+    color: var(--color-on-background);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+/* Hover */
+.back-button:hover {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    transform: translateX(-3px);
+}
