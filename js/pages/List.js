@@ -28,7 +28,18 @@ export default {
                 <table class="list" v-if="list && list.length">
                     <tr v-for="(item, i) in filteredListDisplay" :key="item.originalIndex">
                                 <td class="rank">
-                                    <p v-if="item.originalIndex + 1 <= 900" class="type-label-lg">#{{ item.originalIndex + 1 }}</p>
+                                    <p
+                                        v-if="item.originalIndex + 1 <= 900"
+                                        class="type-label-lg"
+                                        :class="{
+                                            'rank-top-1': item.originalIndex === 0,
+                                            'rank-top-2': item.originalIndex === 1,
+                                            'rank-top-3': item.originalIndex === 2
+                                        }"
+                                    >
+                                        #{{ item.originalIndex + 1 }}
+                                    </p>
+
                                     <p v-else class="type-label-lg">Legacy</p>
                                 </td>
                                 <td class="level" :class="{ 'active': selected === item.originalIndex, 'error': !item.level }">
