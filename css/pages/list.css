@@ -267,7 +267,7 @@
 
     /* Chỉnh vị trí */
     position: relative;
-    top: -8px;   /* lên trên 8px */
+    top: -16px;   /* lên trên 8px */
     left: 8px;   /* sang phải 8px */
 }
 
