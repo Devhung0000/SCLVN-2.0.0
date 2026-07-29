@@ -26,7 +26,14 @@ export default {
                 </div>
                 <div class="board-container">
                     <table class="board">
-                        <tr v-for="(ientry, i) in leaderboard">
+                        <tr
+                            v-for="(ientry, i) in leaderboard"
+                            :class="{
+                                'top-1': i === 0,
+                                'top-2': i === 1,
+                                'top-3': i === 2
+                            }"
+                        >
                             <td class="rank">
                                 <p class="type-label-lg">#{{ i + 1 }}</p>
                             </td>

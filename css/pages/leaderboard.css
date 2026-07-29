@@ -65,6 +65,12 @@
     background-color: var(--color-primary);
     color: var(--color-on-primary);
 }
+.page-leaderboard .board tr.top-1 .user.active button,
+.page-leaderboard .board tr.top-2 .user.active button,
+.page-leaderboard .board tr.top-3 .user.active button {
+    background-color: transparent;
+    color: inherit;
+}
 .page-leaderboard .player {
     display: flex;
     flex-direction: column;
@@ -91,4 +97,50 @@
 }
 .page-leaderboard .player .table a:hover {
     text-decoration: underline;
+}
+/* =========================
+   TOP 1 / TOP 2 / TOP 3
+   ========================= */
+
+.page-leaderboard .board tr.top-1 {
+    background: linear-gradient(135deg, #f6d365, #dca928);
+}
+
+.page-leaderboard .board tr.top-2 {
+    background: linear-gradient(135deg, #cfd4d6, #8e969a);
+}
+
+.page-leaderboard .board tr.top-3 {
+    background: linear-gradient(135deg, #d18a5a, #a8582e);
+}
+
+/* Bo góc hàng đầu */
+.page-leaderboard .board tr.top-1 td:first-child,
+.page-leaderboard .board tr.top-2 td:first-child,
+.page-leaderboard .board tr.top-3 td:first-child {
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+}
+
+.page-leaderboard .board tr.top-1 td:last-child,
+.page-leaderboard .board tr.top-2 td:last-child,
+.page-leaderboard .board tr.top-3 td:last-child {
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+}
+
+/* Làm số thứ hạng nổi bật */
+.page-leaderboard .board tr.top-1 .rank p {
+    color: #fff8d6;
+    font-weight: 800;
+}
+
+.page-leaderboard .board tr.top-2 .rank p {
+    color: #ffffff;
+    font-weight: 800;
+}
+
+.page-leaderboard .board tr.top-3 .rank p {
+    color: #ffe4d2;
+    font-weight: 800;
 }
