@@ -276,3 +276,22 @@
     color: var(--color-on-primary);
     transform: translateX(-2px);
 }
+.owner-name {
+    background: linear-gradient(
+        to right,
+        #583101,
+        #603808,
+        #6f4518,
+        #8b5e34,
+        #a47148,
+        #bc8a5f,
+        #d4a276,
+        #e7bc91,
+        #f3d5b5,
+        #ffedd8
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
