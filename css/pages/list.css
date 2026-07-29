@@ -359,3 +359,18 @@
     color: transparent;
     -webkit-text-fill-color: transparent;
 }
+
+/* Welcome Title Gradient */
+.vietnam-title {
+    background: linear-gradient(
+        90deg,
+        #da251d 0%,
+        #e31c14 30%,
+        #f04b23 55%,
+        #f6a623 75%,
+        #ffcd00 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
