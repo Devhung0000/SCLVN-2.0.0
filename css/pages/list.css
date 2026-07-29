@@ -253,9 +253,9 @@
 .back-button {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
     width: fit-content;
-    padding: 5px 9px;
+    padding: 6px 10px;
     border-radius: 999px;
     border: 1px solid var(--color-primary);
     color: var(--color-on-background);
@@ -263,12 +263,16 @@
     cursor: pointer;
     transition: all 0.2s ease;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 14px;
+
+    /* Chỉnh vị trí */
+    position: relative;
+    top: -8px;   /* lên trên 8px */
+    left: 8px;   /* sang phải 8px */
 }
 
-/* Hover */
 .back-button:hover {
     background-color: var(--color-primary);
     color: var(--color-on-primary);
-    transform: translateX(-3px);
+    transform: translateX(-2px);
 }
