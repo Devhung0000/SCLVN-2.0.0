@@ -49,9 +49,14 @@
     min-width: 0;
 }
 .page-leaderboard .board .user button {
-    max-width: 100%;
-    position: relative;
-    z-index: 1;
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: start;
+    word-break: normal;
+    overflow-wrap: anywhere;
 }
 .page-leaderboard .board .user button:hover {
     background-color: var(--color-background-hover);
@@ -95,7 +100,7 @@
 
 .page-leaderboard .board-row {
     display: grid;
-    grid-template-columns: 50px 100px minmax(0, 1fr);
+    grid-template-columns: max-content max-content 1fr;
     align-items: center;
     width: 100%;
 }
