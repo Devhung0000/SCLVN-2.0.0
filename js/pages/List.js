@@ -176,7 +176,7 @@ export default {
                         <p class="error" v-for="error of errors">{{ error }}</p>
                     </div>
                     <div class="og">
-                        <p class="type-label-md">Website layout made by <a href="https://tsl.pages.dev" style="text-decoration: underline;" target="_blank">TheShittyList</a> and <a href="https://sgdlist.pages.dev/" style="text-decoration: underline;" target="_blank">SGD Level List</a>. <br> UI inspired by <a href="https://aredl.net" style="text-decoration: underline;" target="_blank">The All Rated Extreme Demons List</a>. <br> The Official Spam Challenge List in Vietnam!</p>
+                        <p class="type-label-md">Website layout and UI made by <a href="https://therakelist.pages.dev/" style="text-decoration: underline;" target="_blank">SCL[gwa]</a>. <br> The Official Spam Challenge List in Vietnam!</p>
 		    </div>
                     <template v-if="editors">
                         <h2>List Moderators</h2>
@@ -201,7 +201,7 @@ export default {
                         Submission Rules:
                     </h3>
                     <p>
-                        -The Website cannot displays the entire rules here, Join the server <a href="https://discord.gg/Qcj5JSRKa" style="text-decoration: underline;"target="_blank">here</a> to view the full rules!
+                        -The Website cannot display the entire rules, Join the server <a href="https://discord.gg/Qcj5JSRKa" style="text-decoration: underline;"target="_blank">here</a> to view the full rules!
                     </p>
                 </div>
             </div>
