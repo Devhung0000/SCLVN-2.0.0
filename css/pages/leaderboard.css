@@ -157,12 +157,19 @@
 .page-leaderboard .board tr.top-1 td:first-child,
 .page-leaderboard .board tr.top-2 td:first-child,
 .page-leaderboard .board tr.top-3 td:first-child {
-    border-radius: 12px 0 0 12px;
+    border-radius: 24px 0 0 24px;
 }
 
 /* Bo góc bên phải */
 .page-leaderboard .board tr.top-1 td:last-child,
 .page-leaderboard .board tr.top-2 td:last-child,
 .page-leaderboard .board tr.top-3 td:last-child {
-    border-radius: 0 12px 12px 0;
+    border-radius: 0 24px 24px 0;
+}
+
+/* Cắt phần màu thừa */
+.page-leaderboard .board tr.top-1,
+.page-leaderboard .board tr.top-2,
+.page-leaderboard .board tr.top-3 {
+    overflow: hidden;
 }
