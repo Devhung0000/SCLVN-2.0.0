@@ -9,6 +9,7 @@ export default {
     },
     data: () => ({
         leaderboard: [],
+        list: [],
         loading: true,
         selected: 0,
         err: [],
@@ -25,28 +26,36 @@ export default {
                     </p>
                 </div>
                 <div class="board-container">
-                    <table class="board">
-                        <tr
+                    <div class="board">
+                        <div
                             v-for="(ientry, i) in leaderboard"
+                            class="board-row"
                             :class="{
                                 'top-1': i === 0,
                                 'top-2': i === 1,
                                 'top-3': i === 2
                             }"
                         >
-                            <td class="rank">
+                            <div class="rank">
                                 <p class="type-label-lg">#{{ i + 1 }}</p>
-                            </td>
-                            <td class="total">
+                            </div>
+
+                            <div class="total">
                                 <p class="type-label-lg">{{ localize(ientry.total) }}</p>
-                            </td>
-                            <td class="user" :class="{ 'active': selected == i }">
+                            </div>
+
+                            <div
+                                class="user"
+                                :class="{ 'active': selected == i }"
+                            >
                                 <button @click="selected = i">
-                                    <span class="type-label-lg">{{ ientry.user }}</span>
+                                    <span class="type-label-lg">
+                                        {{ ientry.user }}
+                                    </span>
                                 </button>
-                            </td>
-                        </tr>
-                    </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="player-container">
                     <div class="player">
