@@ -158,15 +158,19 @@
 .page-leaderboard .board tr.top-3 td:last-child {
     border-radius: 0 20px 20px 0;
 }
-/* Làm riêng Top 1, 2, 3 ngắn hơn */
+/* Tạo khoảng trống hai bên cho Top 1/2/3 */
 .page-leaderboard .board tr.top-1 td:first-child,
 .page-leaderboard .board tr.top-2 td:first-child,
 .page-leaderboard .board tr.top-3 td:first-child {
-    padding-left: 1.5rem;
+    padding-left: 20px;
 }
 
 .page-leaderboard .board tr.top-1 td:last-child,
 .page-leaderboard .board tr.top-2 td:last-child,
 .page-leaderboard .board tr.top-3 td:last-child {
-    padding-right: 1.5rem;
+    padding-right: 20px;
+}
+.page-leaderboard .board {
+    border-collapse: separate;
+    border-spacing: 0 8px;
 }
