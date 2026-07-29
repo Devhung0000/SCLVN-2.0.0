@@ -182,11 +182,20 @@ export default {
                         <h2>List Moderators</h2>
                         <ol class="editors">
                             <li v-for="editor in editors">
-                                <img :src="\`/assets/\${roleIconMap[editor.role]}\${store.dark ? '-dark' : ''}.svg\`" :alt="editor.role">
+                                <span
+                                    class="role-icon"
+                                    :class="`role-icon-${editor.role}`"
+                                    :style="{
+                                        '--icon-url': `url('/assets/${roleIconMap[editor.role]}${store.dark ? '-dark' : ''}.svg')`
+                                    }"
+                                ></span>
                                 <a
                                     v-if="editor.link"
                                     class="type-label-lg link"
-                                    :class="{ 'owner-name': editor.role === 'owner' }"
+                                    :class="{
+                                        'owner-name': editor.role === 'owner',
+                                        'dev-name': editor.role === 'dev'
+                                    }"
                                     target="_blank"
                                     :href="editor.link"
                                 >
