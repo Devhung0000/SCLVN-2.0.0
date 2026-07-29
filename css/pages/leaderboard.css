@@ -65,12 +65,6 @@
     background-color: var(--color-primary);
     color: var(--color-on-primary);
 }
-.page-leaderboard .board tr.top-1 .user.active button,
-.page-leaderboard .board tr.top-2 .user.active button,
-.page-leaderboard .board tr.top-3 .user.active button {
-    background-color: transparent;
-    color: inherit;
-}
 .page-leaderboard .player {
     display: flex;
     flex-direction: column;
@@ -143,4 +137,36 @@
 .page-leaderboard .board tr.top-3 .rank p {
     color: #ffe4d2;
     font-weight: 800;
+}
+/* TOP 1 */
+.page-leaderboard .board tr.top-1 {
+    background: linear-gradient(135deg, #f6d365, #dca928);
+}
+
+.page-leaderboard .board tr.top-1 .user button,
+.page-leaderboard .board tr.top-1 .user.active button {
+    background: transparent;
+    color: inherit;
+}
+
+/* TOP 2 */
+.page-leaderboard .board tr.top-2 {
+    background: linear-gradient(135deg, #cfd4d6, #8e969a);
+}
+
+.page-leaderboard .board tr.top-2 .user button,
+.page-leaderboard .board tr.top-2 .user.active button {
+    background: transparent;
+    color: inherit;
+}
+
+/* TOP 3 */
+.page-leaderboard .board tr.top-3 {
+    background: linear-gradient(135deg, #d18a5a, #a8582e);
+}
+
+.page-leaderboard .board tr.top-3 .user button,
+.page-leaderboard .board tr.top-3 .user.active button {
+    background: transparent;
+    color: inherit;
 }
