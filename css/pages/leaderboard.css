@@ -31,10 +31,10 @@
     padding-inline: 1rem;
 }
 .page-leaderboard .board {
-    table-layout: auto;
-    display: block;
-    width: 90%;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
 }
 .page-leaderboard .board .rank .flag {
     padding-block: 1rem;
@@ -97,12 +97,6 @@
    LEADERBOARD ROW
    ========================================= */
 
-.page-leaderboard .board {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-}
 
 .page-leaderboard .board-row {
     display: grid;
