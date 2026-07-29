@@ -93,84 +93,113 @@
 .page-leaderboard .player .table a:hover {
     text-decoration: underline;
 }
-/* =========================
-   TOP 1 - GOLD
-   ========================= */
+/* =========================================
+   LEADERBOARD ROW
+   ========================================= */
 
-.page-leaderboard .board tr.top-1 td {
-    background: linear-gradient(135deg, #f6d365, #dca928);
-}
-
-.page-leaderboard .board tr.top-1 .user button,
-.page-leaderboard .board tr.top-1 .user.active button {
-    background: transparent;
-    color: inherit;
-}
-
-
-/* =========================
-   TOP 2 - SILVER
-   ========================= */
-
-.page-leaderboard .board tr.top-2 td {
-    background: linear-gradient(135deg, #cfd4d6, #8e969a);
-}
-
-.page-leaderboard .board tr.top-2 .user button,
-.page-leaderboard .board tr.top-2 .user.active button {
-    background: transparent;
-    color: inherit;
-}
-
-
-/* =========================
-   TOP 3 - BRONZE
-   ========================= */
-
-.page-leaderboard .board tr.top-3 td {
-    background: linear-gradient(135deg, #d18a5a, #a8582e);
-}
-
-.page-leaderboard .board tr.top-3 .user button,
-.page-leaderboard .board tr.top-3 .user.active button {
-    background: transparent;
-    color: inherit;
-}
-
-
-/* =========================
-   BO GÓC TRÁI
-   ========================= */
-
-.page-leaderboard .board tr.top-1 td:first-child,
-.page-leaderboard .board tr.top-2 td:first-child,
-.page-leaderboard .board tr.top-3 td:first-child {
-    border-radius: 20px 0 0 20px;
-}
-
-
-/* =========================
-   BO GÓC PHẢI
-   ========================= */
-
-.page-leaderboard .board tr.top-1 td:last-child,
-.page-leaderboard .board tr.top-2 td:last-child,
-.page-leaderboard .board tr.top-3 td:last-child {
-    border-radius: 0 20px 20px 0;
-}
-/* Tạo khoảng trống hai bên cho Top 1/2/3 */
-.page-leaderboard .board tr.top-1 td:first-child,
-.page-leaderboard .board tr.top-2 td:first-child,
-.page-leaderboard .board tr.top-3 td:first-child {
-    padding-left: 20px;
-}
-
-.page-leaderboard .board tr.top-1 td:last-child,
-.page-leaderboard .board tr.top-2 td:last-child,
-.page-leaderboard .board tr.top-3 td:last-child {
-    padding-right: 20px;
-}
 .page-leaderboard .board {
-    border-collapse: separate;
-    border-spacing: 0 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.page-leaderboard .board-row {
+    display: grid;
+    grid-template-columns: max-content max-content 1fr;
+    align-items: center;
+    width: 100%;
+}
+
+
+/* =========================================
+   TOP 1 / 2 / 3 - CARD
+   ========================================= */
+
+.page-leaderboard .board-row.top-1,
+.page-leaderboard .board-row.top-2,
+.page-leaderboard .board-row.top-3 {
+    width: 90%;
+    margin-inline: auto;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+
+/* =========================================
+   TOP 1 - GOLD
+   ========================================= */
+
+.page-leaderboard .board-row.top-1 {
+    background: linear-gradient(
+        135deg,
+        #f6d365,
+        #dca928
+    );
+}
+
+
+/* =========================================
+   TOP 2 - SILVER
+   ========================================= */
+
+.page-leaderboard .board-row.top-2 {
+    background: linear-gradient(
+        135deg,
+        #cfd4d6,
+        #8e969a
+    );
+}
+
+
+/* =========================================
+   TOP 3 - BRONZE
+   ========================================= */
+
+.page-leaderboard .board-row.top-3 {
+    background: linear-gradient(
+        135deg,
+        #d18a5a,
+        #a8582e
+    );
+}
+
+
+/* =========================================
+   TOP 1/2/3 - BUTTON
+   ========================================= */
+
+.page-leaderboard .board-row.top-1 .user button,
+.page-leaderboard .board-row.top-2 .user button,
+.page-leaderboard .board-row.top-3 .user button {
+    background: transparent;
+    color: inherit;
+}
+
+
+/* Khi click chọn Top 1/2/3
+   vẫn giữ màu của card */
+
+.page-leaderboard .board-row.top-1 .user.active button,
+.page-leaderboard .board-row.top-2 .user.active button,
+.page-leaderboard .board-row.top-3 .user.active button {
+    background: transparent;
+    color: inherit;
+}
+
+
+/* =========================================
+   PADDING CHO TOP 1/2/3
+   ========================================= */
+
+.page-leaderboard .board-row.top-1 > .rank,
+.page-leaderboard .board-row.top-2 > .rank,
+.page-leaderboard .board-row.top-3 > .rank {
+    padding-left: 1rem;
+}
+
+.page-leaderboard .board-row.top-1 > .user,
+.page-leaderboard .board-row.top-2 > .user,
+.page-leaderboard .board-row.top-3 > .user {
+    padding-right: 1rem;
 }
