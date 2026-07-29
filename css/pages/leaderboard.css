@@ -286,3 +286,26 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+/* #1 */
+.page-leaderboard .player .rank-top-1 {
+    background: linear-gradient(135deg, #f6d365, #dca928);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* #2 */
+.page-leaderboard .player .rank-top-2 {
+    background: linear-gradient(135deg, #cfd4d6, #8e969a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* #3 */
+.page-leaderboard .player .rank-top-3 {
+    background: linear-gradient(135deg, #d18a5a, #a8582e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
