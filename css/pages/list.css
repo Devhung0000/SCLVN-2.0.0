@@ -280,6 +280,26 @@
 .owner-name {
     background: linear-gradient(
         to right,
+        #006466,
+        #065a60,
+        #0b525b,
+        #144552,
+        #1b3a4b,
+        #212f45,
+        #272640,
+        #312244,
+        #3e1f47,
+        #4d194d
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+.admin-name {
+    background: linear-gradient(
+        to right,
         #583101,
         #603808,
         #6f4518,
@@ -293,8 +313,8 @@
     );
     -webkit-background-clip: text;
     background-clip: text;
+    color: transparent;
     -webkit-text-fill-color: transparent;
-    font-weight: 700;
 }
 
 /* Dev name gradient */
@@ -309,6 +329,26 @@
         #70e000,
         #9ef01a,
         #ccff33
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Helper name gradient */
+.helper-name {
+    background: linear-gradient(
+        90deg,
+        #590d22,
+        #800f2f,
+        #a4133c,
+        #c9184a,
+        #ff4d6d,
+        #ff758f,
+        #ff8fa3,
+        #ffb3c1
     );
 
     -webkit-background-clip: text;
