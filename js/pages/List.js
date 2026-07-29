@@ -57,7 +57,9 @@ export default {
                 </p>
             </div>
             <div class="level-container">
-			<a v-if="level" @click="selected = null">back</a>
+                <a v-if="level" class="back-button" @click="selected = null">
+                    ← Back to Homepage
+                </a>
                 <div class="level" v-if="level">
 					<div style="display: flex; flex-direction: column; gap: 1rem; width: 100%; justify-self: center;">
                     <div class="button-holder" style="gap: 1em; ">
