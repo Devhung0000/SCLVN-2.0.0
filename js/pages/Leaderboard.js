@@ -59,7 +59,16 @@ export default {
                 </div>
                 <div class="player-container">
                     <div class="player">
-                        <h1>#{{ selected + 1 }} - {{ entry.user }}</h1>
+                        <h1
+                            class="player-title"
+                            :class="{
+                                'top-1': selected === 0,
+                                'top-2': selected === 1,
+                                'top-3': selected === 2
+                            }"
+                        >
+                            #{{ selected + 1 }} - {{ entry.user }}
+                        </h1>
                         <h3>{{ entry.total }} - Hardest: {{ [...entry.verified, ...entry.completed].reduce((min, current) =>current.rank < min.rank ? current : min).level }}</h3>
                         <h2 v-if="entry.verified.length > 0">Verified ({{ entry.verified.length}})</h2>
                         <table class="table">
