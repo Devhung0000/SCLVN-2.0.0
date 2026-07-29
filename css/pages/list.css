@@ -276,42 +276,7 @@
     color: var(--color-on-primary);
     transform: translateX(-2px);
 }
-.role-icon {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
 
-    background-color: currentColor;
-
-    -webkit-mask-image: var(--icon-url);
-    mask-image: var(--icon-url);
-
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-
-    -webkit-mask-position: center;
-    mask-position: center;
-
-    -webkit-mask-size: contain;
-    mask-size: contain;
-}
-
-/* DEV */
-.role-icon-dev {
-    background: linear-gradient(
-        to right,
-        #004b23,
-        #006400,
-        #007200,
-        #008000,
-        #38b000,
-        #70e000,
-        #9ef01a,
-        #ccff33
-    );
-}
-
-/* OWNER */
 .owner-name {
     background: linear-gradient(
         to right,
@@ -330,4 +295,24 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 700;
+}
+
+/* Dev name gradient */
+.dev-name {
+    background: linear-gradient(
+        90deg,
+        #004b23,
+        #006400,
+        #007200,
+        #008000,
+        #38b000,
+        #70e000,
+        #9ef01a,
+        #ccff33
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
 }
