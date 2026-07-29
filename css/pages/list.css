@@ -207,3 +207,42 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+/* =========================================
+   LEVEL DETAIL TITLE - TOP 1 / 2 / 3
+   ========================================= */
+
+/* TOP 1 - GOLD */
+.page-list .level-title-top-1 {
+    background: linear-gradient(
+        135deg,
+        #f6d365,
+        #dca928
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* TOP 2 - SILVER */
+.page-list .level-title-top-2 {
+    background: linear-gradient(
+        135deg,
+        #cfd4d6,
+        #8e969a
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* TOP 3 - BRONZE */
+.page-list .level-title-top-3 {
+    background: linear-gradient(
+        135deg,
+        #d18a5a,
+        #a8582e
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

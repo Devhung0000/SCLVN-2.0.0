@@ -61,7 +61,15 @@ export default {
                 <div class="level" v-if="level">
 					<div style="display: flex; flex-direction: column; gap: 1rem; width: 100%; justify-self: center;">
                     <div class="button-holder" style="gap: 1em; ">
-                        <h1>{{ level.name }}</h1>
+                        <h1
+                            :class="{
+                                'level-title-top-1': selected === 0,
+                                'level-title-top-2': selected === 1,
+                                'level-title-top-3': selected === 2
+                            }"
+                        >
+                            {{ level.name }}
+                        </h1>
                     </div>
                     <h1 style="border-bottom: 1px solid #808080;padding-bottom: 8px;"></h1>
 					<p class="desc" v-if="level.description" v-html="level.description"></p>
