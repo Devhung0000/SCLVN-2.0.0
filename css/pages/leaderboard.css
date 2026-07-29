@@ -97,7 +97,6 @@
    LEADERBOARD ROW
    ========================================= */
 
-
 .page-leaderboard .board-row {
     display: grid;
     grid-template-columns: max-content max-content 1fr;
@@ -125,11 +124,7 @@
    ========================================= */
 
 .page-leaderboard .board-row.top-1 {
-    background: linear-gradient(
-        135deg,
-        #f6d365,
-        #dca928
-    );
+    background: linear-gradient(135deg, #f6d365, #dca928);
 }
 
 
@@ -138,11 +133,7 @@
    ========================================= */
 
 .page-leaderboard .board-row.top-2 {
-    background: linear-gradient(
-        135deg,
-        #cfd4d6,
-        #8e969a
-    );
+    background: linear-gradient(135deg, #cfd4d6, #8e969a);
 }
 
 
@@ -151,29 +142,32 @@
    ========================================= */
 
 .page-leaderboard .board-row.top-3 {
-    background: linear-gradient(
-        135deg,
-        #d18a5a,
-        #a8582e
-    );
+    background: linear-gradient(135deg, #d18a5a, #a8582e);
 }
 
 
 /* =========================================
-   TOP 1/2/3 - BUTTON
+   TOP 1/2/3 - USER BUTTON
    ========================================= */
 
+.page-leaderboard .board-row.top-1 .user,
+.page-leaderboard .board-row.top-2 .user,
+.page-leaderboard .board-row.top-3 .user {
+    width: auto;
+}
+
+
+/* Nút trong Top 1/2/3 trong suốt */
 .page-leaderboard .board-row.top-1 .user button,
 .page-leaderboard .board-row.top-2 .user button,
 .page-leaderboard .board-row.top-3 .user button {
+    width: 100%;
     background: transparent;
     color: inherit;
 }
 
 
-/* Khi click chọn Top 1/2/3
-   vẫn giữ màu của card */
-
+/* Khi click vào Top 1/2/3 vẫn giữ màu */
 .page-leaderboard .board-row.top-1 .user.active button,
 .page-leaderboard .board-row.top-2 .user.active button,
 .page-leaderboard .board-row.top-3 .user.active button {
@@ -183,13 +177,19 @@
 
 
 /* =========================================
-   PADDING CHO TOP 1/2/3
+   PADDING TOP 1/2/3
    ========================================= */
 
 .page-leaderboard .board-row.top-1 > .rank,
 .page-leaderboard .board-row.top-2 > .rank,
 .page-leaderboard .board-row.top-3 > .rank {
     padding-left: 1rem;
+}
+
+.page-leaderboard .board-row.top-1 > .total,
+.page-leaderboard .board-row.top-2 > .total,
+.page-leaderboard .board-row.top-3 > .total {
+    padding: 1rem;
 }
 
 .page-leaderboard .board-row.top-1 > .user,
