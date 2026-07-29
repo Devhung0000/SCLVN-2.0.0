@@ -144,7 +144,7 @@
 .page-leaderboard .board tr.top-1 td:first-child,
 .page-leaderboard .board tr.top-2 td:first-child,
 .page-leaderboard .board tr.top-3 td:first-child {
-    border-radius: 24px 0 0 24px;
+    border-radius: 20px 0 0 20px;
 }
 
 
@@ -155,5 +155,5 @@
 .page-leaderboard .board tr.top-1 td:last-child,
 .page-leaderboard .board tr.top-2 td:last-child,
 .page-leaderboard .board tr.top-3 td:last-child {
-    border-radius: 0 24px 24px 0;
+    border-radius: 0 20px 20px 0;
 }
