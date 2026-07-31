@@ -293,9 +293,20 @@
         #272640,
         #312244,
         #3e1f47,
+        #4d194d,
+
+        #006466,
+        #065a60,
+        #0b525b,
+        #144552,
+        #1b3a4b,
+        #212f45,
+        #272640,
+        #312244,
+        #3e1f47,
         #4d194d
     );
-    background-size: 300% 100%;
+    background-size: 600% 100%;
     background-position: 0% 50%;
 
     -webkit-background-clip: text;
@@ -304,7 +315,7 @@
 
     font-weight: 700;
 
-    animation: gradientMove 8s linear infinite;
+    animation: gradientMove 2s linear infinite;
 }
 
 .admin-name {
@@ -319,9 +330,20 @@
         #d4a276,
         #e7bc91,
         #f3d5b5,
+        #ffedd8,
+
+        #583101,
+        #603808,
+        #6f4518,
+        #8b5e34,
+        #a47148,
+        #bc8a5f,
+        #d4a276,
+        #e7bc91,
+        #f3d5b5,
         #ffedd8
     );
-    background-size: 300% 100%;
+    background-size: 600% 100%;
     background-position: 0% 50%;
 
     -webkit-background-clip: text;
@@ -331,7 +353,7 @@
 
     font-weight: 400;
 
-    animation: gradientMove 8s linear infinite;
+    animation: gradientMove 2s linear infinite;
 }
 
 .dev-name {
@@ -344,9 +366,18 @@
         #38b000,
         #70e000,
         #9ef01a,
+        #ccff33,
+
+        #004b23,
+        #006400,
+        #007200,
+        #008000,
+        #38b000,
+        #70e000,
+        #9ef01a,
         #ccff33
     );
-    background-size: 300% 100%;
+    background-size: 600% 100%;
     background-position: 0% 50%;
 
     -webkit-background-clip: text;
@@ -354,7 +385,7 @@
     color: transparent;
     -webkit-text-fill-color: transparent;
 
-    animation: gradientMove 8s linear infinite;
+    animation: gradientMove 2s linear infinite;
 }
 
 .helper-name {
@@ -367,9 +398,18 @@
         #ff4d6d,
         #ff758f,
         #ff8fa3,
+        #ffb3c1,
+
+        #590d22,
+        #800f2f,
+        #a4133c,
+        #c9184a,
+        #ff4d6d,
+        #ff758f,
+        #ff8fa3,
         #ffb3c1
     );
-    background-size: 300% 100%;
+    background-size: 600% 100%;
     background-position: 0% 50%;
 
     -webkit-background-clip: text;
@@ -377,7 +417,7 @@
     color: transparent;
     -webkit-text-fill-color: transparent;
 
-    animation: gradientMove 8s linear infinite;
+    animation: gradientMove 2s linear infinite;
 }
 
 @keyframes gradientMove {
