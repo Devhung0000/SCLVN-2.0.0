@@ -277,7 +277,10 @@
     transform: translateX(-2px);
 }
 
-/* Owner name gradient */
+/* =========================================
+   Animated Role Gradients
+   ========================================= */
+
 .owner-name {
     background: linear-gradient(
         to right,
@@ -292,13 +295,18 @@
         #3e1f47,
         #4d194d
     );
+    background-size: 300% 100%;
+    background-position: 0% 50%;
+
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+
     font-weight: 700;
+
+    animation: gradientMove 8s linear infinite;
 }
 
-/* Admin name gradient */
 .admin-name {
     background: linear-gradient(
         to right,
@@ -313,14 +321,19 @@
         #f3d5b5,
         #ffedd8
     );
+    background-size: 300% 100%;
+    background-position: 0% 50%;
+
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
+
     font-weight: 400;
+
+    animation: gradientMove 8s linear infinite;
 }
 
-/* Dev name gradient */
 .dev-name {
     background: linear-gradient(
         90deg,
@@ -333,14 +346,17 @@
         #9ef01a,
         #ccff33
     );
+    background-size: 300% 100%;
+    background-position: 0% 50%;
 
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
+
+    animation: gradientMove 8s linear infinite;
 }
 
-/* Helper name gradient */
 .helper-name {
     background: linear-gradient(
         90deg,
@@ -353,11 +369,24 @@
         #ff8fa3,
         #ffb3c1
     );
+    background-size: 300% 100%;
+    background-position: 0% 50%;
 
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
+
+    animation: gradientMove 8s linear infinite;
+}
+
+@keyframes gradientMove {
+    from {
+        background-position: 0% 50%;
+    }
+    to {
+        background-position: 100% 50%;
+    }
 }
 
 .page-list .meta .editors .type-label-lg::before,
