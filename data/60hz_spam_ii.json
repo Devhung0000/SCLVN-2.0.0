@@ -31,6 +31,11 @@
         "user": "NookGD",
         "hz": "60",
         "percent": 100
+        },
+        {
+        "user": "giangdelt",
+        "hz": "60",
+        "percent": 100
         }
     ]
 }
