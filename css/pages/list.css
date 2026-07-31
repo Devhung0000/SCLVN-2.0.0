@@ -450,3 +450,23 @@
     display: inline-block;
     line-height: 1.6rem !important;
 }
+
+/* ==========================
+   Rank Glow
+   ========================== */
+
+.rank-top-1{
+    text-shadow:
+        0 0 8px rgba(255,220,100,.4),
+        0 0 18px rgba(255,220,100,.2);
+}
+
+.rank-top-2{
+    text-shadow:
+        0 0 8px rgba(220,220,220,.4);
+}
+
+.rank-top-3{
+    text-shadow:
+        0 0 8px rgba(210,130,70,.4);
+}
