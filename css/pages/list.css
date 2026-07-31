@@ -309,7 +309,7 @@
 
     will-change: background-position;
 
-    animation: nitroGradient 8s linear infinite;
+    animation: nitroGradient 10s ease-in-out infinite;
 }
 
 /* ==========================
