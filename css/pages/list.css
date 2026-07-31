@@ -281,12 +281,12 @@
    Discord Nitro Style Animated Roles
    ========================================================= */
 
-@keyframes nitroShine {
+@keyframes nitroGradient {
     from {
-        background-position: -250% center;
+        background-position: 0% 50%;
     }
     to {
-        background-position: 250% center;
+        background-position: 100% 50%;
     }
 }
 
@@ -309,7 +309,7 @@
 
     will-change: background-position;
 
-    animation: nitroShine 6s linear infinite;
+    animation: nitroGradient 8s linear infinite;
 }
 
 /* ==========================
