@@ -277,216 +277,155 @@
     transform: translateX(-2px);
 }
 
-/* =========================================
-   Animated Role Gradients (Nitro Style)
-   ========================================= */
+/* =========================================================
+   Discord Nitro Style Animated Roles
+   ========================================================= */
 
-@keyframes nitroGradient {
+@keyframes nitroShine {
     from {
-        background-position: 0% 50%;
+        background-position: -250% center;
     }
     to {
-        background-position: 100% 50%;
+        background-position: 250% center;
     }
 }
 
-/* =======================
-   Owner
-   ======================= */
+/* ==========================
+   Shared Settings
+   ========================== */
 
-.owner-name {
-    background: linear-gradient(
-        90deg,
+.owner-name,
+.admin-name,
+.dev-name,
+.helper-name {
 
-        #006466,
-        #065a60,
-        #0b525b,
-        #144552,
-        #1b3a4b,
-        #212f45,
-        #272640,
-        #312244,
-        #3e1f47,
-        #4d194d,
+    display: inline-block;
 
-        #006466,
-        #065a60,
-        #0b525b,
-        #144552,
-        #1b3a4b,
-        #212f45,
-        #272640,
-        #312244,
-        #3e1f47,
-        #4d194d,
-
-        #006466,
-        #065a60,
-        #0b525b,
-        #144552,
-        #1b3a4b,
-        #212f45,
-        #272640,
-        #312244,
-        #3e1f47,
-        #4d194d
-    );
-
-    background-size: 400% 100%;
-    background-position: 0% 50%;
+    background-size: 250% 100%;
 
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+
+    will-change: background-position;
+
+    animation: nitroShine 6s linear infinite;
+}
+
+/* ==========================
+   Owner
+   ========================== */
+
+.owner-name {
 
     font-weight: 700;
 
-    animation: nitroGradient 6s linear infinite alternate;
-
-/* =======================
-   Admin
-   ======================= */
-
-.admin-name {
-    background: linear-gradient(
+    background-image: linear-gradient(
         90deg,
 
-        #583101,
-        #603808,
-        #6f4518,
-        #8b5e34,
-        #a47148,
-        #bc8a5f,
-        #d4a276,
-        #e7bc91,
-        #f3d5b5,
-        #ffedd8,
+        #006466 0%,
+        #065a60 12%,
 
-        #583101,
-        #603808,
-        #6f4518,
-        #8b5e34,
-        #a47148,
-        #bc8a5f,
-        #d4a276,
-        #e7bc91,
-        #f3d5b5,
-        #ffedd8,
+        #6ef9ff 22%,
+        #d9ffff 28%,
+        #6ef9ff 34%,
 
-        #583101,
-        #603808,
-        #6f4518,
-        #8b5e34,
-        #a47148,
-        #bc8a5f,
-        #d4a276,
-        #e7bc91,
-        #f3d5b5,
-        #ffedd8
+        #0b525b 46%,
+        #144552 58%,
+
+        #9ae7ff 68%,
+        #ffffff 74%,
+        #9ae7ff 80%,
+
+        #312244 90%,
+        #4d194d 100%
     );
+}
 
-    background-size: 400% 100%;
-    background-position: 0% 50%;
+/* ==========================
+   Admin
+   ========================== */
 
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+.admin-name {
 
     font-weight: 400;
 
-    animation: nitroGradient 6s linear infinite alternate;
+    background-image: linear-gradient(
+        90deg,
+
+        #583101 0%,
+        #603808 12%,
+
+        #ffd17d 22%,
+        #fff8dc 30%,
+        #ffd17d 38%,
+
+        #8b5e34 50%,
+        #bc8a5f 62%,
+
+        #ffe0aa 72%,
+        #ffffff 78%,
+        #ffe0aa 84%,
+
+        #d4a276 92%,
+        #ffedd8 100%
+    );
 }
 
-/* =======================
+/* ==========================
    Dev
-   ======================= */
+   ========================== */
 
 .dev-name {
-    background: linear-gradient(
+
+    background-image: linear-gradient(
         90deg,
 
-        #004b23,
-        #006400,
-        #007200,
-        #008000,
-        #38b000,
-        #70e000,
-        #9ef01a,
-        #ccff33,
+        #004b23 0%,
+        #006400 12%,
 
-        #004b23,
-        #006400,
-        #007200,
-        #008000,
-        #38b000,
-        #70e000,
-        #9ef01a,
-        #ccff33,
+        #9ef01a 22%,
+        #ffffff 30%,
+        #9ef01a 38%,
 
-        #004b23,
-        #006400,
-        #007200,
-        #008000,
-        #38b000,
-        #70e000,
-        #9ef01a,
-        #ccff33
+        #008000 50%,
+        #38b000 62%,
+
+        #cfff77 72%,
+        #ffffff 78%,
+        #cfff77 84%,
+
+        #70e000 92%,
+        #ccff33 100%
     );
-
-    background-size: 400% 100%;
-    background-position: 0% 50%;
-
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    animation: nitroGradient 6s linear infinite alternate;
 }
 
-/* =======================
+/* ==========================
    Helper
-   ======================= */
+   ========================== */
 
 .helper-name {
-    background: linear-gradient(
+
+    background-image: linear-gradient(
         90deg,
 
-        #590d22,
-        #800f2f,
-        #a4133c,
-        #c9184a,
-        #ff4d6d,
-        #ff758f,
-        #ff8fa3,
-        #ffb3c1,
+        #590d22 0%,
+        #800f2f 12%,
 
-        #590d22,
-        #800f2f,
-        #a4133c,
-        #c9184a,
-        #ff4d6d,
-        #ff758f,
-        #ff8fa3,
-        #ffb3c1,
+        #ff8fa3 22%,
+        #ffffff 30%,
+        #ff8fa3 38%,
 
-        #590d22,
-        #800f2f,
-        #a4133c,
-        #c9184a,
-        #ff4d6d,
-        #ff758f,
-        #ff8fa3,
-        #ffb3c1
+        #c9184a 50%,
+        #ff4d6d 62%,
+
+        #ffc0cb 72%,
+        #ffffff 78%,
+        #ffc0cb 84%,
+
+        #ff8fa3 92%,
+        #ffb3c1 100%
     );
-
-    background-size: 400% 100%;
-    background-position: 0% 50%;
-
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    animation: nitroGradient 6s linear infinite alternate;
 }
 
 .page-list .meta .editors .type-label-lg::before,
