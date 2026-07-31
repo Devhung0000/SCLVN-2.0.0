@@ -219,3 +219,13 @@ p::after,
     margin-top: -0.4416666667em;
     display: table;
 }
+
+h2::before,
+h2::after {
+    content: none !important;
+}
+
+h1::before,
+h1::after {
+    content: none !important;
+}
