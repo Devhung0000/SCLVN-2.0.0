@@ -341,8 +341,7 @@
 
     font-weight: 700;
 
-    animation: nitroGradient 6s linear infinite;
-}
+    animation: nitroGradient 6s linear infinite alternate;
 
 /* =======================
    Admin
@@ -395,7 +394,7 @@
 
     font-weight: 400;
 
-    animation: nitroGradient 6s linear infinite;
+    animation: nitroGradient 6s linear infinite alternate;
 }
 
 /* =======================
@@ -441,7 +440,7 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 
-    animation: nitroGradient 6s linear infinite;
+    animation: nitroGradient 6s linear infinite alternate;
 }
 
 /* =======================
@@ -487,7 +486,7 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 
-    animation: nitroGradient 6s linear infinite;
+    animation: nitroGradient 6s linear infinite alternate;
 }
 
 .page-list .meta .editors .type-label-lg::before,
