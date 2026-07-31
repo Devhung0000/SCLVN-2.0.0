@@ -278,12 +278,37 @@
 }
 
 /* =========================================
-   Animated Role Gradients
+   Animated Role Gradients (Nitro Style)
    ========================================= */
+
+@keyframes nitroGradient {
+    from {
+        background-position: 0% 50%;
+    }
+    to {
+        background-position: 400% 50%;
+    }
+}
+
+/* =======================
+   Owner
+   ======================= */
 
 .owner-name {
     background: linear-gradient(
-        to right,
+        90deg,
+
+        #006466,
+        #065a60,
+        #0b525b,
+        #144552,
+        #1b3a4b,
+        #212f45,
+        #272640,
+        #312244,
+        #3e1f47,
+        #4d194d,
+
         #006466,
         #065a60,
         #0b525b,
@@ -306,7 +331,8 @@
         #3e1f47,
         #4d194d
     );
-    background-size: 600% 100%;
+
+    background-size: 400% 100%;
     background-position: 0% 50%;
 
     -webkit-background-clip: text;
@@ -315,12 +341,28 @@
 
     font-weight: 700;
 
-    animation: gradientMove 2s linear infinite;
+    animation: nitroGradient 6s linear infinite;
 }
+
+/* =======================
+   Admin
+   ======================= */
 
 .admin-name {
     background: linear-gradient(
-        to right,
+        90deg,
+
+        #583101,
+        #603808,
+        #6f4518,
+        #8b5e34,
+        #a47148,
+        #bc8a5f,
+        #d4a276,
+        #e7bc91,
+        #f3d5b5,
+        #ffedd8,
+
         #583101,
         #603808,
         #6f4518,
@@ -343,22 +385,36 @@
         #f3d5b5,
         #ffedd8
     );
-    background-size: 600% 100%;
+
+    background-size: 400% 100%;
     background-position: 0% 50%;
 
     -webkit-background-clip: text;
     background-clip: text;
-    color: transparent;
     -webkit-text-fill-color: transparent;
 
     font-weight: 400;
 
-    animation: gradientMove 2s linear infinite;
+    animation: nitroGradient 6s linear infinite;
 }
+
+/* =======================
+   Dev
+   ======================= */
 
 .dev-name {
     background: linear-gradient(
         90deg,
+
+        #004b23,
+        #006400,
+        #007200,
+        #008000,
+        #38b000,
+        #70e000,
+        #9ef01a,
+        #ccff33,
+
         #004b23,
         #006400,
         #007200,
@@ -377,20 +433,34 @@
         #9ef01a,
         #ccff33
     );
-    background-size: 600% 100%;
+
+    background-size: 400% 100%;
     background-position: 0% 50%;
 
     -webkit-background-clip: text;
     background-clip: text;
-    color: transparent;
     -webkit-text-fill-color: transparent;
 
-    animation: gradientMove 2s linear infinite;
+    animation: nitroGradient 6s linear infinite;
 }
+
+/* =======================
+   Helper
+   ======================= */
 
 .helper-name {
     background: linear-gradient(
         90deg,
+
+        #590d22,
+        #800f2f,
+        #a4133c,
+        #c9184a,
+        #ff4d6d,
+        #ff758f,
+        #ff8fa3,
+        #ffb3c1,
+
         #590d22,
         #800f2f,
         #a4133c,
@@ -409,24 +479,15 @@
         #ff8fa3,
         #ffb3c1
     );
-    background-size: 600% 100%;
+
+    background-size: 400% 100%;
     background-position: 0% 50%;
 
     -webkit-background-clip: text;
     background-clip: text;
-    color: transparent;
     -webkit-text-fill-color: transparent;
 
-    animation: gradientMove 2s linear infinite;
-}
-
-@keyframes gradientMove {
-    from {
-        background-position: 0% 50%;
-    }
-    to {
-        background-position: 100% 50%;
-    }
+    animation: nitroGradient 6s linear infinite;
 }
 
 .page-list .meta .editors .type-label-lg::before,
