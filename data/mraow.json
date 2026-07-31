@@ -11,10 +11,5 @@
     "device": "All",
     "method": "Alternate",
     "records": [
-        {
-        "user": "test",
-        "hz": "CBF",
-        "percent": 100
-        }
     ]
 }
