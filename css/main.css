@@ -14,12 +14,8 @@
 
 main.dark,
 header.dark {
-
-    background:rgba(28,27,31,.72);
-
-    border-bottom:1px solid rgba(255,255,255,.08);
-
     color-scheme: dark;
+
     --color-background: #1c1b1f;
     --color-on-background: white;
     --color-background-hover: #2e2e2e;
@@ -29,19 +25,16 @@ header.dark {
     --color-on-primary: white;
     --color-error: #de0000;
     --color-on-error: white;
-	--the-button-on-top: brightness(100%) saturate(100%);
-	--level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-	--color-background-list: #1c1b1fde;
+
+    --the-button-on-top: brightness(100%) saturate(100%);
+    --level-button: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5));
+    --color-background-list: #1c1b1fde;
 }
 
 main.darker,
 header.darker {
-
-    background:rgba(7,7,9,.72);
-
-    border-bottom:1px solid rgba(255,255,255,.06);
-
     color-scheme: darker;
+
     --color-background: #070709;
     --color-on-background: white;
     --color-background-hover: #18181B;
@@ -51,10 +44,12 @@ header.darker {
     --color-on-primary: white;
     --color-error: #de0000;
     --color-on-error: white;
-	--the-button-on-top: brightness(100%) saturate(100%);
-	--level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-	--color-background-list: #070709de;
+
+    --the-button-on-top: brightness(100%) saturate(100%);
+    --level-button: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5));
+    --color-background-list: #070709de;
 }
+
 * {
     font-family: 'Poppins';
 }
@@ -84,28 +79,33 @@ main {
 header {
 
     display:flex;
+    align-items:center;
 
     padding-inline:calc(25vw - 10rem);
 
-    height:4rem;
-
-    color:var(--color-on-primary);
+    height:72px;
 
     position:sticky;
     top:0;
 
     z-index:1000;
 
-    background:rgba(255,255,255,.72);
+    color:var(--color-on-primary);
 
-    backdrop-filter:blur(24px) saturate(180%);
-    -webkit-backdrop-filter:blur(24px) saturate(180%);
+    background:rgba(255,255,255,.82);
+
+    backdrop-filter:blur(22px) saturate(180%);
+    -webkit-backdrop-filter:blur(22px) saturate(180%);
 
     border-bottom:1px solid rgba(0,0,0,.08);
 
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.05);
+
     transition:
-        background .3s ease,
-        backdrop-filter .3s ease;
+        background .25s ease,
+        box-shadow .25s ease,
+        backdrop-filter .25s ease;
 
 }
 @media screen and (min-width: 1366px) {
@@ -114,15 +114,40 @@ header {
         padding-inline: 0;
     }
 }
-header .logo {
-    justify-self: end;
-    align-self: center;
-    display: flex;
-    align-items: flex-end;
-    display: inline-block;
+
+header.dark{
+
+    background:rgba(28,27,31,.82);
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.35);
+
 }
+
+header.darker{
+
+    background:rgba(7,7,9,.82);
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.45);
+
+}
+
+header .logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
 header .nav {
     flex: 1;
+
+    display: flex;
+    align-items: center;
 }
 
 main {
