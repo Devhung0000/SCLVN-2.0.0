@@ -124,6 +124,25 @@ export default {
                     <h2>Welcome to the Spam Challenge List Vietnam!</h2>
                     <p>Click the levels on the left side to see information about them!</p>
                     <p>For more information about the submission rules check the right side!</p>
+                    <button class="btn" @click="selected = Math.ceil(Math.random() * list.length)">
+                    	<span class="type-label-lg">I'm feeling lucky</span>
+					</button>
+                    <h2>Filter levels:</h2>
+					<form action="#" class="type-label-lg">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                    	    <select class="btn" v-model="engineSelected" id="method" name="method">
+                        	    <option class="type-label-lg" value="All" selected>Any Method</option>
+                                <option class="type-label-lg" value="Alternating">Alternating</option>
+                                <option class="type-label-lg" value="Jitter">Jitter</option>
+                                <option class="type-label-lg" value='["Altjitter","Alterjitter"]'>Alterjitter</option>
+                                <option class="type-label-lg" value="Rake">Rake</option>
+                                <option class="type-label-lg" value='["G502","G512","K55","K70"]'>Capped Devices</option>
+                                <option class="type-label-lg" value='["Scroll Clicking","Geode Scroll","FlyHec","Lip Spam"]'>Others</option>
+                            </select>
+                    	    <input type="text" class="btn" v-model="fpsSelected" id="fps" name="fps" placeholder="Enter FPS value" autocomplete="off">
+					        <button class="btn" type="button" @click="applyFilters()">Filter!</button>
+                        </div>
+					</form>
                     <a class="nav__icon" href="https://discord.gg/Qcj5JSRKa">
                         <img src="../assets/discord.svg" alt="Discord Logo" />
                     </a>
@@ -145,7 +164,7 @@ export default {
                     <main style="display: flex; flex-direction: column; align-items: left; gap: 24px; text-align: left; overflow: hidden; overflow-y: auto; max-height: 300px; width: 700px; border: 3px solid var(--color-primary); border-radius: 5px;">
             			<div style="display: flex; flex-direction: column; align-items: left; gap: 24px; overflow: visible; margin-left: 10px; margin-top: 12px">
                             <h2>5/30/26</h2>
-                            <p class="cl">- <clw>mraow</clw> has been placed at <clw>#1</clw></p>
+                            <p class="cl">- <clw>Acidic</clw> has been placed at <clw>#1</clw></p>
 							<p class="cl">hello changelog!</p>
 				</div>
         			</main>

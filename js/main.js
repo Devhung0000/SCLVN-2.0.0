@@ -22,48 +22,4 @@ const router = VueRouter.createRouter({
 });
 app.use(router);
 
-app.mount("#app");
-
-Vue.nextTick(initAppleUnderline);
-
-router.afterEach(() => {
-
-    Vue.nextTick(initAppleUnderline);
-
-});
-
-function initAppleUnderline() {
-
-    const nav = document.querySelector(".nav");
-    const underline = document.querySelector(".apple-underline");
-
-    if (!nav || !underline) return;
-
-    const tabs = nav.querySelectorAll(".nav__tab");
-
-    function move(el) {
-
-        underline.style.left = el.offsetLeft + "px";
-        underline.style.width = el.offsetWidth + "px";
-
-    }
-
-    function updateActive() {
-
-        const active = nav.querySelector(".router-link-active");
-
-        if (active) move(active);
-
-    }
-
-    updateActive();
-
-    tabs.forEach(tab => {
-
-        tab.onmouseenter = () => move(tab);
-
-    });
-
-    nav.onmouseleave = updateActive;
-
-}
+app.mount('#app');

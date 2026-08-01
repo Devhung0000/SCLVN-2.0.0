@@ -78,16 +78,8 @@
                         >Submit Record/Verification</a
                     >
                 </div>
-                <div class="apple-underline"></div>
             </nav>
         </header>
-        <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
-                <component
-                    :is="Component"
-                    :class="{ dark: store.dark, 'darker': store.darker }"
-                />
-            </transition>
-        </router-view>
+        <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
     </body>
 </html>
