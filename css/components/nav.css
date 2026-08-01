@@ -3,18 +3,47 @@
     column-gap: 2rem;
 }
 .nav .nav__tab {
+    position: relative;
+
     padding-top: 4px;
-    border-bottom: 1px solid transparent;
     display: flex;
     align-items: center;
-    padding-inline: 0.5rem;
-    transition: border-color 100ms ease;
+    padding-inline: .5rem;
+
+    text-decoration: none;
+
+    transition:
+        color .25s ease,
+        transform .25s ease;
+}
+.nav .nav__tab::after {
+    content: "";
+
+    position: absolute;
+    left: 50%;
+    bottom: 6px;
+
+    width: 0;
+    height: 2px;
+
+    background: var(--color-on-primary);
+
+    transform: translateX(-50%);
+    transition: width .3s cubic-bezier(.4,0,.2,1);
 }
 .nav .nav__tab.router-link-active {
-    border-color: var(--color-on-primary);
+    transform: translateY(-2px);
+}
+
+.nav .nav__tab.router-link-active::after {
+    width: 100%;
 }
 .nav .nav__tab:hover {
-    border-color: var(--color-on-primary);
+    transform: translateY(-2px);
+}
+
+.nav .nav__tab:hover::after {
+    width: 100%;
 }
 .nav .nav__actions {
     flex: 1;
