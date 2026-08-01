@@ -52,19 +52,28 @@
 
     border-radius:999px;
 
-    background:white;
-
-    pointer-events:none;
+    background:var(--color-on-primary);
 
     transition:
-
         left .35s cubic-bezier(.22,1,.36,1),
-
         width .35s cubic-bezier(.22,1,.36,1);
+
+    header.dark .apple-underline,
+    header.darker .apple-underline{
 
     box-shadow:
         0 0 8px rgba(255,255,255,.45),
-        0 0 16px rgba(255,255,255,.15);
+        0 0 18px rgba(255,255,255,.18);
+
+    header:not(.dark):not(.darker) .apple-underline{
+
+    box-shadow:
+        0 0 6px rgba(0,0,0,.20),
+        0 0 12px rgba(0,0,0,.08);
+
+}
+
+}
 
 }
 

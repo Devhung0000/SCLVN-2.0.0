@@ -14,6 +14,11 @@
 
 main.dark,
 header.dark {
+
+    background:rgba(28,27,31,.72);
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
     color-scheme: dark;
     --color-background: #1c1b1f;
     --color-on-background: white;
@@ -31,6 +36,11 @@ header.dark {
 
 main.darker,
 header.darker {
+
+    background:rgba(7,7,9,.72);
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
     color-scheme: darker;
     --color-background: #070709;
     --color-on-background: white;
@@ -41,7 +51,7 @@ header.darker {
     --color-on-primary: white;
     --color-error: #de0000;
     --color-on-error: white;
-	--the-button-on-top: filter: brightness(100%) saturate(100%);
+	--the-button-on-top: brightness(100%) saturate(100%);
 	--level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
 	--color-background-list: #070709de;
 }
@@ -72,11 +82,31 @@ main {
 }
 
 header {
-    display: flex;
-    padding-inline: calc(25vw - 10rem);
-    height: 4rem;
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
+
+    display:flex;
+
+    padding-inline:calc(25vw - 10rem);
+
+    height:4rem;
+
+    color:var(--color-on-primary);
+
+    position:sticky;
+    top:0;
+
+    z-index:1000;
+
+    background:rgba(255,255,255,.72);
+
+    backdrop-filter:blur(24px) saturate(180%);
+    -webkit-backdrop-filter:blur(24px) saturate(180%);
+
+    border-bottom:1px solid rgba(0,0,0,.08);
+
+    transition:
+        background .3s ease,
+        backdrop-filter .3s ease;
+
 }
 @media screen and (min-width: 1366px) {
     header {
