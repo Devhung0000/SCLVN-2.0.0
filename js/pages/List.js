@@ -146,7 +146,7 @@ export default {
             			<div style="display: flex; flex-direction: column; align-items: left; gap: 24px; overflow: visible; margin-left: 10px; margin-top: 12px">
                             <h2>5/30/26</h2>
                             <p class="cl">- <clw>mraow</clw> has been placed at <clw>#1</clw></p>
-							<p class="cl">giangdelt ngu het thuoc chua</p>
+							<p class="cl"></b>THẰNG HƯNG OWNER CỦA CÁI LIST NÀY LÀ THG NGU L</b></p>
 				</div>
         			</main>
                 </div>
