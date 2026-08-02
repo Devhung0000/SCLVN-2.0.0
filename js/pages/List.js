@@ -145,8 +145,8 @@ export default {
                     <main style="display: flex; flex-direction: column; align-items: left; gap: 24px; text-align: left; overflow: hidden; overflow-y: auto; max-height: 300px; width: 700px; border: 3px solid var(--color-primary); border-radius: 5px;">
             			<div style="display: flex; flex-direction: column; align-items: left; gap: 24px; overflow: visible; margin-left: 10px; margin-top: 12px">
                             <h2>5/30/26</h2>
-                            <p class="cl">- <clw>Acidic</clw> has been placed at <clw>#1</clw></p>
-							<p class="cl">hello changelog!</p>
+                            <p class="cl">- <clw>mraow> has been placed at <clw>#1</clw></p>
+							<p class="cl">giangdelt ngu het thuoc chua</p>
 				</div>
         			</main>
                 </div>
