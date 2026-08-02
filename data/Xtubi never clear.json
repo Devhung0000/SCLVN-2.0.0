@@ -13,14 +13,19 @@
     "records": [
         {
         "user": "Baominh",
-        "hz": "60",
+        "hz": "CBF",
         "percent": 100,
         "link": "https://youtu.be/0POCq0HxrEA"
         },
         {
         "user": "NookGD",
         "link": "https://drive.google.com/file/d/1I_2h2pdpBog0IJ6iqiMLx_z83d5TdZUc/view?usp=sharing",
-        "hz": "60",
+        "hz": "CBF",
+        "percent": 100
+        },
+        {
+        "user": "giangdelt",
+        "hz": "CBF",
         "percent": 100
         }
     ]

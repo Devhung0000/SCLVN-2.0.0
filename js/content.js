@@ -182,7 +182,8 @@ export async function fetchLeaderboard() {
             });
         });
         
-        // Creator
+        // Creator (Dit me thang Hung)
+        /*
         for (let index = 0; index < level.creators.length; index++) {      
             const creator = Object.keys(scoreMap).find(
             (u) => u.toLowerCase() === level.creators.map(creator => creator.toLowerCase()),
@@ -201,6 +202,7 @@ export async function fetchLeaderboard() {
                 link: level.verification,
             });
         }
+        */
     });
 
     // Wrap in extra Object containing the user and total score
