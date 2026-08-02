@@ -1,7 +1,6 @@
 .nav{
     position:relative;
     display:flex;
-    align-items:center;
     column-gap:2rem;
 }
 
@@ -29,22 +28,18 @@
 
 }
 
-/* Ẩn underline cũ */
-
-.nav .nav__tab::after{
-    display:none;
-}
-
 /* Apple underline */
 
 .apple-underline{
 
     position:absolute;
 
-    left:0;
     bottom:-3px;
 
+    left:0;
+
     width:0;
+
     height:2px;
 
     border-radius:999px;
@@ -52,8 +47,10 @@
     background:var(--color-on-primary);
 
     transition:
-        left .35s cubic-bezier(.22,1,.36,1),
+        transform .35s cubic-bezier(.22,1,.36,1),
         width .35s cubic-bezier(.22,1,.36,1);
+
+    will-change:transform,width;
 
 }
 
