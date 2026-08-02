@@ -24,46 +24,54 @@ app.use(router);
 
 app.mount("#app");
 
-Vue.nextTick(initAppleUnderline);
-
-router.afterEach(() => {
-
-    Vue.nextTick(initAppleUnderline);
-
-});
-
-function initAppleUnderline() {
+function initNavUnderline() {
 
     const nav = document.querySelector(".nav");
-    const underline = document.querySelector(".apple-underline");
+    if (!nav) return;
 
-    if (!nav || !underline) return;
+    // Nếu đã có thì dùng lại
+    let underline = nav.querySelector(".nav-highlight");
 
-    const tabs = nav.querySelectorAll(".nav__tab");
-
-    function move(el) {
-
-        underline.style.left = el.offsetLeft + "px";
-        underline.style.width = el.offsetWidth + "px";
-
+    if (!underline) {
+        underline = document.createElement("div");
+        underline.className = "nav-highlight";
+        nav.appendChild(underline);
     }
 
-    function updateActive() {
+    const tabs = [...nav.querySelectorAll(".nav__tab")];
 
-        const active = nav.querySelector(".router-link-active");
+    function move(target) {
+        if (!target) return;
 
-        if (active) move(active);
+        const navRect = nav.getBoundingClientRect();
+        const rect = target.getBoundingClientRect();
 
+        underline.style.left = `${rect.left - navRect.left}px`;
+        underline.style.width = `${rect.width}px`;
     }
 
-    updateActive();
+    function moveToActive() {
+        move(nav.querySelector(".router-link-active"));
+    }
+
+    moveToActive();
 
     tabs.forEach(tab => {
-
         tab.onmouseenter = () => move(tab);
-
     });
 
-    nav.onmouseleave = updateActive;
-
+    nav.onmouseleave = moveToActive;
 }
+
+// Chạy sau khi Vue render
+Vue.nextTick(initNavUnderline);
+
+// Chạy lại sau mỗi lần đổi route
+router.afterEach(() => {
+    Vue.nextTick(initNavUnderline);
+});
+
+// Cập nhật khi resize cửa sổ
+window.addEventListener("resize", () => {
+    Vue.nextTick(initNavUnderline);
+});
