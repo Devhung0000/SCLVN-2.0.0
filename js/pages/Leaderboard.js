@@ -235,11 +235,14 @@ export default {
                     .replace(/(^-|-$)/g, '');
             }
 
-            // Đảm bảo đường dẫn thumbnail đúng cấu trúc thư mục data/
             const imgPath = `data/${slug}/thumbnail.png`;
 
+            // Bắt buộc style dùng background-image trực tiếp
             return {
-                backgroundImage: `linear-gradient(90deg, rgba(15, 15, 20, 0.92) 0%, rgba(15, 15, 20, 0.6) 50%, rgba(15, 15, 20, 0.85) 100%), url('${imgPath}')`
+                backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0.8) 100%), url('${imgPath}')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundColor: '#1a1a20'
             };
         }
     },
