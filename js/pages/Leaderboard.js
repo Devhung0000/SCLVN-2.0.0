@@ -208,43 +208,42 @@ export default {
     },
     methods: {
         localize,
+        // Tìm thông tin Level trong this.list (Flatten array nếu list chia dạng 2 cột)
         findLevelData(score) {
             if (!this.list) return null;
             const flatList = this.list.flat().filter(item => item && item.name);
-            return flatList.find(item => item.name.toLowerCase().trim() === score.level.toLowerCase().trim());
+            return flatList.find(item => item.name.toLowerCase() === score.level.toLowerCase());
         },
+        // Lấy link dẫn trực tiếp tới level
         getScoreLink(score) {
+            // Dùng score.link có sẵn từ data nếu có
+            if (score.link) return score.link;
+            
             const levelData = this.findLevelData(score);
             if (levelData && levelData.path) {
                 return `/#/level/${levelData.path}`;
             }
             
-            const slug = score.level
-                .toLowerCase()
-                .trim()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/(^-|-$)/g, '');
-
+            // Fallback: Tự tạo slug tên level
+            const slug = score.level.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
             return `/#/level/${slug}`;
         },
+        // Lấy hình ảnh Banner / Thumbnail
         getBannerStyle(score) {
             const levelData = this.findLevelData(score);
-            let slug = '';
+            let imgPath = '';
 
-            if (levelData && levelData.path) {
-                slug = levelData.path;
+            if (levelData) {
+                // Nếu levelData có thuộc tính path/banner/thumbnail
+                const path = levelData.path || score.level.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                imgPath = `data/${path}/thumbnail.png`;
             } else {
-                slug = score.level
-                    .toLowerCase()
-                    .trim()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/(^-|-$)/g, '');
+                const slug = score.level.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                imgPath = `data/${slug}/thumbnail.png`;
             }
 
-            const imgPath = `data/${slug}/thumbnail.png`;
-
             return {
-                backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.8) 100%), url('${imgPath}')`
+                backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 60%, rgba(0, 0, 0, 0.8) 100%), url('${imgPath}')`
             };
         }
     },
