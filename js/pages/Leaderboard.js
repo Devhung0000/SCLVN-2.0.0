@@ -26,7 +26,7 @@ export default {
                     </p>
                 </div>
 
-                <!-- Cột Trái: Bảng xếp hạng Player -->
+                <!-- Cột trái: Leaderboard List -->
                 <div class="board-container">
                     <div class="board">
                         <div
@@ -66,10 +66,10 @@ export default {
                     </div>
                 </div>
 
-                <!-- Cột Phải: Profile Chi Tiết Player -->
+                <!-- Cột phải: Profile Player -->
                 <div class="player-container" v-if="entry">
                     <div class="player">
-                        <!-- Card Header Player -->
+                        <!-- Header Profile -->
                         <div class="profile-header-card">
                             <div class="profile-info">
                                 <h1
@@ -84,7 +84,7 @@ export default {
                                 </h1>
                                 <div class="player-stats-row">
                                     <span class="stat-badge score-gold">
-                                        ⚡ {{ localize(entry.total) }} pts
+                                        {{ localize(entry.total) }} pts
                                     </span>
                                 </div>
                             </div>
@@ -99,87 +99,85 @@ export default {
                             </div>
                         </div>
 
-                        <!-- HARDEST LEVEL CARD -->
+                        <!-- HARDEST LEVEL -->
                         <div v-if="hardestLevel" class="profile-section">
-                            <h2 class="section-title">🏆 Hardest Beat</h2>
+                            <h2 class="section-title">🏆 Hardest</h2>
                             <a 
-                                :href="'/#/level/' + getLevelSlug(hardestLevel.level)"
-                                class="level-card hardest-card"
-                                :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url(' + getLevelThumb(hardestLevel.level) + ')' }"
+                                :href="'/#/level/' + (hardestLevel.path || getSlug(hardestLevel.level))"
+                                class="level-banner-card hardest-banner"
+                                :style="getBannerStyle(hardestLevel)"
                             >
-                                <div class="level-card-info">
-                                    <span class="level-rank">#{{ hardestLevel.rank }}</span>
-                                    <div class="level-name-wrap">
-                                        <span class="level-title">{{ hardestLevel.level }}</span>
-                                    </div>
+                                <div class="banner-left">
+                                    <span class="banner-rank">#{{ hardestLevel.rank }}</span>
+                                    <span class="banner-title">{{ hardestLevel.level }}</span>
                                 </div>
-                                <div class="level-card-score">
-                                    +{{ localize(hardestLevel.score) }} pts
+                                <div class="banner-right">
+                                    <span class="banner-score">+{{ localize(hardestLevel.score) }} pts</span>
                                 </div>
                             </a>
                         </div>
 
-                        <!-- VERIFIED LEVELS -->
+                        <!-- VERIFIED -->
                         <div v-if="entry.verified.length > 0" class="profile-section">
                             <h2 class="section-title">👑 Verified ({{ entry.verified.length }})</h2>
-                            <div class="level-grid">
+                            <div class="banner-list">
                                 <a 
                                     v-for="score in entry.verified"
                                     :key="score.level"
-                                    :href="'/#/level/' + getLevelSlug(score.level)"
-                                    class="level-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
+                                    :href="'/#/level/' + (score.path || getSlug(score.level))"
+                                    class="level-banner-card"
+                                    :style="getBannerStyle(score)"
                                 >
-                                    <div class="level-card-info">
-                                        <span class="level-rank">#{{ score.rank }}</span>
-                                        <span class="level-title">{{ score.level }}</span>
+                                    <div class="banner-left">
+                                        <span class="banner-rank">#{{ score.rank }}</span>
+                                        <span class="banner-title">{{ score.level }}</span>
                                     </div>
-                                    <div class="level-card-score">
-                                        +{{ localize(score.score) }} pts
+                                    <div class="banner-right">
+                                        <span class="banner-score">+{{ localize(score.score) }} pts</span>
                                     </div>
                                 </a>
                             </div>
                         </div>
 
-                        <!-- COMPLETED LEVELS -->
+                        <!-- COMPLETED -->
                         <div v-if="entry.completed.length > 0" class="profile-section">
                             <h2 class="section-title">✅ Completed ({{ entry.completed.length }})</h2>
-                            <div class="level-grid">
+                            <div class="banner-list">
                                 <a 
                                     v-for="score in entry.completed"
                                     :key="score.level"
-                                    :href="'/#/level/' + getLevelSlug(score.level)"
-                                    class="level-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
+                                    :href="'/#/level/' + (score.path || getSlug(score.level))"
+                                    class="level-banner-card"
+                                    :style="getBannerStyle(score)"
                                 >
-                                    <div class="level-card-info">
-                                        <span class="level-rank">#{{ score.rank }}</span>
-                                        <span class="level-title">{{ score.level }}</span>
+                                    <div class="banner-left">
+                                        <span class="banner-rank">#{{ score.rank }}</span>
+                                        <span class="banner-title">{{ score.level }}</span>
                                     </div>
-                                    <div class="level-card-score">
-                                        +{{ localize(score.score) }} pts
+                                    <div class="banner-right">
+                                        <span class="banner-score">+{{ localize(score.score) }} pts</span>
                                     </div>
                                 </a>
                             </div>
                         </div>
 
-                        <!-- PROGRESSED LEVELS -->
+                        <!-- PROGRESSED -->
                         <div v-if="entry.progressed.length > 0" class="profile-section">
                             <h2 class="section-title">🎯 Progressed ({{ entry.progressed.length }})</h2>
-                            <div class="level-grid">
+                            <div class="banner-list">
                                 <a 
                                     v-for="score in entry.progressed"
                                     :key="score.level"
-                                    :href="'/#/level/' + getLevelSlug(score.level)"
-                                    class="level-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
+                                    :href="'/#/level/' + (score.path || getSlug(score.level))"
+                                    class="level-banner-card"
+                                    :style="getBannerStyle(score)"
                                 >
-                                    <div class="level-card-info">
-                                        <span class="level-rank">#{{ score.rank }}</span>
-                                        <span class="level-title">{{ score.percent }}% {{ score.level }}</span>
+                                    <div class="banner-left">
+                                        <span class="banner-rank">#{{ score.rank }}</span>
+                                        <span class="banner-title">{{ score.percent }}% {{ score.level }}</span>
                                     </div>
-                                    <div class="level-card-score">
-                                        +{{ localize(score.score) }} pts
+                                    <div class="banner-right">
+                                        <span class="banner-score">+{{ localize(score.score) }} pts</span>
                                     </div>
                                 </a>
                             </div>
@@ -210,14 +208,17 @@ export default {
     },
     methods: {
         localize,
-        getLevelSlug(name) {
+        getSlug(name) {
             if (!name) return '';
             return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         },
-        getLevelThumb(name) {
-            const slug = this.getLevelSlug(name);
-            // Đường dẫn tới ảnh thumbnail của Level
-            return `data/${slug}/thumbnail.png`; 
+        getBannerStyle(score) {
+            const slug = score.path || this.getSlug(score.level);
+            // Ưu tiên thumbnail -> banner -> fallback
+            const imgPath = `data/${slug}/thumbnail.png`;
+            return {
+                backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.75) 100%), url('${imgPath}')`
+            };
         }
     },
 };
