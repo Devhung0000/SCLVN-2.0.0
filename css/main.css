@@ -197,3 +197,48 @@ header{
     }
 
 }
+/* --- LEADERBOARD CUSTOMIZATION --- */
+.board-row {
+  display: flex;
+  align-items: center;
+}
+
+/* Đẩy cột tổng điểm (total) sang góc phải */
+.board-row .total {
+  margin-left: auto;
+}
+
+/* Ảnh Icon trên bảng xếp hạng (62x51 pixel) */
+.board-user-icon {
+  width: 62px;
+  height: 51px;
+  object-fit: contain;
+  margin: 0 10px;
+}
+
+/* Cho phần chữ rank (#1, #2, #3...) to hơn một tí */
+.board-row .rank p {
+  font-size: 1.5rem !important;
+  font-weight: bold;
+}
+
+/* --- PROFILE AVATAR CUSTOMIZATION (Phần khoanh đỏ) --- */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.profile-avatar-container {
+  flex-shrink: 0;
+}
+
+/* Ảnh Profile góc phải chuẩn kích thước 260x150 pixel */
+.profile-user-avatar {
+  width: 260px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 8px;
+}
