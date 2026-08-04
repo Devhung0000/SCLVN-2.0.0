@@ -1,4 +1,5 @@
 import routes from './routes.js';
+import "./ripple.js";
 export const store = Vue.reactive({
     dark: JSON.parse(localStorage.getItem('dark')) ?? true,
     darker: JSON.parse(localStorage.getItem('darker')) ?? false,
