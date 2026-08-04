@@ -677,3 +677,38 @@ a.level-banner-card.hardest-banner {
     border-radius: 5px !important;
     border: 1px solid rgba(76, 201, 240, 0.4) !important;
 }
+/* ================= FIX LỖI MÀU TRẮNG MÀN HÌNH & VẠCH DỌC ================= */
+
+/* 1. Đổi toàn bộ nền trang web thành màu tối (Xóa 2 dải trắng 2 bên mép) */
+html, body, #app, #main, main {
+    background-color: #0b0b0e !important; /* hoặc #000000 tùy màu nền ông thích */
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. Triệt hạ vạch trắng dọc bên phải phần Profile Header */
+.page-leaderboard,
+.board-container,
+.player-container,
+.player,
+.profile-header-card {
+    border-right: none !important;
+    border-left: none !important;
+    box-shadow: none !important;
+}
+
+/* Xóa các pseudoelement (dấu vết còn sót lại tạo ra vạch trắng) */
+.page-leaderboard::before,
+.page-leaderboard::after,
+.player-container::before,
+.player-container::after,
+.player::before,
+.player::after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    background: none !important;
+}
