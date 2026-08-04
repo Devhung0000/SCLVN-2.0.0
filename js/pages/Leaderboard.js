@@ -20,18 +20,17 @@ export default {
         </main>
         <main v-else class="page-leaderboard-container">
             <div class="page-leaderboard">
-                <div class="error-container" v-if="err.length > 0">
-                    <p class="error">
+                <div class="error-container">
+                    <p class="error" v-if="err.length > 0">
                         Leaderboard may be incorrect, as the following levels could not be loaded: {{ err.join(', ') }}
                     </p>
                 </div>
 
-                <!-- CỘT TRÁI: LEADERBOARD -->
+                <!-- Cột trái: Danh sách Leaderboard -->
                 <div class="board-container">
                     <div class="board">
                         <div
                             v-for="(ientry, i) in leaderboard"
-                            :key="ientry.user"
                             class="board-row"
                             :class="{
                                 'top-1': i === 0,
@@ -41,9 +40,11 @@ export default {
                             }"
                             @click="selected = i"
                         >
-                            <span class="rank-num">#{{ i + 1 }}</span>
+                            <div class="rank">
+                                <p class="type-label-lg">#{{ i + 1 }}</p>
+                            </div>
 
-                            <div class="user-avatar-wrap">
+                            <div class="user-icon-container">
                                 <img 
                                     class="board-user-icon" 
                                     :src="'assets/avatars/' + ientry.user + '.png'" 
@@ -52,18 +53,23 @@ export default {
                                 />
                             </div>
 
-                            <span class="user-name-text">{{ ientry.user }}</span>
+                            <div class="user">
+                                <span class="type-label-lg player-name-text">
+                                    {{ ientry.user }}
+                                </span>
+                            </div>
 
-                            <span class="score-badge">{{ localize(ientry.total) }} pts</span>
+                            <div class="total">
+                                <span class="score-badge">{{ localize(ientry.total) }} pts</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- CỘT PHẢI: PROFILE PLAYER -->
+                <!-- Cột phải: Profile Chi Tiết -->
                 <div class="player-container" v-if="entry">
                     <div class="player">
-                        
-                        <!-- Header Profile -->
+                        <!-- Header Player Card -->
                         <div class="profile-header-card">
                             <div class="profile-info">
                                 <h1
@@ -237,12 +243,8 @@ export default {
 
             const imgPath = `data/${slug}/thumbnail.png`;
 
-            // Bắt buộc style dùng background-image trực tiếp
             return {
-                backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0.8) 100%), url('${imgPath}')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundColor: '#1a1a20'
+                backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.8) 100%), url('${imgPath}')`
             };
         }
     },
