@@ -368,3 +368,233 @@ input[type="radio"] {
   border-radius: 6px !important;
   border: 1px solid rgba(76, 201, 240, 0.3) !important;
 }
+/* ================= FIX FULL LEADERBOARD OVERRIDE ================= */
+
+/* Layout Container */
+.page-leaderboard-container {
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 20px !important;
+}
+
+.page-leaderboard {
+  display: flex !important;
+  gap: 30px !important;
+  align-items: flex-start !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.board-container {
+  flex: 0 0 380px !important;
+  width: 380px !important;
+}
+
+.player-container {
+  flex: 1 !important;
+  min-width: 0 !important;
+  border-left: none !important; /* Xóa vạch trắng dọc thừa */
+  padding-left: 0 !important;
+}
+
+/* Cột Trái: Item Player */
+.board {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+.board-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 52px !important;
+  padding: 0 14px !important;
+  background: #18181c !important;
+  border: 1px solid #2a2a32 !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+}
+
+.board-row:hover {
+  background: #23232a !important;
+  border-color: #444452 !important;
+  transform: translateX(4px) !important;
+}
+
+.board-row.active {
+  background: #282833 !important;
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2) !important;
+}
+
+.rank-num {
+  font-family: 'Consolas', monospace !important;
+  font-weight: bold !important;
+  font-size: 1rem !important;
+  color: #ffd700 !important;
+  width: 35px !important;
+}
+
+.user-avatar-wrap {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  margin-right: 10px !important;
+  flex-shrink: 0 !important;
+}
+
+.board-user-icon {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.user-name-text {
+  flex: 1 !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  font-size: 0.95rem !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: left !important;
+}
+
+.score-badge {
+  font-family: 'Consolas', monospace !important;
+  font-size: 0.85rem !important;
+  font-weight: bold !important;
+  color: #ffd700 !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(255, 215, 0, 0.3) !important;
+}
+
+/* Cột Phải: Profile Header */
+.profile-header-card {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: #18181c !important;
+  border: 1px solid #2a2a32 !important;
+  border-radius: 12px !important;
+  padding: 20px 24px !important;
+  margin-bottom: 25px !important;
+}
+
+.player-title {
+  margin: 0 0 8px 0 !important;
+  font-size: 1.8rem !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+}
+
+.stat-badge.score-gold {
+  font-family: 'Consolas', monospace !important;
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  color: #ffb703 !important;
+  background: rgba(255, 183, 3, 0.1) !important;
+  border: 1px solid rgba(255, 183, 3, 0.3) !important;
+  padding: 4px 12px !important;
+  border-radius: 6px !important;
+}
+
+.profile-avatar-box {
+  width: 75px !important;
+  height: 75px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  border: 2px solid #3a3a48 !important;
+}
+
+.profile-user-avatar {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Banner Level Trong Profile */
+.profile-section {
+  margin-bottom: 22px !important;
+  text-align: left !important;
+}
+
+.section-title {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #cccccc !important;
+  margin-bottom: 12px !important;
+}
+
+.banner-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+.level-banner-card {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 52px !important;
+  padding: 0 18px !important;
+  border-radius: 10px !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border: 1px solid #333340 !important;
+  text-decoration: none !important;
+  color: #ffffff !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s ease !important;
+}
+
+.level-banner-card:hover {
+  transform: translateX(5px) !important;
+  border-color: #ffd700 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7) !important;
+}
+
+.hardest-banner {
+  border: 1.5px solid #ffd700 !important;
+  height: 58px !important;
+}
+
+.banner-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.banner-rank {
+  font-family: 'Consolas', monospace !important;
+  font-weight: bold !important;
+  font-size: 1.1rem !important;
+  color: #ffd700 !important;
+  min-width: 30px !important;
+}
+
+.banner-title {
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+.banner-score {
+  font-family: 'Consolas', monospace !important;
+  font-size: 0.85rem !important;
+  font-weight: bold !important;
+  color: #4cc9f0 !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(76, 201, 240, 0.4) !important;
+}
