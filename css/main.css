@@ -538,3 +538,26 @@ header{
   border-radius: 6px !important;
   border: 1px solid rgba(76, 201, 240, 0.3) !important;
 }
+/* Đảm bảo thẻ level-banner-card hiển thị đúng hình nền */
+.level-banner-card {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 52px !important;
+  padding: 0 16px !important;
+  border-radius: 10px !important;
+  background-size: cover !important;
+  background-position: center !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  text-decoration: none !important;
+  color: #ffffff !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.level-banner-card:hover {
+  transform: translateX(6px) !important;
+  border-color: rgba(255, 215, 0, 0.6) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6) !important;
+}
