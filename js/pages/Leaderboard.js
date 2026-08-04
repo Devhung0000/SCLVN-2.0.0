@@ -27,21 +27,24 @@ export default {
                 </div>
                 <div class="board-container">
                     <div class="board">
+                        <!-- Click vào toàn bộ khối board-row -->
                         <div
                             v-for="(ientry, i) in leaderboard"
                             class="board-row"
                             :class="{
                                 'top-1': i === 0,
                                 'top-2': i === 1,
-                                'top-3': i === 2
+                                'top-3': i === 2,
+                                'active': selected === i
                             }"
+                            @click="selected = i"
                         >
                             <!-- 1. Rank -->
                             <div class="rank">
                                 <p class="type-label-lg">#{{ i + 1 }}</p>
                             </div>
 
-                            <!-- 2. Icon GD (Đã bỏ alt để không bị hiện lặp tên khi lỗi ảnh) -->
+                            <!-- 2. Avatar GD -->
                             <div class="user-icon-container">
                                 <img 
                                     class="board-user-icon" 
@@ -51,16 +54,11 @@ export default {
                                 />
                             </div>
 
-                            <!-- 3. Tên Player (Đã thêm class player-name-text) -->
-                            <div
-                                class="user"
-                                :class="{ 'active': selected == i }"
-                            >
-                                <button @click="selected = i">
-                                    <span class="type-label-lg player-name-text">
-                                        {{ ientry.user }}
-                                    </span>
-                                </button>
+                            <!-- 3. Tên Player -->
+                            <div class="user">
+                                <span class="type-label-lg player-name-text">
+                                    {{ ientry.user }}
+                                </span>
                             </div>
 
                             <!-- 4. Điểm số -->
@@ -72,7 +70,7 @@ export default {
                 </div>
                 <div class="player-container" v-if="entry">
                     <div class="player">
-                        <!-- Header Profile: Tên bên trái - Ảnh 260x150 bên phải -->
+                        <!-- Header Profile: Tên bên trái - Ảnh bên phải -->
                         <div class="profile-header-wrap">
                             <div class="profile-title-box">
                                 <h1
