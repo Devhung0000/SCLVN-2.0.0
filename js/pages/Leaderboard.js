@@ -103,7 +103,9 @@ export default {
                         <div v-if="hardestLevel" class="profile-section">
                             <h2 class="section-title">🏆 Hardest Beat</h2>
                             <a 
-                                :href="'/#/level/' + getLevelSlug(hardestLevel.level)"
+                                :href="getScoreLink(hardestLevel)"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 class="level-card hardest-card"
                                 :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url(' + getLevelThumb(hardestLevel.level) + ')' }"
                             >
@@ -126,7 +128,9 @@ export default {
                                 <a 
                                     v-for="score in entry.verified"
                                     :key="score.level"
-                                    :href="'/#/level/' + getLevelSlug(score.level)"
+                                    :href="getScoreLink(score)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     class="level-card"
                                     :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
                                 >
@@ -148,7 +152,9 @@ export default {
                                 <a 
                                     v-for="score in entry.completed"
                                     :key="score.level"
-                                    :href="'/#/level/' + getLevelSlug(score.level)"
+                                    :href="getScoreLink(score)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     class="level-card"
                                     :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
                                 >
@@ -170,7 +176,9 @@ export default {
                                 <a 
                                     v-for="score in entry.progressed"
                                     :key="score.level"
-                                    :href="'/#/level/' + getLevelSlug(score.level)"
+                                    :href="getScoreLink(score)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     class="level-card"
                                     :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
                                 >
@@ -216,8 +224,20 @@ export default {
         },
         getLevelThumb(name) {
             const slug = this.getLevelSlug(name);
-            // Đường dẫn tới ảnh thumbnail của Level
             return `data/${slug}/thumbnail.png`; 
+        },
+        // Hàm mới: Tự kiểm tra và trả về link YouTube / completion của player
+        getScoreLink(score) {
+            if (!score) return '#';
+            
+            // Tìm thuộc tính chứa link proof trong file json data
+            const proofUrl = score.link || score.video || score.proof || score.url;
+            if (proofUrl) {
+                return proofUrl;
+            }
+
+            // Nếu player không có video proof riêng thì fallback chuyển đến trang level
+            return `/#/level/${this.getLevelSlug(score.level)}`;
         }
     },
 };
