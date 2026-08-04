@@ -40,7 +40,7 @@ export default {
                                 <p class="type-label-lg">#{{ i + 1 }}</p>
                             </div>
 
-                            <!-- 1. THÊM ICON PLAYER TRONG LEADERBOARD -->
+                            <!-- Ảnh Icon GD ở Leaderboard -->
                             <div class="user-icon-container">
                                 <img 
                                     class="board-user-icon" 
@@ -67,11 +67,11 @@ export default {
                         </div>
                     </div>
                 </div>
-                <div class="player-container">
+                <div class="player-container" v-if="entry">
                     <div class="player">
-                        <!-- 2. TẠO KHỐI HEADER PROFILE CHỨA THÔNG TIN VÀ ẢNH ĐẠI DIỆN KHOANH ĐỎ -->
-                        <div class="profile-header">
-                            <div class="profile-header-info">
+                        <!-- Header Profile: Tên bên trái - Ảnh bên phải -->
+                        <div class="profile-header-wrap">
+                            <div class="profile-title-box">
                                 <h1
                                     class="player-title"
                                     :class="{
@@ -82,11 +82,11 @@ export default {
                                 >
                                     #{{ selected + 1 }} - {{ entry.user }}
                                 </h1>
-                                <h3>{{ entry.total }} - Hardest: {{ [...entry.verified, ...entry.completed].reduce((min, current) => current.rank < min.rank ? current : min).level }}</h3>
+                                <h3>{{ entry.total }} - Hardest: {{ [...entry.verified, ...entry.completed].reduce((min, current) => current.rank < min.rank ? current : min, {rank: 999, level: 'None'}).level }}</h3>
                             </div>
 
-                            <!-- KHỐI ẢNH KHOANH ĐỎ Ở PROFLIE (260x150px) -->
-                            <div class="profile-avatar-container">
+                            <!-- Ảnh Profile (Khoanh đỏ) -->
+                            <div class="profile-avatar-box">
                                 <img 
                                     class="profile-user-avatar" 
                                     :src="'assets/avatars/' + entry.user + '.png'" 
@@ -170,7 +170,6 @@ export default {
         this.list = await fetchList();
         this.leaderboard = leaderboard;
         this.err = err;
-        // Hide loading spinner
         this.loading = false;
     },
     methods: {
