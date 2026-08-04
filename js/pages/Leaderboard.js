@@ -20,17 +20,18 @@ export default {
         </main>
         <main v-else class="page-leaderboard-container">
             <div class="page-leaderboard">
-                <div class="error-container">
-                    <p class="error" v-if="err.length > 0">
+                <div class="error-container" v-if="err.length > 0">
+                    <p class="error">
                         Leaderboard may be incorrect, as the following levels could not be loaded: {{ err.join(', ') }}
                     </p>
                 </div>
 
-                <!-- Cột trái: Danh sách Leaderboard -->
+                <!-- CỘT TRÁI: DANH SÁCH LEADERBOARD -->
                 <div class="board-container">
                     <div class="board">
                         <div
                             v-for="(ientry, i) in leaderboard"
+                            :key="ientry.user"
                             class="board-row"
                             :class="{
                                 'top-1': i === 0,
@@ -40,11 +41,9 @@ export default {
                             }"
                             @click="selected = i"
                         >
-                            <div class="rank">
-                                <p class="type-label-lg">#{{ i + 1 }}</p>
-                            </div>
+                            <span class="rank-num">#{{ i + 1 }}</span>
 
-                            <div class="user-icon-container">
+                            <div class="user-avatar-wrap">
                                 <img 
                                     class="board-user-icon" 
                                     :src="'assets/avatars/' + ientry.user + '.png'" 
@@ -53,23 +52,18 @@ export default {
                                 />
                             </div>
 
-                            <div class="user">
-                                <span class="type-label-lg player-name-text">
-                                    {{ ientry.user }}
-                                </span>
-                            </div>
+                            <span class="user-name-text">{{ ientry.user }}</span>
 
-                            <div class="total">
-                                <span class="score-badge">{{ localize(ientry.total) }} pts</span>
-                            </div>
+                            <span class="score-badge">{{ localize(ientry.total) }} pts</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Cột phải: Profile Chi Tiết -->
+                <!-- CỘT PHẢI: PROFILE PLAYER -->
                 <div class="player-container" v-if="entry">
                     <div class="player">
-                        <!-- Header Player Card -->
+                        
+                        <!-- Header Profile -->
                         <div class="profile-header-card">
                             <div class="profile-info">
                                 <h1
