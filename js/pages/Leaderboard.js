@@ -41,28 +41,29 @@ export default {
                                 <p class="type-label-lg">#{{ i + 1 }}</p>
                             </div>
 
-                            <!-- 2. Icon GD (Khoá cứng 62x51) -->
+                            <!-- 2. Icon GD (Đã bỏ alt để không bị hiện lặp tên khi lỗi ảnh) -->
                             <div class="user-icon-container">
                                 <img 
                                     class="board-user-icon" 
                                     :src="'assets/avatars/' + ientry.user + '.png'" 
-                                    :alt="ientry.user"
+                                    alt=""
+                                    @error="$event.target.style.display='none'"
                                 />
                             </div>
 
-                            <!-- 3. Tên Player -->
+                            <!-- 3. Tên Player (Đã thêm class player-name-text) -->
                             <div
                                 class="user"
                                 :class="{ 'active': selected == i }"
                             >
                                 <button @click="selected = i">
-                                    <span class="type-label-lg">
+                                    <span class="type-label-lg player-name-text">
                                         {{ ientry.user }}
                                     </span>
                                 </button>
                             </div>
 
-                            <!-- 4. Điểm số (Nằm ngay cạnh tên) -->
+                            <!-- 4. Điểm số -->
                             <div class="total">
                                 <span class="score-badge">{{ localize(ientry.total) }} pts</span>
                             </div>
@@ -87,12 +88,12 @@ export default {
                                 <h3>{{ entry.total }} - Hardest: {{ [...entry.verified, ...entry.completed].reduce((min, current) => current.rank < min.rank ? current : min, {rank: 999, level: 'None'}).level }}</h3>
                             </div>
 
-                            <!-- Ảnh Profile (Khoanh đỏ) -->
+                            <!-- Ảnh Profile -->
                             <div class="profile-avatar-box">
                                 <img 
                                     class="profile-user-avatar" 
                                     :src="'assets/avatars/' + entry.user + '.png'" 
-                                    :alt="entry.user"
+                                    alt=""
                                 />
                             </div>
                         </div>
