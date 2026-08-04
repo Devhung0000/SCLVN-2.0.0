@@ -197,33 +197,69 @@ header{
     }
 
 }
-/* ================= 1. BẢNG XẾP HẠNG (LEADERBOARD) ================= */
+/* ================= THIẾT LẬP BẢNG XẾP HẠNG GỌN DÀI ================= */
 
-/* Khung chứa icon trong hàng */
+/* Hàng player dạng dẹt, nằm ngang */
+.board-row {
+  display: flex !important;
+  align-items: center !important;
+  flex-direction: row !important;
+  padding: 8px 15px !important;
+  gap: 12px !important;
+  height: auto !important;
+  min-height: 65px !important;
+}
+
+/* 1. Kích thước Icon chuẩn 62x51px */
 .user-icon-container {
   width: 62px !important;
   height: 51px !important;
+  flex-shrink: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  overflow: hidden !important;
-  flex-shrink: 0 !important;
 }
 
-/* Ép ảnh icon đúng 62x51 px không bị vỡ/giãn */
 .board-user-icon {
   width: 62px !important;
   height: 51px !important;
-  max-width: 62px !important;
-  max-height: 51px !important;
   object-fit: contain !important;
-  display: block !important;
 }
 
+/* 2. Cột Tên Player */
+.board-row .user {
+  margin: 0 !important;
+  text-align: left !important;
+}
 
-/* ================= 2. TRANG PROFILE (BÊN PHẢI) ================= */
+/* 3. Cột Điểm số - Thiết kế Phông chữ riêng nằm ngay cạnh tên */
+.board-row .total {
+  margin-left: 5px !important; /* Đặt ngay sát tên */
+  display: flex !important;
+  align-items: center !important;
+}
 
-/* Tạo khung Flexbox chia 2 cột cho Profile */
+.score-badge {
+  font-family: 'Consolas', 'Courier New', monospace, sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #ffd700 !important; /* Màu vàng kim nổi bật */
+  background: rgba(0, 0, 0, 0.3) !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(255, 215, 0, 0.3) !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* Custom màu điểm cho Top 1, 2, 3 cho đồng bộ */
+.top-1 .score-badge {
+  color: #fff !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ================= TRANG PROFILE (BÊN PHẢI) ================= */
+
 .profile-header-wrap {
   display: flex !important;
   justify-content: space-between !important;
@@ -232,22 +268,15 @@ header{
   margin-bottom: 20px !important;
 }
 
-/* Ảnh đại diện Profile góc bên phải */
 .profile-avatar-box {
   width: 260px !important;
   height: 150px !important;
   flex-shrink: 0 !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
 }
 
 .profile-user-avatar {
   width: 260px !important;
   height: 150px !important;
-  max-width: 260px !important;
-  max-height: 150px !important;
   object-fit: contain !important;
   border-radius: 8px !important;
-  display: block !important;
 }
