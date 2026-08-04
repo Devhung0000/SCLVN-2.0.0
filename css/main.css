@@ -197,75 +197,66 @@ header{
     }
 
 }
-/* ================= FIX LỖI AVATAR PHÌNH TO CHE TÊN ================= */
+/* ================= FIX CLICK CẢ KHỐI & HOVER SÁNG ================= */
 
-/* 1. Thanh container chính */
 .board-row {
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
   width: 100% !important;
-  height: 60px !important;
-  padding: 0 15px !important;
-  gap: 12px !important; /* Khoảng cách giữa Rank - Avatar - Tên - Điểm */
+  height: 55px !important;
+  padding: 0 16px !important;
+  gap: 14px !important;
   box-sizing: border-box !important;
-  overflow: hidden !important;
+  cursor: pointer !important;              /* Hiện bàn tay bấm toàn khối */
+  transition: all 0.2s ease-in-out !important; /* Hiệu ứng mượt */
+  border-radius: 12px !important;
 }
 
-/* 2. Ép Rank thu gọn */
-.board-row .rank {
-  flex-shrink: 0 !important;
-  min-width: 35px !important;
+/* Hover vào toàn bộ khối sẽ sáng lên */
+.board-row:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  filter: brightness(1.2) !important;
+  transform: translateX(4px) !important;   /* Nhích nhẹ sang phải tạo cảm giác bấm */
 }
 
-/* 3. KHÓA CỨNG kích thước khung chứa Avatar (không cho phình to) */
+/* Khối đang được CHỌN (Active) */
+.board-row.active {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4) !important;
+}
+
+/* Avatar nhỏ gọn cố định */
 .user-icon-container {
-  width: 45px !important;       /* Kích thước vừa vặn */
-  height: 45px !important;
-  min-width: 45px !important;   /* Cấm co giãn */
-  max-width: 45px !important;
-  flex-shrink: 0 !important;    /* Không cho bị bóp nghẹt */
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  flex-shrink: 0 !important;
+  border-radius: 6px !important;
   overflow: hidden !important;
-  border-radius: 6px !important; /* Bo góc avatar cho đẹp */
 }
 
-/* 4. Khóa ảnh Avatar bên trong khung */
 .board-user-icon {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important;  /* Cắt ảnh vuông vắn đẹp mắt */
-  display: block !important;
+  object-fit: cover !important;
 }
 
-/* 5. Cột Tên Player nằm ngay sau Avatar */
+/* Tên player: Không cắt bớt tên, hiện đầy đủ */
 .board-row .user {
   flex: 1 !important;
-  min-width: 0 !important;      /* Giúp text-overflow hoạt động */
   text-align: left !important;
-  margin: 0 !important;
-}
-
-.board-row .user button {
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  max-width: 100% !important;
-  cursor: pointer !important;
+  white-space: nowrap !important;
 }
 
 .player-name-text {
-  display: block !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important; /* Tên quá dài tự có dấu ... */
-  color: #fff !important;
+  font-size: 1.05rem !important;
   font-weight: bold !important;
+  color: #fff !important;
+  white-space: nowrap !important;
 }
 
-/* 6. Cột Điểm nằm gọn gàng bên phải */
+/* Cột điểm đẩy dạt về bên phải */
 .board-row .total {
   margin-left: auto !important;
   flex-shrink: 0 !important;
@@ -278,8 +269,8 @@ header{
   font-size: 0.9rem !important;
   font-weight: bold !important;
   color: #ffd700 !important;
-  background: rgba(0, 0, 0, 0.4) !important;
-  padding: 4px 10px !important;
-  border-radius: 6px !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  padding: 5px 12px !important;
+  border-radius: 8px !important;
   border: 1px solid rgba(255, 215, 0, 0.3) !important;
 }
