@@ -223,4 +223,39 @@ input[type="radio"] {
   border-radius: 8px !important;
   border: 1px solid rgba(255, 215, 0, 0.3) !important;
 }
+/* ================= FIX VỊ TRÍ ẢNH PROFILE (SANG PHẢI) ================= */
+
+/* 1. Đưa Tên & Ảnh nằm cùng 1 hàng ngang */
+.profile-header-wrap {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important; /* Tên bên trái, Ảnh đẩy sang phải */
+  width: 100% !important;
+  margin-bottom: 20px !important;
+  gap: 20px !important;
+}
+
+/* 2. Cột chứa thông tin Tên & Hardest */
+.profile-title-box {
+  flex: 1 !important;
+  text-align: left !important;
+}
+
+/* 3. Khung chứa Ảnh Profile bên phải */
+.profile-avatar-box {
+  flex-shrink: 0 !important;
+  width: 150px !important;       /* Chiều rộng ảnh */
+  height: 150px !important;      /* Chiều cao ảnh */
+  border-radius: 12px !important;/* Bo góc ảnh cho mượt */
+  overflow: hidden !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 4. Ảnh vừa khít khung */
+.profile-user-avatar {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
 
