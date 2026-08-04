@@ -11,5 +11,11 @@
     "device": "All",
     "method": "Alternate",
     "records": [
+         {
+        "user": "baominh",
+        "hz": "60",
+        "link": "https://youtu.be/Fdo8Mkr3Nto?si=Um-gkMnb1HNAdHM9",
+        "percent": 100
+        }
     ]
 }
