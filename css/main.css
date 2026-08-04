@@ -146,3 +146,81 @@ input[type="radio"] {
    background: var(--color-background);
    color: var(--color-on-background);
 }
+/* ================= FIX CLICK CẢ KHỐI & HOVER SÁNG ================= */
+
+.board-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  height: 55px !important;
+  padding: 0 16px !important;
+  gap: 14px !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;              /* Hiện bàn tay bấm toàn khối */
+  transition: all 0.2s ease-in-out !important; /* Hiệu ứng mượt */
+  border-radius: 12px !important;
+}
+
+/* Hover vào toàn bộ khối sẽ sáng lên */
+.board-row:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  filter: brightness(1.2) !important;
+  transform: translateX(4px) !important;   /* Nhích nhẹ sang phải tạo cảm giác bấm */
+}
+
+/* Khối đang được CHỌN (Active) */
+.board-row.active {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4) !important;
+}
+
+/* Avatar nhỏ gọn cố định */
+.user-icon-container {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  flex-shrink: 0 !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+}
+
+.board-user-icon {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Tên player: Không cắt bớt tên, hiện đầy đủ */
+.board-row .user {
+  flex: 1 !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+
+.player-name-text {
+  font-size: 1.05rem !important;
+  font-weight: bold !important;
+  color: #fff !important;
+  white-space: nowrap !important;
+}
+
+/* Cột điểm đẩy dạt về bên phải */
+.board-row .total {
+  margin-left: auto !important;
+  flex-shrink: 0 !important;
+}
+
+.score-badge {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  font-family: 'Consolas', monospace !important;
+  font-size: 0.9rem !important;
+  font-weight: bold !important;
+  color: #ffd700 !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  padding: 5px 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 215, 0, 0.3) !important;
+}
+
