@@ -197,48 +197,57 @@ header{
     }
 
 }
-/* --- LEADERBOARD CUSTOMIZATION --- */
-.board-row {
-  display: flex;
-  align-items: center;
+/* ================= 1. BẢNG XẾP HẠNG (LEADERBOARD) ================= */
+
+/* Khung chứa icon trong hàng */
+.user-icon-container {
+  width: 62px !important;
+  height: 51px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
 }
 
-/* Đẩy cột tổng điểm (total) sang góc phải */
-.board-row .total {
-  margin-left: auto;
-}
-
-/* Ảnh Icon trên bảng xếp hạng (62x51 pixel) */
+/* Ép ảnh icon đúng 62x51 px không bị vỡ/giãn */
 .board-user-icon {
-  width: 62px;
-  height: 51px;
-  object-fit: contain;
-  margin: 0 10px;
+  width: 62px !important;
+  height: 51px !important;
+  max-width: 62px !important;
+  max-height: 51px !important;
+  object-fit: contain !important;
+  display: block !important;
 }
 
-/* Cho phần chữ rank (#1, #2, #3...) to hơn một tí */
-.board-row .rank p {
-  font-size: 1.5rem !important;
-  font-weight: bold;
+
+/* ================= 2. TRANG PROFILE (BÊN PHẢI) ================= */
+
+/* Tạo khung Flexbox chia 2 cột cho Profile */
+.profile-header-wrap {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  margin-bottom: 20px !important;
 }
 
-/* --- PROFILE AVATAR CUSTOMIZATION (Phần khoanh đỏ) --- */
-.profile-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-  margin-bottom: 20px;
+/* Ảnh đại diện Profile góc bên phải */
+.profile-avatar-box {
+  width: 260px !important;
+  height: 150px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 
-.profile-avatar-container {
-  flex-shrink: 0;
-}
-
-/* Ảnh Profile góc phải chuẩn kích thước 260x150 pixel */
 .profile-user-avatar {
-  width: 260px;
-  height: 150px;
-  object-fit: contain;
-  border-radius: 8px;
+  width: 260px !important;
+  height: 150px !important;
+  max-width: 260px !important;
+  max-height: 150px !important;
+  object-fit: contain !important;
+  border-radius: 8px !important;
+  display: block !important;
 }
