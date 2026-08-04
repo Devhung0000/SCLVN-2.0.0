@@ -197,8 +197,9 @@ header{
     }
 
 }
-/* ================= FIX LỖI ĐÈ CHỮ VÀ LẶP TÊN ================= */
+/* ================= FIX LỖI AVATAR PHÌNH TO CHE TÊN ================= */
 
+/* 1. Thanh container chính */
 .board-row {
   display: flex !important;
   align-items: center !important;
@@ -206,36 +207,65 @@ header{
   width: 100% !important;
   height: 60px !important;
   padding: 0 15px !important;
-  gap: 12px !important;
+  gap: 12px !important; /* Khoảng cách giữa Rank - Avatar - Tên - Điểm */
   box-sizing: border-box !important;
+  overflow: hidden !important;
 }
 
-/* Cột Tên Player: Giới hạn chiều rộng để không đè vào điểm số */
+/* 2. Ép Rank thu gọn */
+.board-row .rank {
+  flex-shrink: 0 !important;
+  min-width: 35px !important;
+}
+
+/* 3. KHÓA CỨNG kích thước khung chứa Avatar (không cho phình to) */
+.user-icon-container {
+  width: 45px !important;       /* Kích thước vừa vặn */
+  height: 45px !important;
+  min-width: 45px !important;   /* Cấm co giãn */
+  max-width: 45px !important;
+  flex-shrink: 0 !important;    /* Không cho bị bóp nghẹt */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  border-radius: 6px !important; /* Bo góc avatar cho đẹp */
+}
+
+/* 4. Khóa ảnh Avatar bên trong khung */
+.board-user-icon {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;  /* Cắt ảnh vuông vắn đẹp mắt */
+  display: block !important;
+}
+
+/* 5. Cột Tên Player nằm ngay sau Avatar */
 .board-row .user {
   flex: 1 !important;
-  min-width: 0 !important; /* Bắt buộc để text-overflow hoạt động */
-  margin: 0 !important;
+  min-width: 0 !important;      /* Giúp text-overflow hoạt động */
   text-align: left !important;
+  margin: 0 !important;
 }
 
 .board-row .user button {
-  max-width: 100% !important;
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
+  max-width: 100% !important;
   cursor: pointer !important;
 }
 
-/* Nếu tên quá dài sẽ tự có dấu "..." chứ không chèn lên điểm */
 .player-name-text {
   display: block !important;
   white-space: nowrap !important;
   overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  max-width: 100% !important;
+  text-overflow: ellipsis !important; /* Tên quá dài tự có dấu ... */
+  color: #fff !important;
+  font-weight: bold !important;
 }
 
-/* Cột điểm đẩy hẳn sang bên phải */
+/* 6. Cột Điểm nằm gọn gàng bên phải */
 .board-row .total {
   margin-left: auto !important;
   flex-shrink: 0 !important;
@@ -245,10 +275,10 @@ header{
   display: inline-block !important;
   white-space: nowrap !important;
   font-family: 'Consolas', monospace !important;
-  font-size: 0.95rem !important;
+  font-size: 0.9rem !important;
   font-weight: bold !important;
   color: #ffd700 !important;
-  background: rgba(0, 0, 0, 0.3) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
   padding: 4px 10px !important;
   border-radius: 6px !important;
   border: 1px solid rgba(255, 215, 0, 0.3) !important;
