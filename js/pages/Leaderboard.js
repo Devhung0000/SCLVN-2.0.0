@@ -40,8 +40,14 @@ export default {
                                 <p class="type-label-lg">#{{ i + 1 }}</p>
                             </div>
 
-                            <div class="total">
-                                <p class="type-label-lg">{{ localize(ientry.total) }}</p>
+                            <!-- 1. THÊM ICON PLAYER TRONG LEADERBOARD -->
+                            <div class="user-icon-container">
+                                <img 
+                                    class="board-user-icon" 
+                                    :src="'assets/avatars/' + ientry.user + '.png'" 
+                                    :alt="ientry.user"
+                                    @error="$event.target.src='assets/avatars/default.png'"
+                                />
                             </div>
 
                             <div
@@ -54,22 +60,42 @@ export default {
                                     </span>
                                 </button>
                             </div>
+
+                            <div class="total">
+                                <p class="type-label-lg">{{ localize(ientry.total) }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="player-container">
                     <div class="player">
-                        <h1
-                            class="player-title"
-                            :class="{
-                                'top-1': selected === 0,
-                                'top-2': selected === 1,
-                                'top-3': selected === 2
-                            }"
-                        >
-                            #{{ selected + 1 }} - {{ entry.user }}
-                        </h1>
-                        <h3>{{ entry.total }} - Hardest: {{ [...entry.verified, ...entry.completed].reduce((min, current) =>current.rank < min.rank ? current : min).level }}</h3>
+                        <!-- 2. TẠO KHỐI HEADER PROFILE CHỨA THÔNG TIN VÀ ẢNH ĐẠI DIỆN KHOANH ĐỎ -->
+                        <div class="profile-header">
+                            <div class="profile-header-info">
+                                <h1
+                                    class="player-title"
+                                    :class="{
+                                        'top-1': selected === 0,
+                                        'top-2': selected === 1,
+                                        'top-3': selected === 2
+                                    }"
+                                >
+                                    #{{ selected + 1 }} - {{ entry.user }}
+                                </h1>
+                                <h3>{{ entry.total }} - Hardest: {{ [...entry.verified, ...entry.completed].reduce((min, current) => current.rank < min.rank ? current : min).level }}</h3>
+                            </div>
+
+                            <!-- KHỐI ẢNH KHOANH ĐỎ Ở PROFLIE (260x150px) -->
+                            <div class="profile-avatar-container">
+                                <img 
+                                    class="profile-user-avatar" 
+                                    :src="'assets/avatars/' + entry.user + '.png'" 
+                                    :alt="entry.user"
+                                    @error="$event.target.src='assets/avatars/default.png'"
+                                />
+                            </div>
+                        </div>
+
                         <h2 v-if="entry.verified.length > 0">Verified ({{ entry.verified.length}})</h2>
                         <table class="table">
                             <tr v-for="score in entry.verified">
