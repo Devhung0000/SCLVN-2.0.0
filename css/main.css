@@ -309,3 +309,119 @@ header{
   object-fit: cover !important;
   display: block !important;
 }
+/* ================= PROFILE ULTIMATE REDESIGN ================= */
+
+/* Header Card Profile */
+.profile-header-card {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important;
+  padding: 20px 25px !important;
+  margin-bottom: 25px !important;
+}
+
+.player-title {
+  margin: 0 0 10px 0 !important;
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+}
+
+/* Tùy chỉnh font chữ & màu sắc cho Điểm số (Pts) */
+.player-stats-row {
+  display: flex !important;
+  gap: 10px !important;
+}
+
+.stat-badge.score-gold {
+  font-family: 'Consolas', 'Courier New', monospace !important;
+  font-size: 1.2rem !important;
+  font-weight: bold !important;
+  color: #ffb703 !important;
+  background: rgba(255, 183, 3, 0.15) !important;
+  border: 1px solid rgba(255, 183, 3, 0.4) !important;
+  padding: 6px 14px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 12px rgba(255, 183, 3, 0.2) !important;
+}
+
+/* Sections & Title */
+.profile-section {
+  margin-bottom: 25px !important;
+  text-align: left !important;
+}
+
+.section-title {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: #e0e0e0 !important;
+  margin-bottom: 12px !important;
+}
+
+/* Danh sách Level dạng Card Banner (Grid) */
+.level-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap: 12px !important;
+}
+
+/* Style cho từng Card Level */
+.level-card {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 14px 18px !important;
+  border-radius: 12px !important;
+  background-size: cover !important;
+  background-position: center !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  text-decoration: none !important;
+  color: #fff !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.level-card:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  border-color: rgba(255, 215, 0, 0.6) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 215, 0, 0.2) !important;
+}
+
+/* Hardest Level nổi bật hơn */
+.level-card.hardest-card {
+  padding: 18px 22px !important;
+  border: 2px solid rgba(255, 215, 0, 0.5) !important;
+}
+
+.level-card-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.level-rank {
+  font-family: 'Consolas', monospace !important;
+  font-weight: bold !important;
+  font-size: 1.1rem !important;
+  color: #ffd700 !important;
+}
+
+.level-title {
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8) !important;
+}
+
+.level-card-score {
+  font-family: 'Consolas', monospace !important;
+  font-size: 0.95rem !important;
+  font-weight: bold !important;
+  color: #4cc9f0 !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(76, 201, 240, 0.3) !important;
+}
