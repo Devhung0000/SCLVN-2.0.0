@@ -598,3 +598,82 @@ input[type="radio"] {
   border-radius: 6px !important;
   border: 1px solid rgba(76, 201, 240, 0.4) !important;
 }
+/* ================= FORCE KILL OLD STYLES & FIX BUGS ================= */
+
+/* 1. Xóa sạch vạch dọc màu trắng dính ở bên phải */
+.player, 
+.player-container, 
+.page-leaderboard,
+.board-container {
+    border: none !important;
+    border-right: none !important;
+    border-left: none !important;
+    box-shadow: none !important;
+}
+
+.player::after,
+.player::before,
+.player-container::after,
+.player-container::before {
+    display: none !important;
+    content: none !important;
+}
+
+/* 2. Ép hiển thị Background của Banner Level */
+a.level-banner-card {
+    background-color: transparent !important; /* Dọn dẹp màu đen tuyền cũ đè lên ảnh */
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: 52px !important;
+    padding: 0 16px !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    text-decoration: none !important;
+    color: #ffffff !important;
+    box-sizing: border-box !important;
+    margin-bottom: 6px !important;
+}
+
+a.level-banner-card:hover {
+    border-color: #ffd700 !important;
+    transform: translateX(4px) !important;
+}
+
+a.level-banner-card.hardest-banner {
+    border: 1.5px solid #ffd700 !important;
+    height: 58px !important;
+}
+
+/* 3. Text & Layout bên trong Banner */
+.banner-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.banner-rank {
+    font-family: monospace !important;
+    font-weight: bold !important;
+    font-size: 1.1rem !important;
+    color: #ffd700 !important;
+}
+
+.banner-title {
+    font-weight: bold !important;
+    font-size: 1rem !important;
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9) !important;
+}
+
+.banner-score {
+    font-family: monospace !important;
+    font-size: 0.85rem !important;
+    font-weight: bold !important;
+    color: #4cc9f0 !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+    padding: 3px 8px !important;
+    border-radius: 5px !important;
+    border: 1px solid rgba(76, 201, 240, 0.4) !important;
+}
