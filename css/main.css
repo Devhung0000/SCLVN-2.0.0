@@ -179,29 +179,46 @@ input[type="radio"] {
   gap: 8px !important;
 }
 
+/* ----- 1. Leaderboard Row Style ----- */
 .board-row {
   display: flex !important;
   align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  height: 55px !important;
+  padding: 0 16px !important;
+  gap: 14px !important;
+  box-sizing: border-box !important;
   justify-content: space-between !important;
   height: 50px !important;
   padding: 0 14px !important;
   background: rgba(255, 255, 255, 0.05) !important;
   border-radius: 8px !important;
   cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  border-radius: 12px !important;
   transition: all 0.2s ease !important;
   box-sizing: border-box !important;
 }
 
 .board-row:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  filter: brightness(1.2) !important;
+  transform: translateX(4px) !important;
   background: rgba(255, 255, 255, 0.12) !important;
   transform: translateX(3px) !important;
 }
 
 .board-row.active {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4) !important;
   background: rgba(255, 255, 255, 0.2) !important;
   border: 1px solid rgba(255, 215, 0, 0.5) !important;
 }
 
+.board-row .rank {
+  flex-shrink: 0 !important;
+  min-width: 35px !important;
 .rank-num {
   font-family: 'Consolas', monospace !important;
   font-weight: bold !important;
@@ -210,6 +227,12 @@ input[type="radio"] {
   width: 30px !important;
 }
 
+.user-icon-container {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  flex-shrink: 0 !important;
+  border-radius: 6px !important;
 .user-avatar-wrap {
   width: 32px !important;
   height: 32px !important;
@@ -220,41 +243,62 @@ input[type="radio"] {
 }
 
 .board-user-icon {
-  width: 100% !important;
-  height: 100% !important;
+@@ -46,73 +225,64 @@
   object-fit: cover !important;
 }
 
+.board-row .user {
 .user-name-text {
   flex: 1 !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+
+.player-name-text {
+  font-size: 1.05rem !important;
   font-weight: bold !important;
   color: #fff !important;
   font-size: 0.95rem !important;
   white-space: nowrap !important;
+}
+
+.board-row .total {
+  margin-left: auto !important;
+  flex-shrink: 0 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   text-align: left !important;
 }
 
 .score-badge {
+  display: inline-block !important;
+  white-space: nowrap !important;
   font-family: 'Consolas', monospace !important;
+  font-size: 0.9rem !important;
   font-size: 0.85rem !important;
   font-weight: bold !important;
   color: #ffd700 !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  padding: 5px 12px !important;
+  border-radius: 8px !important;
   background: rgba(0, 0, 0, 0.4) !important;
   padding: 3px 8px !important;
   border-radius: 6px !important;
   border: 1px solid rgba(255, 215, 0, 0.3) !important;
 }
 
+/* ----- 2. Profile Header ----- */
 /* 2. Cột Phải (Header Profile) */
 .profile-header-card {
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
+  background: rgba(20, 20, 20, 0.6) !important;
   background: rgba(255, 255, 255, 0.05) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 12px !important;
+  padding: 16px 20px !important;
+  margin-bottom: 25px !important;
   padding: 18px 24px !important;
   margin-bottom: 20px !important;
 }
@@ -268,38 +312,48 @@ input[type="radio"] {
 
 .stat-badge.score-gold {
   font-family: 'Consolas', monospace !important;
+  font-size: 1.1rem !important;
   font-size: 1.05rem !important;
   font-weight: bold !important;
   color: #ffb703 !important;
   background: rgba(255, 183, 3, 0.15) !important;
   border: 1px solid rgba(255, 183, 3, 0.3) !important;
+  padding: 4px 12px !important;
   padding: 4px 10px !important;
   border-radius: 6px !important;
 }
 
 .profile-avatar-box {
+  flex-shrink: 0 !important;
+  width: 110px !important;
+  height: 110px !important;
+  border-radius: 12px !important;
   width: 70px !important;
   height: 70px !important;
   border-radius: 10px !important;
   overflow: hidden !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
   border: 2px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 .profile-user-avatar {
-  width: 100% !important;
-  height: 100% !important;
+@@ -121,85 +291,80 @@
   object-fit: cover !important;
 }
 
+/* ----- 3. Level Banner List In Profile ----- */
 /* 3. Thẻ Banner Level */
 .profile-section {
+  margin-bottom: 22px !important;
   margin-bottom: 20px !important;
   text-align: left !important;
 }
 
 .section-title {
+  font-size: 1.1rem !important;
   font-size: 1.05rem !important;
   font-weight: bold !important;
+  color: #e0e0e0 !important;
   color: #ddd !important;
   margin-bottom: 10px !important;
 }
@@ -307,6 +361,7 @@ input[type="radio"] {
 .banner-list {
   display: flex !important;
   flex-direction: column !important;
+  gap: 10px !important;
   gap: 8px !important;
 }
 
@@ -315,8 +370,10 @@ input[type="radio"] {
   justify-content: space-between !important;
   align-items: center !important;
   width: 100% !important;
+  height: 52px !important;
   height: 50px !important;
   padding: 0 16px !important;
+  border-radius: 10px !important;
   border-radius: 8px !important;
   background-size: cover !important;
   background-position: center !important;
@@ -324,391 +381,64 @@ input[type="radio"] {
   text-decoration: none !important;
   color: #ffffff !important;
   box-sizing: border-box !important;
+  transition: all 0.2s ease-in-out !important;
   transition: all 0.2s ease !important;
 }
 
 .level-banner-card:hover {
+  transform: translateX(6px) !important;
   transform: translateX(4px) !important;
   border-color: rgba(255, 215, 0, 0.6) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 10px rgba(255, 215, 0, 0.2) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
 }
 
 .hardest-banner {
   border: 1.5px solid rgba(255, 215, 0, 0.5) !important;
+  height: 58px !important;
   height: 56px !important;
 }
 
 .banner-left {
   display: flex !important;
   align-items: center !important;
+  gap: 14px !important;
   gap: 12px !important;
 }
 
 .banner-rank {
   font-family: 'Consolas', monospace !important;
   font-weight: bold !important;
+  font-size: 1.1rem !important;
   font-size: 1.05rem !important;
   color: #ffd700 !important;
+  min-width: 30px !important;
   min-width: 25px !important;
 }
 
 .banner-title {
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
   font-weight: bold !important;
   font-size: 1rem !important;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
 }
 
+.banner-right {
+  display: flex !important;
+  align-items: center !important;
+}
+
 .banner-score {
   font-family: 'Consolas', monospace !important;
+  font-size: 0.9rem !important;
   font-size: 0.85rem !important;
   font-weight: bold !important;
   color: #4cc9f0 !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  padding: 4px 10px !important;
   background: rgba(0, 0, 0, 0.6) !important;
   padding: 3px 8px !important;
   border-radius: 6px !important;
   border: 1px solid rgba(76, 201, 240, 0.3) !important;
-}
-/* ================= FIX FULL LEADERBOARD OVERRIDE ================= */
-
-/* Layout Container */
-.page-leaderboard-container {
-  width: 100% !important;
-  max-width: 1200px !important;
-  margin: 0 auto !important;
-  padding: 20px !important;
-}
-
-.page-leaderboard {
-  display: flex !important;
-  gap: 30px !important;
-  align-items: flex-start !important;
-  border: none !important;
-  background: transparent !important;
-}
-
-.board-container {
-  flex: 0 0 380px !important;
-  width: 380px !important;
-}
-
-.player-container {
-  flex: 1 !important;
-  min-width: 0 !important;
-  border-left: none !important; /* Xóa vạch trắng dọc thừa */
-  padding-left: 0 !important;
-}
-
-/* Cột Trái: Item Player */
-.board {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 10px !important;
-}
-
-.board-row {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  height: 52px !important;
-  padding: 0 14px !important;
-  background: #18181c !important;
-  border: 1px solid #2a2a32 !important;
-  border-radius: 10px !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-  box-sizing: border-box !important;
-}
-
-.board-row:hover {
-  background: #23232a !important;
-  border-color: #444452 !important;
-  transform: translateX(4px) !important;
-}
-
-.board-row.active {
-  background: #282833 !important;
-  border-color: #ffd700 !important;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2) !important;
-}
-
-.rank-num {
-  font-family: 'Consolas', monospace !important;
-  font-weight: bold !important;
-  font-size: 1rem !important;
-  color: #ffd700 !important;
-  width: 35px !important;
-}
-
-.user-avatar-wrap {
-  width: 34px !important;
-  height: 34px !important;
-  border-radius: 6px !important;
-  overflow: hidden !important;
-  margin-right: 10px !important;
-  flex-shrink: 0 !important;
-}
-
-.board-user-icon {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-}
-
-.user-name-text {
-  flex: 1 !important;
-  font-weight: 700 !important;
-  color: #fff !important;
-  font-size: 0.95rem !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  text-align: left !important;
-}
-
-.score-badge {
-  font-family: 'Consolas', monospace !important;
-  font-size: 0.85rem !important;
-  font-weight: bold !important;
-  color: #ffd700 !important;
-  background: rgba(0, 0, 0, 0.5) !important;
-  padding: 4px 10px !important;
-  border-radius: 6px !important;
-  border: 1px solid rgba(255, 215, 0, 0.3) !important;
-}
-
-/* Cột Phải: Profile Header */
-.profile-header-card {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  background: #18181c !important;
-  border: 1px solid #2a2a32 !important;
-  border-radius: 12px !important;
-  padding: 20px 24px !important;
-  margin-bottom: 25px !important;
-}
-
-.player-title {
-  margin: 0 0 8px 0 !important;
-  font-size: 1.8rem !important;
-  font-weight: 800 !important;
-  color: #fff !important;
-}
-
-.stat-badge.score-gold {
-  font-family: 'Consolas', monospace !important;
-  font-size: 1rem !important;
-  font-weight: bold !important;
-  color: #ffb703 !important;
-  background: rgba(255, 183, 3, 0.1) !important;
-  border: 1px solid rgba(255, 183, 3, 0.3) !important;
-  padding: 4px 12px !important;
-  border-radius: 6px !important;
-}
-
-.profile-avatar-box {
-  width: 75px !important;
-  height: 75px !important;
-  border-radius: 12px !important;
-  overflow: hidden !important;
-  border: 2px solid #3a3a48 !important;
-}
-
-.profile-user-avatar {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-}
-
-/* Banner Level Trong Profile */
-.profile-section {
-  margin-bottom: 22px !important;
-  text-align: left !important;
-}
-
-.section-title {
-  font-size: 1.05rem !important;
-  font-weight: 700 !important;
-  color: #cccccc !important;
-  margin-bottom: 12px !important;
-}
-
-.banner-list {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 10px !important;
-}
-
-.level-banner-card {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  width: 100% !important;
-  height: 52px !important;
-  padding: 0 18px !important;
-  border-radius: 10px !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  border: 1px solid #333340 !important;
-  text-decoration: none !important;
-  color: #ffffff !important;
-  box-sizing: border-box !important;
-  transition: all 0.2s ease !important;
-}
-
-.level-banner-card:hover {
-  transform: translateX(5px) !important;
-  border-color: #ffd700 !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7) !important;
-}
-
-.hardest-banner {
-  border: 1.5px solid #ffd700 !important;
-  height: 58px !important;
-}
-
-.banner-left {
-  display: flex !important;
-  align-items: center !important;
-  gap: 14px !important;
-}
-
-.banner-rank {
-  font-family: 'Consolas', monospace !important;
-  font-weight: bold !important;
-  font-size: 1.1rem !important;
-  color: #ffd700 !important;
-  min-width: 30px !important;
-}
-
-.banner-title {
-  font-weight: 700 !important;
-  font-size: 1.05rem !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9) !important;
-}
-
-.banner-score {
-  font-family: 'Consolas', monospace !important;
-  font-size: 0.85rem !important;
-  font-weight: bold !important;
-  color: #4cc9f0 !important;
-  background: rgba(0, 0, 0, 0.7) !important;
-  padding: 4px 10px !important;
-  border-radius: 6px !important;
-  border: 1px solid rgba(76, 201, 240, 0.4) !important;
-}
-/* ================= FORCE KILL OLD STYLES & FIX BUGS ================= */
-
-/* 1. Xóa sạch vạch dọc màu trắng dính ở bên phải */
-.player, 
-.player-container, 
-.page-leaderboard,
-.board-container {
-    border: none !important;
-    border-right: none !important;
-    border-left: none !important;
-    box-shadow: none !important;
-}
-
-.player::after,
-.player::before,
-.player-container::after,
-.player-container::before {
-    display: none !important;
-    content: none !important;
-}
-
-/* 2. Ép hiển thị Background của Banner Level */
-a.level-banner-card {
-    background-color: transparent !important; /* Dọn dẹp màu đen tuyền cũ đè lên ảnh */
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    width: 100% !important;
-    height: 52px !important;
-    padding: 0 16px !important;
-    border-radius: 8px !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    text-decoration: none !important;
-    color: #ffffff !important;
-    box-sizing: border-box !important;
-    margin-bottom: 6px !important;
-}
-
-a.level-banner-card:hover {
-    border-color: #ffd700 !important;
-    transform: translateX(4px) !important;
-}
-
-a.level-banner-card.hardest-banner {
-    border: 1.5px solid #ffd700 !important;
-    height: 58px !important;
-}
-
-/* 3. Text & Layout bên trong Banner */
-.banner-left {
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-}
-
-.banner-rank {
-    font-family: monospace !important;
-    font-weight: bold !important;
-    font-size: 1.1rem !important;
-    color: #ffd700 !important;
-}
-
-.banner-title {
-    font-weight: bold !important;
-    font-size: 1rem !important;
-    color: #ffffff !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.9) !important;
-}
-
-.banner-score {
-    font-family: monospace !important;
-    font-size: 0.85rem !important;
-    font-weight: bold !important;
-    color: #4cc9f0 !important;
-    background: rgba(0, 0, 0, 0.75) !important;
-    padding: 3px 8px !important;
-    border-radius: 5px !important;
-    border: 1px solid rgba(76, 201, 240, 0.4) !important;
-}
-/* ================= FIX LỖI MÀU TRẮNG MÀN HÌNH & VẠCH DỌC ================= */
-
-/* 1. Đổi toàn bộ nền trang web thành màu tối (Xóa 2 dải trắng 2 bên mép) */
-html, body, #app, #main, main {
-    background-color: #0b0b0e !important; /* hoặc #000000 tùy màu nền ông thích */
-    margin: 0 !important;
-    padding: 0 !important;
-    min-height: 100vh !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-/* 2. Triệt hạ vạch trắng dọc bên phải phần Profile Header */
-.page-leaderboard,
-.board-container,
-.player-container,
-.player,
-.profile-header-card {
-    border-right: none !important;
-    border-left: none !important;
-    box-shadow: none !important;
-}
-
-/* Xóa các pseudoelement (dấu vết còn sót lại tạo ra vạch trắng) */
-.page-leaderboard::before,
-.page-leaderboard::after,
-.player-container::before,
-.player-container::after,
-.player::before,
-.player::after {
-    display: none !important;
-    content: none !important;
-    border: none !important;
-    background: none !important;
 }
