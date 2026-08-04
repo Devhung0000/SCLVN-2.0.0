@@ -36,20 +36,21 @@ export default {
                                 'top-3': i === 2
                             }"
                         >
+                            <!-- 1. Rank -->
                             <div class="rank">
                                 <p class="type-label-lg">#{{ i + 1 }}</p>
                             </div>
 
-                            <!-- Ảnh Icon GD ở Leaderboard -->
+                            <!-- 2. Icon GD (Khoá cứng 62x51) -->
                             <div class="user-icon-container">
                                 <img 
                                     class="board-user-icon" 
                                     :src="'assets/avatars/' + ientry.user + '.png'" 
                                     :alt="ientry.user"
-                                    @error="$event.target.src='assets/avatars/default.png'"
                                 />
                             </div>
 
+                            <!-- 3. Tên Player -->
                             <div
                                 class="user"
                                 :class="{ 'active': selected == i }"
@@ -61,15 +62,16 @@ export default {
                                 </button>
                             </div>
 
+                            <!-- 4. Điểm số (Nằm ngay cạnh tên) -->
                             <div class="total">
-                                <p class="type-label-lg">{{ localize(ientry.total) }}</p>
+                                <span class="score-badge">{{ localize(ientry.total) }} pts</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="player-container" v-if="entry">
                     <div class="player">
-                        <!-- Header Profile: Tên bên trái - Ảnh bên phải -->
+                        <!-- Header Profile: Tên bên trái - Ảnh 260x150 bên phải -->
                         <div class="profile-header-wrap">
                             <div class="profile-title-box">
                                 <h1
@@ -91,7 +93,6 @@ export default {
                                     class="profile-user-avatar" 
                                     :src="'assets/avatars/' + entry.user + '.png'" 
                                     :alt="entry.user"
-                                    @error="$event.target.src='assets/avatars/default.png'"
                                 />
                             </div>
                         </div>
