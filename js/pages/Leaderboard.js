@@ -26,7 +26,7 @@ export default {
                     </p>
                 </div>
 
-                <!-- Cột trái: Leaderboard List -->
+                <!-- Cột trái: Danh sách Leaderboard -->
                 <div class="board-container">
                     <div class="board">
                         <div
@@ -66,10 +66,10 @@ export default {
                     </div>
                 </div>
 
-                <!-- Cột phải: Profile Player -->
+                <!-- Cột phải: Profile Chi Tiết -->
                 <div class="player-container" v-if="entry">
                     <div class="player">
-                        <!-- Header Profile -->
+                        <!-- Header Player Card -->
                         <div class="profile-header-card">
                             <div class="profile-info">
                                 <h1
@@ -84,7 +84,7 @@ export default {
                                 </h1>
                                 <div class="player-stats-row">
                                     <span class="stat-badge score-gold">
-                                        {{ localize(entry.total) }} pts
+                                        ⚡ {{ localize(entry.total) }} pts
                                     </span>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@ export default {
                         <div v-if="hardestLevel" class="profile-section">
                             <h2 class="section-title">🏆 Hardest</h2>
                             <a 
-                                :href="'/#/level/' + (hardestLevel.path || getSlug(hardestLevel.level))"
+                                :href="getScoreLink(hardestLevel)"
                                 class="level-banner-card hardest-banner"
                                 :style="getBannerStyle(hardestLevel)"
                             >
@@ -124,7 +124,7 @@ export default {
                                 <a 
                                     v-for="score in entry.verified"
                                     :key="score.level"
-                                    :href="'/#/level/' + (score.path || getSlug(score.level))"
+                                    :href="getScoreLink(score)"
                                     class="level-banner-card"
                                     :style="getBannerStyle(score)"
                                 >
@@ -146,7 +146,7 @@ export default {
                                 <a 
                                     v-for="score in entry.completed"
                                     :key="score.level"
-                                    :href="'/#/level/' + (score.path || getSlug(score.level))"
+                                    :href="getScoreLink(score)"
                                     class="level-banner-card"
                                     :style="getBannerStyle(score)"
                                 >
@@ -168,7 +168,7 @@ export default {
                                 <a 
                                     v-for="score in entry.progressed"
                                     :key="score.level"
-                                    :href="'/#/level/' + (score.path || getSlug(score.level))"
+                                    :href="getScoreLink(score)"
                                     class="level-banner-card"
                                     :style="getBannerStyle(score)"
                                 >
@@ -208,16 +208,42 @@ export default {
     },
     methods: {
         localize,
-        getSlug(name) {
-            if (!name) return '';
-            return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        // Tìm thông tin Level trong this.list (Flatten array nếu list chia dạng 2 cột)
+        findLevelData(score) {
+            if (!this.list) return null;
+            const flatList = this.list.flat().filter(item => item && item.name);
+            return flatList.find(item => item.name.toLowerCase() === score.level.toLowerCase());
         },
+        // Lấy link dẫn trực tiếp tới level
+        getScoreLink(score) {
+            // Dùng score.link có sẵn từ data nếu có
+            if (score.link) return score.link;
+            
+            const levelData = this.findLevelData(score);
+            if (levelData && levelData.path) {
+                return `/#/level/${levelData.path}`;
+            }
+            
+            // Fallback: Tự tạo slug tên level
+            const slug = score.level.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            return `/#/level/${slug}`;
+        },
+        // Lấy hình ảnh Banner / Thumbnail
         getBannerStyle(score) {
-            const slug = score.path || this.getSlug(score.level);
-            // Ưu tiên thumbnail -> banner -> fallback
-            const imgPath = `data/${slug}/thumbnail.png`;
+            const levelData = this.findLevelData(score);
+            let imgPath = '';
+
+            if (levelData) {
+                // Nếu levelData có thuộc tính path/banner/thumbnail
+                const path = levelData.path || score.level.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                imgPath = `data/${path}/thumbnail.png`;
+            } else {
+                const slug = score.level.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                imgPath = `data/${slug}/thumbnail.png`;
+            }
+
             return {
-                backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.75) 100%), url('${imgPath}')`
+                backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 60%, rgba(0, 0, 0, 0.8) 100%), url('${imgPath}')`
             };
         }
     },
