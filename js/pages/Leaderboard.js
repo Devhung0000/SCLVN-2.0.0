@@ -240,4 +240,4 @@ export default {
             return `/#/level/${this.getLevelSlug(score.level)}`;
         }
     },
-};v
+};
