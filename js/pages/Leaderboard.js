@@ -13,7 +13,7 @@ export default {
         loading: true,
         selected: 0,
         err: [],
-        playerSocials: {}, // Lưu dữ liệu mạng xã hội từ data/_players.json
+        playerSocials: {},
     }),
     template: `
         <main v-if="loading">
@@ -22,7 +22,7 @@ export default {
         <main v-else class="page-leaderboard-container">
             <div class="page-leaderboard">
                 <div class="error-container">
-                    <p class="error" v-if="err.length > 0">
+                    <p class="error" v-if="err && err.length > 0">
                         Leaderboard may be incorrect, as the following levels could not be loaded: {{ err.join(', ') }}
                     </p>
                 </div>
@@ -32,6 +32,7 @@ export default {
                     <div class="board">
                         <div
                             v-for="(ientry, i) in leaderboard"
+                            :key="ientry.user || i"
                             class="board-row"
                             :class="{
                                 'top-1': i === 0,
@@ -160,7 +161,7 @@ export default {
                         </div>
 
                         <!-- VERIFIED LEVELS -->
-                        <div v-if="entry.verified.length > 0" class="profile-section">
+                        <div v-if="entry.verified && entry.verified.length > 0" class="profile-section">
                             <h2 class="section-title">👑 Verified ({{ entry.verified.length }})</h2>
                             <div class="level-grid">
                                 <a 
@@ -184,7 +185,7 @@ export default {
                         </div>
 
                         <!-- COMPLETED LEVELS -->
-                        <div v-if="entry.completed.length > 0" class="profile-section">
+                        <div v-if="entry.completed && entry.completed.length > 0" class="profile-section">
                             <h2 class="section-title">✅ Completed ({{ entry.completed.length }})</h2>
                             <div class="level-grid">
                                 <a 
@@ -208,7 +209,7 @@ export default {
                         </div>
 
                         <!-- PROGRESSED LEVELS -->
-                        <div v-if="entry.progressed.length > 0" class="profile-section">
+                        <div v-if="entry.progressed && entry.progressed.length > 0" class="profile-section">
                             <h2 class="section-title">🎯 Progressed ({{ entry.progressed.length }})</h2>
                             <div class="level-grid">
                                 <a 
@@ -238,41 +239,48 @@ export default {
     `,
     computed: {
         entry() {
-            return this.leaderboard[this.selected];
+            if (!this.leaderboard || this.leaderboard.length === 0) return null;
+            return this.leaderboard[this.selected] || null;
         },
         hardestLevel() {
             if (!this.entry) return null;
-            const allBeats = [...this.entry.verified, ...this.entry.completed];
+            const verified = this.entry.verified || [];
+            const completed = this.entry.completed || [];
+            const allBeats = [...verified, ...completed];
             if (allBeats.length === 0) return null;
-            return allBeats.reduce((min, current) => current.rank < min.rank ? current : min, allBeats[0]);
+            return allBeats.reduce((min, current) => (current.rank < min.rank ? current : min), allBeats[0]);
         },
-        // Lấy thông tin link social của player đang chọn
         currentSocials() {
             if (!this.entry || !this.entry.user) return null;
             return this.playerSocials[this.entry.user.toLowerCase()] || null;
         }
     },
     async mounted() {
-        const [leaderboard, err] = await fetchLeaderboard();
-        this.list = await fetchList();
-        this.leaderboard = leaderboard;
-        this.err = err;
+        try {
+            const [leaderboard, err] = await fetchLeaderboard();
+            this.list = await fetchList();
+            this.leaderboard = leaderboard || [];
+            this.err = err || [];
+        } catch (e) {
+            console.error("Lỗi fetchLeaderboard:", e);
+        }
 
-        // Tải dữ liệu mạng xã hội từ file JSON
         try {
             const res = await fetch('data/_players.json');
             if (res.ok) {
                 const socialsArray = await res.json();
                 const map = {};
-                socialsArray.forEach(item => {
-                    if (item.name) {
-                        map[item.name.toLowerCase()] = item;
-                    }
-                });
+                if (Array.isArray(socialsArray)) {
+                    socialsArray.forEach(item => {
+                        if (item && item.name) {
+                            map[item.name.toLowerCase()] = item;
+                        }
+                    });
+                }
                 this.playerSocials = map;
             }
         } catch (e) {
-            console.warn("Không thể tải file data/_players.json", e);
+            console.warn("Chưa tìm thấy hoặc lỗi đọc file data/_players.json", e);
         }
 
         this.loading = false;
@@ -285,7 +293,7 @@ export default {
         },
         getLevelThumb(name) {
             const slug = this.getLevelSlug(name);
-            return `data/${slug}/thumbnail.png`; 
+            return `data/${slug}/thumbnail.png`;
         },
         getScoreLink(score) {
             if (!score) return '#';
@@ -295,5 +303,5 @@ export default {
             }
             return `/#/level/${this.getLevelSlug(score.level)}`;
         }
-    },
-};v
+    }
+};
