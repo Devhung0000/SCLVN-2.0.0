@@ -31,7 +31,6 @@ export default {
                     <div class="board">
                         <div
                             v-for="(ientry, i) in leaderboard"
-                            :key="ientry.user"
                             class="board-row"
                             :class="{
                                 'top-1': i === 0,
@@ -228,8 +227,6 @@ export default {
             return `data/${slug}/thumbnail.png`; 
         },
         // Hàm mới: Tự kiểm tra và trả về link YouTube / completion của player
-
-        // HÀM TRA CỨU LINK PROOF TỪ DỮ LIỆU FILE LEVEL JSON
         getScoreLink(score) {
             if (!score) return '#';
             
@@ -237,36 +234,10 @@ export default {
             const proofUrl = score.link || score.video || score.proof || score.url;
             if (proofUrl) {
                 return proofUrl;
-            if (!score || !this.entry) return '#';
-
-            const userName = this.entry.user.toLowerCase().trim();
-            const levelName = score.level.toLowerCase().trim();
-
-            // 1. Duyệt danh sách level để tìm level tương ứng
-            const flatList = this.list.flat().filter(item => item && item.name);
-            const levelData = flatList.find(item => item.name.toLowerCase().trim() === levelName);
-
-            if (levelData) {
-                // Kiểm tra nếu là Verifier (người đăng level)
-                if (levelData.verifier && levelData.verifier.toLowerCase().trim() === userName) {
-                    if (levelData.verification) return levelData.verification;
-                    if (levelData.link) return levelData.link;
-                }
-
-                // Tìm trong mảng "records" của level đó
-                if (levelData.records && levelData.records.length > 0) {
-                    const userRecord = levelData.records.find(
-                        r => r.user && r.user.toLowerCase().trim() === userName
-                    );
-                    if (userRecord && userRecord.link) {
-                        return userRecord.link;
-                    }
-                }
             }
 
             // Nếu player không có video proof riêng thì fallback chuyển đến trang level
-            // Fallback: Nếu user không có gắn link youtube trong records thì chuyển hướng về trang chi tiết Level
             return `/#/level/${this.getLevelSlug(score.level)}`;
         }
     },
-};
+};v
