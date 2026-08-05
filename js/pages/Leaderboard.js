@@ -1,4 +1,4 @@
-import { fetchLeaderboard, fetchList, fetchLevel } from '../content.js';
+import { fetchLeaderboard, fetchList } from '../content.js';
 import { localize } from '../util.js';
 
 import Spinner from '../components/Spinner.js';
@@ -13,7 +13,6 @@ export default {
         loading: true,
         selected: 0,
         err: [],
-        levelCache: {}, // Cache dữ liệu level để tìm link proof nhanh
     }),
     template: `
         <main v-if="loading">
@@ -91,7 +90,6 @@ export default {
                                 </div>
                             </div>
 
-                            <!-- Avatar & Social Links Box -->
                             <div class="profile-avatar-box">
                                 <img 
                                     class="profile-user-avatar" 
@@ -99,20 +97,6 @@ export default {
                                     alt=""
                                     @error="$event.target.src='assets/avatars/default.png'"
                                 />
-                                
-                                <div class="profile-social-container" v-if="entry.youtube || entry.discord || entry.facebook">
-                                    <div class="profile-social-icons">
-                                        <a v-if="entry.youtube" :href="entry.youtube" target="_blank" rel="noopener noreferrer" class="social-icon-link yt" title="YouTube">
-                                            <i class="fab fa-youtube"></i>
-                                        </a>
-                                        <a v-if="entry.discord" :href="entry.discord" target="_blank" rel="noopener noreferrer" class="social-icon-link ds" title="Discord">
-                                            <i class="fab fa-discord"></i>
-                                        </a>
-                                        <a v-if="entry.facebook" :href="entry.facebook" target="_blank" rel="noopener noreferrer" class="social-icon-link fb" title="Facebook">
-                                            <i class="fab fa-facebook-f"></i>
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -228,23 +212,9 @@ export default {
     },
     async mounted() {
         const [leaderboard, err] = await fetchLeaderboard();
-        const list = await fetchList();
-        
+        this.list = await fetchList();
         this.leaderboard = leaderboard;
-        this.list = list;
         this.err = err;
-
-        // Tải trước dữ liệu các level để tra cứu link proof chính xác trong mảng "records"
-        const flatList = list.flat().filter(item => item && item.path);
-        for (let i = 0; i < flatList.length; i++) {
-            const levelMeta = flatList[i];
-            const levelData = await fetchLevel(levelMeta.path);
-            if (levelData && levelData[0]) {
-                const fullLevel = levelData[0];
-                this.levelCache[fullLevel.name.toLowerCase().trim()] = fullLevel;
-            }
-        }
-
         this.loading = false;
     },
     methods: {
@@ -257,35 +227,45 @@ export default {
             const slug = this.getLevelSlug(name);
             return `data/${slug}/thumbnail.png`; 
         },
+        // Hàm mới: Tự kiểm tra và trả về link YouTube / completion của player
 
-        // Tra cứu link proof cụ thể của từng Player ở từng Level
+        // HÀM TRA CỨU LINK PROOF TỪ DỮ LIỆU FILE LEVEL JSON
         getScoreLink(score) {
+            if (!score) return '#';
+            
+            // Tìm thuộc tính chứa link proof trong file json data
+            const proofUrl = score.link || score.video || score.proof || score.url;
+            if (proofUrl) {
+                return proofUrl;
             if (!score || !this.entry) return '#';
 
             const userName = this.entry.user.toLowerCase().trim();
             const levelName = score.level.toLowerCase().trim();
 
-            const levelData = this.levelCache[levelName];
+            // 1. Duyệt danh sách level để tìm level tương ứng
+            const flatList = this.list.flat().filter(item => item && item.name);
+            const levelData = flatList.find(item => item.name.toLowerCase().trim() === levelName);
 
             if (levelData) {
-                // Kiểm tra Verifier
+                // Kiểm tra nếu là Verifier (người đăng level)
                 if (levelData.verifier && levelData.verifier.toLowerCase().trim() === userName) {
                     if (levelData.verification) return levelData.verification;
+                    if (levelData.link) return levelData.link;
                 }
 
-                // Kiểm tra Victor trong mảng records
+                // Tìm trong mảng "records" của level đó
                 if (levelData.records && levelData.records.length > 0) {
                     const userRecord = levelData.records.find(
                         r => r.user && r.user.toLowerCase().trim() === userName
                     );
-
                     if (userRecord && userRecord.link) {
                         return userRecord.link;
                     }
                 }
             }
 
-            // Mặc định về trang level nếu player không có đính kèm link
+            // Nếu player không có video proof riêng thì fallback chuyển đến trang level
+            // Fallback: Nếu user không có gắn link youtube trong records thì chuyển hướng về trang chi tiết Level
             return `/#/level/${this.getLevelSlug(score.level)}`;
         }
     },
