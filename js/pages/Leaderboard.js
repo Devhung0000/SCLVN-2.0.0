@@ -13,6 +13,7 @@ export default {
         loading: true,
         selected: 0,
         err: [],
+        playerSocials: {}, // Lưu dữ liệu mạng xã hội từ data/_players.json
     }),
     template: `
         <main v-if="loading">
@@ -89,6 +90,7 @@ export default {
                                 </div>
                             </div>
 
+                            <!-- Khối Avatar + Icons Mạng Xã Hội Nằm Ngang -->
                             <div class="profile-avatar-box">
                                 <img 
                                     class="profile-user-avatar" 
@@ -96,6 +98,42 @@ export default {
                                     alt=""
                                     @error="$event.target.src='assets/avatars/default.png'"
                                 />
+
+                                <!-- Social Icons -->
+                                <div v-if="currentSocials" class="player-socials-row">
+                                    <a 
+                                        v-if="currentSocials.youtube" 
+                                        :href="currentSocials.youtube" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        title="YouTube"
+                                        @click.stop
+                                    >
+                                        <img src="assets/youtube.svg" class="social-icon" alt="YouTube" />
+                                    </a>
+
+                                    <a 
+                                        v-if="currentSocials.facebook" 
+                                        :href="currentSocials.facebook" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        title="Facebook"
+                                        @click.stop
+                                    >
+                                        <img src="assets/facebook.svg" class="social-icon" alt="Facebook" />
+                                    </a>
+
+                                    <a 
+                                        v-if="currentSocials.discord" 
+                                        :href="currentSocials.discord" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        title="Discord"
+                                        @click.stop
+                                    >
+                                        <img src="assets/discord.svg" class="social-icon" alt="Discord" />
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -207,6 +245,11 @@ export default {
             const allBeats = [...this.entry.verified, ...this.entry.completed];
             if (allBeats.length === 0) return null;
             return allBeats.reduce((min, current) => current.rank < min.rank ? current : min, allBeats[0]);
+        },
+        // Lấy thông tin link social của player đang chọn
+        currentSocials() {
+            if (!this.entry || !this.entry.user) return null;
+            return this.playerSocials[this.entry.user.toLowerCase()] || null;
         }
     },
     async mounted() {
@@ -214,6 +257,24 @@ export default {
         this.list = await fetchList();
         this.leaderboard = leaderboard;
         this.err = err;
+
+        // Tải dữ liệu mạng xã hội từ file JSON
+        try {
+            const res = await fetch('data/_players.json');
+            if (res.ok) {
+                const socialsArray = await res.json();
+                const map = {};
+                socialsArray.forEach(item => {
+                    if (item.name) {
+                        map[item.name.toLowerCase()] = item;
+                    }
+                });
+                this.playerSocials = map;
+            }
+        } catch (e) {
+            console.warn("Không thể tải file data/_players.json", e);
+        }
+
         this.loading = false;
     },
     methods: {
@@ -226,17 +287,12 @@ export default {
             const slug = this.getLevelSlug(name);
             return `data/${slug}/thumbnail.png`; 
         },
-        // Hàm mới: Tự kiểm tra và trả về link YouTube / completion của player
         getScoreLink(score) {
             if (!score) return '#';
-            
-            // Tìm thuộc tính chứa link proof trong file json data
             const proofUrl = score.link || score.video || score.proof || score.url;
             if (proofUrl) {
                 return proofUrl;
             }
-
-            // Nếu player không có video proof riêng thì fallback chuyển đến trang level
             return `/#/level/${this.getLevelSlug(score.level)}`;
         }
     },
