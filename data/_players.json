@@ -1,1 +1,14 @@
-
+[
+  {
+    "name": "baominh",
+    "youtube": "https://youtube.com/@baominh",
+    "facebook": "https://facebook.com/baominh",
+    "discord": "https://discord.gg/xxx"
+  },
+  {
+    "name": "player_khac",
+    "youtube": "https://youtube.com/@player_khac",
+    "facebook": "",
+    "discord": "https://discord.gg/yyy"
+  }
+]
