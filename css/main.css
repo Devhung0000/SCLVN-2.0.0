@@ -250,12 +250,17 @@ input[type="radio"] {
     font-weight: 800 !important;
 }
 
-/* Row chứa điểm số Pts và Badge Discord ID */
+/* Xếp Pts và Discord ID thành hàng dọc */
 .player-stats-row {
     display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+}
+
+.pts-container {
+    display: flex !important;
     align-items: center !important;
-    flex-wrap: wrap !important;
-    gap: 12px !important;
 }
 
 .stat-badge.score-gold {
@@ -270,26 +275,31 @@ input[type="radio"] {
     box-shadow: 0 0 12px rgba(255, 183, 3, 0.2) !important;
 }
 
-/* Badge Discord Tag bên cạnh Pts */
-.stat-badge.discord-badge {
+/* Kiểu chữ trơn cho Discord ID (Không đóng khung) */
+.discord-plain-info {
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.95rem !important;
-    font-weight: 600 !important;
-    color: #5865F2 !important; /* Màu tím Discord */
-    background: rgba(88, 101, 242, 0.12) !important;
-    border: 1px solid rgba(88, 101, 242, 0.4) !important;
-    padding: 6px 14px !important;
-    border-radius: 8px !important;
-    box-shadow: 0 0 10px rgba(88, 101, 242, 0.15) !important;
+    gap: 6px !important;
+    padding-left: 2px !important;
+    opacity: 0.85 !important;
+    transition: opacity 0.2s ease !important;
 }
 
-.discord-badge-icon {
+.discord-plain-info:hover {
+    opacity: 1 !important;
+}
+
+.discord-plain-icon {
     width: 18px !important;
     height: 18px !important;
     object-fit: contain !important;
+}
+
+.discord-plain-text {
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    color: #b9bbbe !important;
+    letter-spacing: 0.3px !important;
 }
 
 /* --- Khung Avatar & Social Icons --- */
