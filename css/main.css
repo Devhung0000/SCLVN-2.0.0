@@ -257,7 +257,7 @@ input[type="radio"] {
 .player-stats-row {
     display: flex !important;
     align-items: center !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 0 !important;
 }
 
 .stat-badge.score-gold {
@@ -272,40 +272,12 @@ input[type="radio"] {
     box-shadow: 0 0 12px rgba(255, 183, 3, 0.2) !important;
 }
 
-/* Dòng Discord nằm dưới Pts (TRÂN TRẦN, KHÔNG KHUNG) */
-.discord-text-row {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding-left: 2px !important;
-    margin-top: 4px !important;
-    background: transparent !important;
-    border: none !important;
-}
-
-.discord-text-icon,
-.discord-badge-icon {
-    width: 20px !important;
-    height: 20px !important;
-    max-width: 20px !important;
-    max-height: 20px !important;
-    object-fit: contain !important;
-    flex-shrink: 0 !important;
-}
-
-.discord-text-id {
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 1.05rem !important;
-    font-weight: 600 !important;
-    color: #ffffff !important;
-}
-
 /* --- Khung Avatar & Social Icons --- */
 .profile-avatar-box {
     flex-shrink: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    align-items: center !important;
+    align-items: flex-end !important;
     gap: 10px !important;
 }
 
@@ -319,40 +291,101 @@ input[type="radio"] {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Social icons nằm hàng ngang dưới Avatar */
+/* Social icons + Discord Tag nằm hàng ngang dưới Avatar */
 .player-socials-row {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    justify-content: center !important;
-    gap: 12px !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
     width: 100% !important;
+    flex-wrap: wrap !important;
 }
 
+/* Khung Discord Tag nhỏ gọn, bắt mắt */
+.discord-tag {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: rgba(88, 101, 242, 0.18) !important;
+    border: 1px solid rgba(88, 101, 242, 0.45) !important;
+    padding: 4px 10px !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    user-select: none !important;
+}
+
+.discord-tag:hover {
+    background: rgba(88, 101, 242, 0.35) !important;
+    border-color: #5865F2 !important;
+    transform: translateY(-2px) !important;
+}
+
+.discord-icon {
+    width: 16px !important;
+    height: 16px !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
+}
+
+.discord-username {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    color: #e2e8f0 !important;
+    letter-spacing: 0.2px !important;
+}
+
+.copy-toast {
+    position: absolute !important;
+    top: -28px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background: #5865F2 !important;
+    color: #fff !important;
+    font-size: 0.7rem !important;
+    font-weight: bold !important;
+    padding: 2px 8px !important;
+    border-radius: 4px !important;
+    white-space: nowrap !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    animation: fadeInOut 1.5s forwards !important;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, 5px); }
+    15% { opacity: 1; transform: translate(-50%, 0); }
+    85% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, -5px); }
+}
+
+/* Icon Youtube, Facebook, GDVN */
 .player-socials-row .social-icon {
     width: 22px !important;
     height: 22px !important;
     object-fit: contain !important;
-    opacity: 0.8 !important;
+    opacity: 0.85 !important;
     transition: transform 0.2s ease, opacity 0.2s ease !important;
+    display: block !important;
 }
 
 .player-socials-row .social-icon:hover {
     opacity: 1 !important;
-    transform: scale(1.25) !important;
+    transform: scale(1.2) !important;
 }
 
-/* Icon tùy chỉnh cho GDVN */
 .social-icon.gdvn-icon {
     width: auto !important;
-    height: 28px !important;
+    height: 26px !important;
     max-width: 60px !important;
     border-radius: 4px !important;
     object-fit: contain !important;
 }
 
 .social-icon.gdvn-icon:hover {
-    transform: scale(1.15) !important;
+    transform: scale(1.1) !important;
 }
 
 /* ================= PROFILE SECTIONS & LEVEL CARDS ================= */
