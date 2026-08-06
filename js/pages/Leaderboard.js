@@ -85,13 +85,20 @@ export default {
                                     #{{ selected + 1 }} - {{ entry.user }}
                                 </h1>
                                 <div class="player-stats-row">
+                                    <!-- Nút điểm số Pts -->
                                     <span class="stat-badge score-gold">
                                         ⚡ {{ localize(entry.total) }} pts
+                                    </span>
+
+                                    <!-- Nút Discord Tag bên phải Pts -->
+                                    <span v-if="currentSocials && currentSocials.discord" class="stat-badge discord-badge" :title="'Discord: ' + currentSocials.discord">
+                                        <img src="assets/discord.svg" class="discord-badge-icon" alt="Discord" />
+                                        <span>{{ currentSocials.discord }}</span>
                                     </span>
                                 </div>
                             </div>
 
-                            <!-- Khối Avatar + Icons Mạng Xã Hội Nằm Ngang -->
+                            <!-- Khối Avatar + Icons Mạng Xã Hội (YT, FB, GDVN) -->
                             <div class="profile-avatar-box">
                                 <img 
                                     class="profile-user-avatar" 
@@ -100,7 +107,7 @@ export default {
                                     @error="$event.target.src='assets/avatars/default.png'"
                                 />
 
-                                <!-- Social Icons -->
+                                <!-- Social Icons dưới Avatar -->
                                 <div v-if="currentSocials" class="player-socials-row">
                                     <a 
                                         v-if="currentSocials.youtube" 
@@ -124,15 +131,16 @@ export default {
                                         <img src="assets/facebook.svg" class="social-icon" alt="Facebook" />
                                     </a>
 
+                                    <!-- Logo GDVN thay cho Discord ở vị trí này -->
                                     <a 
-                                        v-if="currentSocials.discord" 
-                                        :href="currentSocials.discord" 
+                                        v-if="currentSocials.gdvn" 
+                                        :href="currentSocials.gdvn" 
                                         target="_blank" 
                                         rel="noopener noreferrer"
-                                        title="Discord"
+                                        title="GDVN Profile"
                                         @click.stop
                                     >
-                                        <img src="assets/discord.svg" class="social-icon" alt="Discord" />
+                                        <img src="assets/gdvn.png" class="social-icon gdvn-icon" alt="GDVN" />
                                     </a>
                                 </div>
                             </div>
