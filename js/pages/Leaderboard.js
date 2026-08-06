@@ -1,256 +1,315 @@
 import { fetchLeaderboard, fetchList } from '../content.js';
 import { localize } from '../util.js';
+
 import Spinner from '../components/Spinner.js';
 
 export default {
     components: {
         Spinner,
     },
-    data() {
-        return {
-            leaderboard: [],
-            loading: true,
-            selectedPlayerIndex: 0,
-            socialsData: {},
-            listData: [],
-        };
-    },
-    computed: {
-        selectedPlayer() {
-            if (!this.leaderboard || this.leaderboard.length === 0) return null;
-            return this.leaderboard[this.selectedPlayerIndex] || null;
-        },
-        currentSocials() {
-            if (!this.selectedPlayer) return null;
-            const name = this.selectedPlayer.user;
-            return this.socialsData ? this.socialsData[name] || null : null;
-        },
-        verifiedLevels() {
-            if (!this.selectedPlayer || !this.listData || !this.listData.length) return [];
-            const playerName = this.selectedPlayer.user;
-            if (!playerName) return [];
-
-            let results = [];
-            this.listData.forEach((level, index) => {
-                if (level && level.verifier && level.verifier.toLowerCase() === playerName.toLowerCase()) {
-                    results.push({
-                        rank: index + 1,
-                        name: level.name || 'Unknown',
-                        score: level.score || 0,
-                        link: level.verification || level.showcase || '#',
-                        banner: level.banner || ''
-                    });
-                }
-            });
-            return results;
-        },
-        completedLevels() {
-            if (!this.selectedPlayer) return [];
-            // Tự động kiểm tra cả 'verified' hoặc 'records' hoặc 'completed' để tránh lỗi dữ liệu
-            return this.selectedPlayer.verified || this.selectedPlayer.records || this.selectedPlayer.completed || [];
-        },
-        progressLevels() {
-            if (!this.selectedPlayer) return [];
-            return this.selectedPlayer.progressed || this.selectedPlayer.progress || [];
-        }
-    },
-    async mounted() {
-        try {
-            const [board, list] = await Promise.all([
-                fetchLeaderboard().catch(e => { console.error('Lỗi fetchLeaderboard:', e); return []; }),
-                fetchList().catch(e => { console.error('Lỗi fetchList:', e); return []; })
-            ]);
-
-            this.leaderboard = Array.isArray(board) ? board : [];
-            this.listData = Array.isArray(list) ? list : [];
-
-            try {
-                const res = await fetch('./data/_socials.json');
-                if (res.ok) {
-                    this.socialsData = await res.json();
-                }
-            } catch (e) {
-                console.warn("Không thể tải file _socials.json:", e);
-            }
-
-        } catch (err) {
-            console.error("Lỗi tổng trong mounted Leaderboard:", err);
-        } finally {
-            this.loading = false; // Luôn luôn tắt loading dù có lỗi xảy ra
-        }
-    },
-    methods: {
-        localize,
-        selectPlayer(index) {
-            this.selectedPlayerIndex = index;
-        },
-        getAvatarUrl(user) {
-            if (this.socialsData && user && this.socialsData[user] && this.socialsData[user].avatar) {
-                return this.socialsData[user].avatar;
-            }
-            return 'https://i.ibb.co/3sS7X1S/default-avatar.png';
-        },
-        getCardStyle(level) {
-            if (level && level.banner) {
-                return {
-                    backgroundImage: `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url(${level.banner})`
-                };
-            }
-            return {
-                backgroundColor: 'rgba(255, 255, 255, 0.05)'
-            };
-        }
-    },
+    data: () => ({
+        leaderboard: [],
+        list: [],
+        loading: true,
+        selected: 0,
+        err: [],
+        playerSocials: {},
+    }),
     template: `
         <main v-if="loading">
             <Spinner></Spinner>
         </main>
-        <main v-else class="page-leaderboard">
-            <!-- CỘT TRÁI: BẢNG XẾP HẠNG (LEADERBOARD LIST) -->
-            <div class="board-column">
-                <div 
-                    v-for="(entry, index) in leaderboard" 
-                    :key="index"
-                    class="board-row"
-                    :class="{ active: selectedPlayerIndex === index }"
-                    @click="selectPlayer(index)"
-                >
-                    <span class="rank">#{{ index + 1 }}</span>
-                    <div class="user-icon-container">
-                        <img :src="getAvatarUrl(entry.user)" class="board-user-icon" alt="Avatar" />
-                    </div>
-                    <div class="user">
-                        <span class="player-name-text">{{ entry.user }}</span>
-                    </div>
-                    <div class="total">
-                        <span class="score-badge">{{ localize(entry.total || 0) }} pts</span>
-                    </div>
+        <main v-else class="page-leaderboard-container">
+            <div class="page-leaderboard">
+                <div class="error-container">
+                    <p class="error" v-if="err && err.length > 0">
+                        Leaderboard may be incorrect, as the following levels could not be loaded: {{ err.join(', ') }}
+                    </p>
                 </div>
-            </div>
 
-            <!-- CỘT PHẢI: CHI TIẾT PROFILE (PLAYER PROFILE) -->
-            <div class="profile-column" v-if="selectedPlayer">
-                
-                <!-- CARD THÔNG TIN CÁ NHÂN HEADER -->
-                <div class="profile-header-card">
-                    <div class="profile-info">
-                        <h1 class="player-title">#{{ selectedPlayerIndex + 1 }} - {{ selectedPlayer.user }}</h1>
-                        
-                        <div class="player-stats-row">
-                            <!-- Nút điểm số Pts -->
-                            <div class="pts-container">
-                                <span class="stat-badge score-gold">
-                                    ⚡ {{ localize(selectedPlayer.total || 0) }} pts
+                <!-- Cột Trái: Bảng xếp hạng Player -->
+                <div class="board-container">
+                    <div class="board">
+                        <div
+                            v-for="(ientry, i) in leaderboard"
+                            :key="ientry.user || i"
+                            class="board-row"
+                            :class="{
+                                'top-1': i === 0,
+                                'top-2': i === 1,
+                                'top-3': i === 2,
+                                'active': selected === i
+                            }"
+                            @click="selected = i"
+                        >
+                            <div class="rank">
+                                <p class="type-label-lg">#{{ i + 1 }}</p>
+                            </div>
+
+                            <div class="user-icon-container">
+                                <img 
+                                    class="board-user-icon" 
+                                    :src="'assets/avatars/' + ientry.user + '.png'" 
+                                    alt=""
+                                    @error="$event.target.style.display='none'"
+                                />
+                            </div>
+
+                            <div class="user">
+                                <span class="type-label-lg player-name-text">
+                                    {{ ientry.user }}
                                 </span>
                             </div>
 
-                            <!-- Hàng Discord ID nằm NGAY DƯỚI nút Pts (Chữ trơn, logo + ID) -->
-                            <div v-if="currentSocials && currentSocials.discord" class="discord-plain-info" :title="'Discord: ' + currentSocials.discord">
-                                <img src="assets/discord.svg" class="discord-plain-icon" alt="Discord" />
-                                <span class="discord-plain-text">{{ currentSocials.discord }}</span>
+                            <div class="total">
+                                <span class="score-badge">{{ localize(ientry.total) }} pts</span>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- AVATAR VÀ SOCIAL ICONS BÊN PHẢI -->
-                    <div class="profile-avatar-box">
-                        <img :src="getAvatarUrl(selectedPlayer.user)" class="profile-user-avatar" alt="Avatar" />
-                        
-                        <!-- Dãy icon Youtube, Facebook, GDVN bên dưới Avatar -->
-                        <div class="player-socials-row" v-if="currentSocials">
-                            <a v-if="currentSocials.youtube" :href="currentSocials.youtube" target="_blank" title="YouTube">
-                                <img src="assets/youtube.svg" class="social-icon" alt="YouTube" />
-                            </a>
-                            <a v-if="currentSocials.facebook" :href="currentSocials.facebook" target="_blank" title="Facebook">
-                                <img src="assets/facebook.svg" class="social-icon" alt="Facebook" />
-                            </a>
-                            <a v-if="currentSocials.gdvn" :href="currentSocials.gdvn" target="_blank" title="GDVN Profile">
-                                <img src="assets/gdvn.png" class="social-icon gdvn-icon" alt="GDVN" />
+                <!-- Cột Phải: Profile Chi Tiết Player -->
+                <div class="player-container" v-if="entry">
+                    <div class="player">
+                        <!-- Card Header Player -->
+                        <div class="profile-header-card">
+                            <div class="profile-info">
+                                <h1
+                                    class="player-title"
+                                    :class="{
+                                        'top-1': selected === 0,
+                                        'top-2': selected === 1,
+                                        'top-3': selected === 2
+                                    }"
+                                >
+                                    #{{ selected + 1 }} - {{ entry.user }}
+                                </h1>
+                                <div class="player-stats-row">
+                                    <!-- Nút điểm số Pts -->
+                                    <span class="stat-badge score-gold">
+                                        ⚡ {{ localize(entry.total) }} pts
+                                    </span>
+
+                                    <!-- Nút Discord Tag bên phải Pts -->
+                                    <span v-if="currentSocials && currentSocials.discord" class="stat-badge discord-badge" :title="'Discord: ' + currentSocials.discord">
+                                        <img src="assets/discord.svg" class="discord-badge-icon" alt="Discord" />
+                                        <span>{{ currentSocials.discord }}</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Khối Avatar + Icons Mạng Xã Hội (YT, FB, GDVN) -->
+                            <div class="profile-avatar-box">
+                                <img 
+                                    class="profile-user-avatar" 
+                                    :src="'assets/avatars/' + entry.user + '.png'" 
+                                    alt=""
+                                    @error="$event.target.src='assets/avatars/default.png'"
+                                />
+
+                                <!-- Social Icons dưới Avatar -->
+                                <div v-if="currentSocials" class="player-socials-row">
+                                    <a 
+                                        v-if="currentSocials.youtube" 
+                                        :href="currentSocials.youtube" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        title="YouTube"
+                                        @click.stop
+                                    >
+                                        <img src="assets/youtube.svg" class="social-icon" alt="YouTube" />
+                                    </a>
+
+                                    <a 
+                                        v-if="currentSocials.facebook" 
+                                        :href="currentSocials.facebook" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        title="Facebook"
+                                        @click.stop
+                                    >
+                                        <img src="assets/facebook.svg" class="social-icon" alt="Facebook" />
+                                    </a>
+
+                                    <!-- Logo GDVN thay cho Discord ở vị trí này -->
+                                    <a 
+                                        v-if="currentSocials.gdvn" 
+                                        :href="currentSocials.gdvn" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        title="GDVN Profile"
+                                        @click.stop
+                                    >
+                                        <img src="assets/gdvn.png" class="social-icon gdvn-icon" alt="GDVN" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- HARDEST LEVEL CARD -->
+                        <div v-if="hardestLevel" class="profile-section">
+                            <h2 class="section-title">🏆 Hardest Beat</h2>
+                            <a 
+                                :href="getScoreLink(hardestLevel)"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="level-card hardest-card"
+                                :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url(' + getLevelThumb(hardestLevel.level) + ')' }"
+                            >
+                                <div class="level-card-info">
+                                    <span class="level-rank">#{{ hardestLevel.rank }}</span>
+                                    <div class="level-name-wrap">
+                                        <span class="level-title">{{ hardestLevel.level }}</span>
+                                    </div>
+                                </div>
+                                <div class="level-card-score">
+                                    +{{ localize(hardestLevel.score) }} pts
+                                </div>
                             </a>
                         </div>
-                    </div>
-                </div>
 
-                <!-- SECTION 1: HARDEST LEVEL -->
-                <div class="profile-section" v-if="completedLevels.length > 0">
-                    <h2 class="section-title">Hardest Level Beat</h2>
-                    <a 
-                        :href="completedLevels[0].link || '#'" 
-                        target="_blank" 
-                        class="level-card hardest-card"
-                        :style="getCardStyle(completedLevels[0])"
-                    >
-                        <div class="level-card-info">
-                            <span class="level-rank">#{{ completedLevels[0].rank || 1 }}</span>
-                            <span class="level-title">{{ completedLevels[0].name || 'Unknown' }}</span>
+                        <!-- VERIFIED LEVELS -->
+                        <div v-if="entry.verified && entry.verified.length > 0" class="profile-section">
+                            <h2 class="section-title">👑 Verified ({{ entry.verified.length }})</h2>
+                            <div class="level-grid">
+                                <a 
+                                    v-for="score in entry.verified"
+                                    :key="score.level"
+                                    :href="getScoreLink(score)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="level-card"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
+                                >
+                                    <div class="level-card-info">
+                                        <span class="level-rank">#{{ score.rank }}</span>
+                                        <span class="level-title">{{ score.level }}</span>
+                                    </div>
+                                    <div class="level-card-score">
+                                        +{{ localize(score.score) }} pts
+                                    </div>
+                                </a>
+                            </div>
                         </div>
-                        <span class="level-card-score">{{ localize(completedLevels[0].score || 0) }} pts</span>
-                    </a>
-                </div>
 
-                <!-- SECTION 2: VERIFIED LEVELS -->
-                <div class="profile-section" v-if="verifiedLevels.length > 0">
-                    <h2 class="section-title">Verified Levels ({{ verifiedLevels.length }})</h2>
-                    <div class="level-grid">
-                        <a 
-                            v-for="(item, i) in verifiedLevels" 
-                            :key="i"
-                            :href="item.link || '#'" 
-                            target="_blank" 
-                            class="level-card"
-                            :style="getCardStyle(item)"
-                        >
-                            <div class="level-card-info">
-                                <span class="level-rank">#{{ item.rank }}</span>
-                                <span class="level-title">{{ item.name }}</span>
+                        <!-- COMPLETED LEVELS -->
+                        <div v-if="entry.completed && entry.completed.length > 0" class="profile-section">
+                            <h2 class="section-title">✅ Completed ({{ entry.completed.length }})</h2>
+                            <div class="level-grid">
+                                <a 
+                                    v-for="score in entry.completed"
+                                    :key="score.level"
+                                    :href="getScoreLink(score)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="level-card"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
+                                >
+                                    <div class="level-card-info">
+                                        <span class="level-rank">#{{ score.rank }}</span>
+                                        <span class="level-title">{{ score.level }}</span>
+                                    </div>
+                                    <div class="level-card-score">
+                                        +{{ localize(score.score) }} pts
+                                    </div>
+                                </a>
                             </div>
-                            <span class="level-card-score">{{ localize(item.score) }} pts</span>
-                        </a>
+                        </div>
+
+                        <!-- PROGRESSED LEVELS -->
+                        <div v-if="entry.progressed && entry.progressed.length > 0" class="profile-section">
+                            <h2 class="section-title">🎯 Progressed ({{ entry.progressed.length }})</h2>
+                            <div class="level-grid">
+                                <a 
+                                    v-for="score in entry.progressed"
+                                    :key="score.level"
+                                    :href="getScoreLink(score)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="level-card"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
+                                >
+                                    <div class="level-card-info">
+                                        <span class="level-rank">#{{ score.rank }}</span>
+                                        <span class="level-title">{{ score.percent }}% {{ score.level }}</span>
+                                    </div>
+                                    <div class="level-card-score">
+                                        +{{ localize(score.score) }} pts
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-
-                <!-- SECTION 3: COMPLETED LEVELS -->
-                <div class="profile-section" v-if="completedLevels.length > 0">
-                    <h2 class="section-title">Completed Levels ({{ completedLevels.length }})</h2>
-                    <div class="level-grid">
-                        <a 
-                            v-for="(item, i) in completedLevels" 
-                            :key="i"
-                            :href="item.link || '#'" 
-                            target="_blank" 
-                            class="level-card"
-                            :style="getCardStyle(item)"
-                        >
-                            <div class="level-card-info">
-                                <span class="level-rank">#{{ item.rank || (i + 1) }}</span>
-                                <span class="level-title">{{ item.name || 'Unknown' }}</span>
-                            </div>
-                            <span class="level-card-score">{{ localize(item.score || 0) }} pts</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- SECTION 4: LIST PROGRESS -->
-                <div class="profile-section" v-if="progressLevels.length > 0">
-                    <h2 class="section-title">List Progress ({{ progressLevels.length }})</h2>
-                    <div class="level-grid">
-                        <a 
-                            v-for="(item, i) in progressLevels" 
-                            :key="i"
-                            :href="item.link || '#'" 
-                            target="_blank" 
-                            class="level-card"
-                            :style="getCardStyle(item)"
-                        >
-                            <div class="level-card-info">
-                                <span class="level-rank">#{{ item.rank || (i + 1) }}</span>
-                                <span class="level-title">{{ item.name || 'Unknown' }} ({{ item.percent || 0 }}%)</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
             </div>
         </main>
-    `
+    `,
+    computed: {
+        entry() {
+            if (!this.leaderboard || this.leaderboard.length === 0) return null;
+            return this.leaderboard[this.selected] || null;
+        },
+        hardestLevel() {
+            if (!this.entry) return null;
+            const verified = this.entry.verified || [];
+            const completed = this.entry.completed || [];
+            const allBeats = [...verified, ...completed];
+            if (allBeats.length === 0) return null;
+            return allBeats.reduce((min, current) => (current.rank < min.rank ? current : min), allBeats[0]);
+        },
+        currentSocials() {
+            if (!this.entry || !this.entry.user) return null;
+            return this.playerSocials[this.entry.user.toLowerCase()] || null;
+        }
+    },
+    async mounted() {
+        try {
+            const [leaderboard, err] = await fetchLeaderboard();
+            this.list = await fetchList();
+            this.leaderboard = leaderboard || [];
+            this.err = err || [];
+        } catch (e) {
+            console.error("Lỗi fetchLeaderboard:", e);
+        }
+
+        try {
+            const res = await fetch('data/_players.json');
+            if (res.ok) {
+                const socialsArray = await res.json();
+                const map = {};
+                if (Array.isArray(socialsArray)) {
+                    socialsArray.forEach(item => {
+                        if (item && item.name) {
+                            map[item.name.toLowerCase()] = item;
+                        }
+                    });
+                }
+                this.playerSocials = map;
+            }
+        } catch (e) {
+            console.warn("Chưa tìm thấy hoặc lỗi đọc file data/_players.json", e);
+        }
+
+        this.loading = false;
+    },
+    methods: {
+        localize,
+        getLevelSlug(name) {
+            if (!name) return '';
+            return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        },
+        getLevelThumb(name) {
+            const slug = this.getLevelSlug(name);
+            return `data/${slug}/thumbnail.png`;
+        },
+        getScoreLink(score) {
+            if (!score) return '#';
+            const proofUrl = score.link || score.video || score.proof || score.url;
+            if (proofUrl) {
+                return proofUrl;
+            }
+            return `/#/level/${this.getLevelSlug(score.level)}`;
+        }
+    }
 };
