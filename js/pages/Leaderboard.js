@@ -17,24 +17,25 @@ export default {
     },
     computed: {
         selectedPlayer() {
-            if (this.leaderboard.length === 0) return null;
-            return this.leaderboard[this.selectedPlayerIndex];
+            if (!this.leaderboard || this.leaderboard.length === 0) return null;
+            return this.leaderboard[this.selectedPlayerIndex] || null;
         },
         currentSocials() {
             if (!this.selectedPlayer) return null;
             const name = this.selectedPlayer.user;
-            return this.socialsData[name] || null;
+            return this.socialsData ? this.socialsData[name] || null : null;
         },
         verifiedLevels() {
-            if (!this.selectedPlayer || !this.listData.length) return [];
+            if (!this.selectedPlayer || !this.listData || !this.listData.length) return [];
             const playerName = this.selectedPlayer.user;
-            let results = [];
+            if (!playerName) return [];
 
+            let results = [];
             this.listData.forEach((level, index) => {
-                if (level.verifier && level.verifier.toLowerCase() === playerName.toLowerCase()) {
+                if (level && level.verifier && level.verifier.toLowerCase() === playerName.toLowerCase()) {
                     results.push({
                         rank: index + 1,
-                        name: level.name,
+                        name: level.name || 'Unknown',
                         score: level.score || 0,
                         link: level.verification || level.showcase || '#',
                         banner: level.banner || ''
@@ -45,21 +46,23 @@ export default {
         },
         completedLevels() {
             if (!this.selectedPlayer) return [];
-            return this.selectedPlayer.verified || [];
+            // Tự động kiểm tra cả 'verified' hoặc 'records' hoặc 'completed' để tránh lỗi dữ liệu
+            return this.selectedPlayer.verified || this.selectedPlayer.records || this.selectedPlayer.completed || [];
         },
         progressLevels() {
             if (!this.selectedPlayer) return [];
-            return this.selectedPlayer.progressed || [];
+            return this.selectedPlayer.progressed || this.selectedPlayer.progress || [];
         }
     },
     async mounted() {
         try {
             const [board, list] = await Promise.all([
-                fetchLeaderboard(),
-                fetchList()
+                fetchLeaderboard().catch(e => { console.error('Lỗi fetchLeaderboard:', e); return []; }),
+                fetchList().catch(e => { console.error('Lỗi fetchList:', e); return []; })
             ]);
-            this.leaderboard = board;
-            this.listData = list;
+
+            this.leaderboard = Array.isArray(board) ? board : [];
+            this.listData = Array.isArray(list) ? list : [];
 
             try {
                 const res = await fetch('./data/_socials.json');
@@ -67,13 +70,13 @@ export default {
                     this.socialsData = await res.json();
                 }
             } catch (e) {
-                console.warn("Không thể tải file _socials.json", e);
+                console.warn("Không thể tải file _socials.json:", e);
             }
 
         } catch (err) {
-            console.error("Lỗi khi tải dữ liệu Leaderboard:", err);
+            console.error("Lỗi tổng trong mounted Leaderboard:", err);
         } finally {
-            this.loading = false;
+            this.loading = false; // Luôn luôn tắt loading dù có lỗi xảy ra
         }
     },
     methods: {
@@ -82,14 +85,13 @@ export default {
             this.selectedPlayerIndex = index;
         },
         getAvatarUrl(user) {
-            const socials = this.socialsData[user];
-            if (socials && socials.avatar) {
-                return socials.avatar;
+            if (this.socialsData && user && this.socialsData[user] && this.socialsData[user].avatar) {
+                return this.socialsData[user].avatar;
             }
             return 'https://i.ibb.co/3sS7X1S/default-avatar.png';
         },
         getCardStyle(level) {
-            if (level.banner) {
+            if (level && level.banner) {
                 return {
                     backgroundImage: `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url(${level.banner})`
                 };
@@ -121,7 +123,7 @@ export default {
                         <span class="player-name-text">{{ entry.user }}</span>
                     </div>
                     <div class="total">
-                        <span class="score-badge">{{ localize(entry.total) }} pts</span>
+                        <span class="score-badge">{{ localize(entry.total || 0) }} pts</span>
                     </div>
                 </div>
             </div>
@@ -138,7 +140,7 @@ export default {
                             <!-- Nút điểm số Pts -->
                             <div class="pts-container">
                                 <span class="stat-badge score-gold">
-                                    ⚡ {{ localize(selectedPlayer.total) }} pts
+                                    ⚡ {{ localize(selectedPlayer.total || 0) }} pts
                                 </span>
                             </div>
 
@@ -173,16 +175,16 @@ export default {
                 <div class="profile-section" v-if="completedLevels.length > 0">
                     <h2 class="section-title">Hardest Level Beat</h2>
                     <a 
-                        :href="completedLevels[0].link" 
+                        :href="completedLevels[0].link || '#'" 
                         target="_blank" 
                         class="level-card hardest-card"
                         :style="getCardStyle(completedLevels[0])"
                     >
                         <div class="level-card-info">
-                            <span class="level-rank">#{{ completedLevels[0].rank }}</span>
-                            <span class="level-title">{{ completedLevels[0].name }}</span>
+                            <span class="level-rank">#{{ completedLevels[0].rank || 1 }}</span>
+                            <span class="level-title">{{ completedLevels[0].name || 'Unknown' }}</span>
                         </div>
-                        <span class="level-card-score">{{ localize(completedLevels[0].score) }} pts</span>
+                        <span class="level-card-score">{{ localize(completedLevels[0].score || 0) }} pts</span>
                     </a>
                 </div>
 
@@ -193,7 +195,7 @@ export default {
                         <a 
                             v-for="(item, i) in verifiedLevels" 
                             :key="i"
-                            :href="item.link" 
+                            :href="item.link || '#'" 
                             target="_blank" 
                             class="level-card"
                             :style="getCardStyle(item)"
@@ -214,16 +216,16 @@ export default {
                         <a 
                             v-for="(item, i) in completedLevels" 
                             :key="i"
-                            :href="item.link" 
+                            :href="item.link || '#'" 
                             target="_blank" 
                             class="level-card"
                             :style="getCardStyle(item)"
                         >
                             <div class="level-card-info">
-                                <span class="level-rank">#{{ item.rank }}</span>
-                                <span class="level-title">{{ item.name }}</span>
+                                <span class="level-rank">#{{ item.rank || (i + 1) }}</span>
+                                <span class="level-title">{{ item.name || 'Unknown' }}</span>
                             </div>
-                            <span class="level-card-score">{{ localize(item.score) }} pts</span>
+                            <span class="level-card-score">{{ localize(item.score || 0) }} pts</span>
                         </a>
                     </div>
                 </div>
@@ -235,14 +237,14 @@ export default {
                         <a 
                             v-for="(item, i) in progressLevels" 
                             :key="i"
-                            :href="item.link" 
+                            :href="item.link || '#'" 
                             target="_blank" 
                             class="level-card"
                             :style="getCardStyle(item)"
                         >
                             <div class="level-card-info">
-                                <span class="level-rank">#{{ item.rank }}</span>
-                                <span class="level-title">{{ item.name }} ({{ item.percent }}%)</span>
+                                <span class="level-rank">#{{ item.rank || (i + 1) }}</span>
+                                <span class="level-title">{{ item.name || 'Unknown' }} ({{ item.percent || 0 }}%)</span>
                             </div>
                         </a>
                     </div>
