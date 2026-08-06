@@ -250,9 +250,12 @@ input[type="radio"] {
     font-weight: 800 !important;
 }
 
+/* Row chứa điểm số Pts và Badge Discord ID */
 .player-stats-row {
     display: flex !important;
-    gap: 10px !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
 }
 
 .stat-badge.score-gold {
@@ -265,6 +268,28 @@ input[type="radio"] {
     padding: 6px 14px !important;
     border-radius: 8px !important;
     box-shadow: 0 0 12px rgba(255, 183, 3, 0.2) !important;
+}
+
+/* Badge Discord Tag bên cạnh Pts */
+.stat-badge.discord-badge {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    color: #5865F2 !important; /* Màu tím Discord */
+    background: rgba(88, 101, 242, 0.12) !important;
+    border: 1px solid rgba(88, 101, 242, 0.4) !important;
+    padding: 6px 14px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0 10px rgba(88, 101, 242, 0.15) !important;
+}
+
+.discord-badge-icon {
+    width: 18px !important;
+    height: 18px !important;
+    object-fit: contain !important;
 }
 
 /* --- Khung Avatar & Social Icons --- */
@@ -307,6 +332,10 @@ input[type="radio"] {
 .player-socials-row .social-icon:hover {
     opacity: 1 !important;
     transform: scale(1.25) !important;
+}
+
+.social-icon.gdvn-icon {
+    border-radius: 4px !important;
 }
 
 /* ================= PROFILE SECTIONS & LEVEL CARDS ================= */
@@ -383,4 +412,4 @@ input[type="radio"] {
     padding: 4px 10px !important;
     border-radius: 6px !important;
     border: 1px solid rgba(76, 201, 240, 0.3) !important;
-}v
+}
