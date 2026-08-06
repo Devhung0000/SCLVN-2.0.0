@@ -50,7 +50,6 @@ header.darker {
 /* ================= BASE STYLES ================= */
 * {
     font-family: 'Poppins', sans-serif;
-    box-sizing: border-box;
 }
 
 html,
@@ -156,22 +155,6 @@ input[type="radio"] {
     color: var(--color-on-background);
 }
 
-/* ================= LEADERBOARD PAGE LAYOUT ================= */
-.page-leaderboard {
-    display: grid !important;
-    grid-template-columns: minmax(280px, 0.8fr) 2fr !important;
-    gap: 20px !important;
-    padding: 20px !important;
-    height: 100% !important;
-}
-
-.board-column,
-.profile-column {
-    overflow-y: auto !important;
-    max-height: 100% !important;
-    padding-right: 5px !important;
-}
-
 /* ================= LEADERBOARD ROW (LEFT COLUMN) ================= */
 .board-row {
     display: flex !important;
@@ -185,7 +168,6 @@ input[type="radio"] {
     cursor: pointer !important;
     transition: all 0.2s ease-in-out !important;
     border-radius: 12px !important;
-    margin-bottom: 6px !important;
 }
 
 .board-row:hover {
@@ -197,12 +179,6 @@ input[type="radio"] {
 .board-row.active {
     background-color: rgba(255, 255, 255, 0.22) !important;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.4) !important;
-}
-
-.board-row .rank {
-    font-weight: bold !important;
-    min-width: 30px !important;
-    text-align: left !important;
 }
 
 .user-icon-container {
@@ -224,8 +200,6 @@ input[type="radio"] {
     flex: 1 !important;
     text-align: left !important;
     white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
 }
 
 .player-name-text {
@@ -271,12 +245,13 @@ input[type="radio"] {
 }
 
 .player-title {
-    margin: 0 0 12px 0 !important;
+    margin: 0 0 10px 0 !important;
     font-size: 2rem !important;
     font-weight: 800 !important;
 }
 
-/* Container chứa Pts và Discord ID (Xếp hàng dọc) */
+/* Row chứa điểm số Pts và Badge Discord ID */
+/* Xếp Pts và Discord ID thành hàng dọc */
 .player-stats-row {
     display: flex !important;
     flex-direction: column !important;
@@ -287,6 +262,8 @@ input[type="radio"] {
 .pts-container {
     display: flex !important;
     align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
 }
 
 .stat-badge.score-gold {
@@ -301,10 +278,22 @@ input[type="radio"] {
     box-shadow: 0 0 12px rgba(255, 183, 3, 0.2) !important;
 }
 
-/* Discord ID trơn (Chữ + Logo, không đóng khung) */
+/* Badge Discord Tag bên cạnh Pts */
+.stat-badge.discord-badge {
+/* Kiểu chữ trơn cho Discord ID (Không đóng khung) */
 .discord-plain-info {
     display: flex !important;
     align-items: center !important;
+    gap: 8px !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    color: #5865F2 !important; /* Màu tím Discord */
+    background: rgba(88, 101, 242, 0.12) !important;
+    border: 1px solid rgba(88, 101, 242, 0.4) !important;
+    padding: 6px 14px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0 10px rgba(88, 101, 242, 0.15) !important;
     gap: 6px !important;
     padding-left: 2px !important;
     opacity: 0.85 !important;
@@ -315,6 +304,7 @@ input[type="radio"] {
     opacity: 1 !important;
 }
 
+.discord-badge-icon {
 .discord-plain-icon {
     width: 18px !important;
     height: 18px !important;
