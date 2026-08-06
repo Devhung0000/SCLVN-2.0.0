@@ -413,3 +413,14 @@ input[type="radio"] {
     border-radius: 6px !important;
     border: 1px solid rgba(76, 201, 240, 0.3) !important;
 }
+.social-icon.gdvn-icon {
+    width: auto !important;       /* Cho chiều rộng tự co giãn theo tỉ lệ */
+    height: 28px !important;      /* Tăng chiều cao lên để chữ to rõ */
+    max-width: 60px !important;   /* Giới hạn max tránh bị phình to quá */
+    object-fit: contain !important;
+}
+
+/* Hiệu ứng phóng to nhẹ khi hover */
+.social-icon.gdvn-icon:hover {
+    transform: scale(1.15) !important;
+}
