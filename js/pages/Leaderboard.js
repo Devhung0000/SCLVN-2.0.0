@@ -13,6 +13,7 @@ export default {
         selected: 0,
         err: [],
         playerSocials: {},
+        copiedDiscord: false,
     }),
     template: `
         <main v-if="loading">
@@ -84,25 +85,15 @@ export default {
                                     #{{ selected + 1 }} - {{ entry.user }}
                                 </h1>
                                 
-                                <!-- Dòng 1: Nút điểm số Pts -->
+                                <!-- Điểm số Pts -->
                                 <div class="player-stats-row">
                                     <span class="stat-badge score-gold">
                                         ⚡ {{ localize(entry.total) }} pts
                                     </span>
                                 </div>
-
-                                <!-- Dòng 2: Discord nằm ở DƯỚI Pts (Không khung, chỉ icon + text) -->
-                                <div 
-                                    v-if="currentSocials && currentSocials.discord" 
-                                    class="discord-text-row"
-                                    :title="'Discord: ' + currentSocials.discord"
-                                >
-                                    <img src="assets/discord.svg" class="discord-text-icon" alt="Discord" />
-                                    <span class="discord-text-id">{{ currentSocials.discord }}</span>
-                                </div>
                             </div>
 
-                            <!-- Khối Avatar + Icons Mạng Xã Hội (YT, FB, GDVN) -->
+                            <!-- Khối Avatar + Social Icons (Gồm Discord, YT, FB, GDVN) -->
                             <div class="profile-avatar-box">
                                 <img 
                                     class="profile-user-avatar" 
@@ -111,8 +102,21 @@ export default {
                                     @error="$event.target.src='assets/avatars/default.png'"
                                 />
 
-                                <!-- Social Icons dưới Avatar -->
+                                <!-- Dòng Social Icons nằm ngay dưới Avatar -->
                                 <div v-if="currentSocials" class="player-socials-row">
+                                    <!-- Discord Tag cùng hàng -->
+                                    <div 
+                                        v-if="currentSocials.discord" 
+                                        class="discord-tag"
+                                        :title="'Click để copy: ' + currentSocials.discord"
+                                        @click="copyDiscord(currentSocials.discord)"
+                                    >
+                                        <img src="assets/discord.svg" class="discord-icon" alt="Discord" />
+                                        <span class="discord-username">{{ currentSocials.discord }}</span>
+                                        <span v-if="copiedDiscord" class="copy-toast">Copied!</span>
+                                    </div>
+
+                                    <!-- YouTube -->
                                     <a 
                                         v-if="currentSocials.youtube" 
                                         :href="currentSocials.youtube" 
@@ -124,6 +128,7 @@ export default {
                                         <img src="assets/youtube.svg" class="social-icon" alt="YouTube" />
                                     </a>
 
+                                    <!-- Facebook -->
                                     <a 
                                         v-if="currentSocials.facebook" 
                                         :href="currentSocials.facebook" 
@@ -135,6 +140,7 @@ export default {
                                         <img src="assets/facebook.svg" class="social-icon" alt="Facebook" />
                                     </a>
 
+                                    <!-- GDVN -->
                                     <a 
                                         v-if="currentSocials.gdvn" 
                                         :href="currentSocials.gdvn" 
@@ -313,6 +319,15 @@ export default {
                 return proofUrl;
             }
             return `/#/level/${this.getLevelSlug(score.level)}`;
+        },
+        copyDiscord(username) {
+            if (!username) return;
+            navigator.clipboard.writeText(username).then(() => {
+                this.copiedDiscord = true;
+                setTimeout(() => {
+                    this.copiedDiscord = false;
+                }, 1500);
+            });
         }
     }
 };
