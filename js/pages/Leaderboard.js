@@ -83,22 +83,22 @@ export default {
                                 >
                                     #{{ selected + 1 }} - {{ entry.user }}
                                 </h1>
-                                <div class="player-stats-row" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-                                    <!-- Nút điểm số Pts -->
+                                
+                                <!-- Dòng 1: Nút điểm số Pts -->
+                                <div class="player-stats-row">
                                     <span class="stat-badge score-gold">
                                         ⚡ {{ localize(entry.total) }} pts
                                     </span>
+                                </div>
 
-                                    <!-- Nút Discord Tag bên phải Pts (Fix CSSInline) -->
-                                    <span 
-                                        v-if="currentSocials && currentSocials.discord" 
-                                        class="stat-badge discord-badge" 
-                                        :title="'Discord: ' + currentSocials.discord"
-                                        style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 6px; background: rgba(88, 101, 242, 0.15); color: #5865F2; font-weight: 600;"
-                                    >
-                                        <img src="assets/discord.svg" class="discord-badge-icon" alt="Discord" style="width: 18px; height: 18px; object-fit: contain; flex-shrink: 0;" />
-                                        <span>{{ currentSocials.discord }}</span>
-                                    </span>
+                                <!-- Dòng 2: Discord nằm ở DƯỚI Pts (Không khung, chỉ icon + text) -->
+                                <div 
+                                    v-if="currentSocials && currentSocials.discord" 
+                                    class="discord-text-row"
+                                    :title="'Discord: ' + currentSocials.discord"
+                                >
+                                    <img src="assets/discord.svg" class="discord-text-icon" alt="Discord" />
+                                    <span class="discord-text-id">{{ currentSocials.discord }}</span>
                                 </div>
                             </div>
 
