@@ -251,15 +251,7 @@ input[type="radio"] {
 }
 
 /* Row chứa điểm số Pts và Badge Discord ID */
-/* Xếp Pts và Discord ID thành hàng dọc */
 .player-stats-row {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 8px !important;
-}
-
-.pts-container {
     display: flex !important;
     align-items: center !important;
     flex-wrap: wrap !important;
@@ -280,8 +272,6 @@ input[type="radio"] {
 
 /* Badge Discord Tag bên cạnh Pts */
 .stat-badge.discord-badge {
-/* Kiểu chữ trơn cho Discord ID (Không đóng khung) */
-.discord-plain-info {
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
@@ -294,28 +284,12 @@ input[type="radio"] {
     padding: 6px 14px !important;
     border-radius: 8px !important;
     box-shadow: 0 0 10px rgba(88, 101, 242, 0.15) !important;
-    gap: 6px !important;
-    padding-left: 2px !important;
-    opacity: 0.85 !important;
-    transition: opacity 0.2s ease !important;
-}
-
-.discord-plain-info:hover {
-    opacity: 1 !important;
 }
 
 .discord-badge-icon {
-.discord-plain-icon {
     width: 18px !important;
     height: 18px !important;
     object-fit: contain !important;
-}
-
-.discord-plain-text {
-    font-size: 0.95rem !important;
-    font-weight: 500 !important;
-    color: #b9bbbe !important;
-    letter-spacing: 0.3px !important;
 }
 
 /* --- Khung Avatar & Social Icons --- */
