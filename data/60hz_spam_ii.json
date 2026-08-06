@@ -40,7 +40,13 @@
         {
         "user": "infasaegd",
         "link": "https://drive.google.com/file/d/1yY3SzTM-4fLs9rF65fBDshfC6pG9v0O-/view?usp=drivesdk",
-        "hz": "CBF",
+        "hz": "60",
+        "percent": 100
+        },
+        {
+        "user": "JunhaHoangGD",
+        "link": "https://youtu.be/_G3GL7MofNo",
+        "hz": "60",
         "percent": 100
         }
     ]
