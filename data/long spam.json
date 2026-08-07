@@ -11,10 +11,16 @@
     "device": "All",
     "method": "Alternate",
     "records": [
-         {
+        {
         "user": "baominh",
-        "hz": "60",
+        "hz": "CBF",
         "link": "https://youtu.be/Fdo8Mkr3Nto?si=Um-gkMnb1HNAdHM9",
+        "percent": 100
+        },
+        {
+        "user": "giangdelt",
+        "hz": "CBF",
+        "link": "https://youtu.be/_bFXthyJAIw",
         "percent": 100
         }
     ]
