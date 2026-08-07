@@ -1,0 +1,20 @@
+{
+    "id": 139134327,
+    "name": "wave spam ez",
+    "author": "SilentBall",
+    "creators": ["SilentBall"],
+    "verifier": "SilentBall",
+    "verification": "https://youtu.be/N0QOiTOM-84",
+    "percentToQualify": 100,
+    "fps": "240",
+    "handcam": "recommended",
+    "device": "All",
+    "method": "Alternate",
+    "records": [
+        {
+        "user": "giangdelt",
+        "hz": "240",
+        "percent": 100
+        }
+     ]
+}
