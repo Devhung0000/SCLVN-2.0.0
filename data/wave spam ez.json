@@ -19,7 +19,13 @@
         {
         "user": "Jaokujn",
         "link": "https://youtu.be/PwFdjlY6FNQ?si=U6WUEgbPWSyqJE5E",
-        "hz": "60",
+        "hz": "240",
+        "percent": 100
+        },
+        {
+        "user": "baominh",
+        "link": "https://drive.google.com/open?id=1ZvYcNsUB5IGp5viPdLigtcyJdHSYhNaR",
+        "hz": "CBF",
         "percent": 100
         }
      ]
