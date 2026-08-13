@@ -11,5 +11,10 @@
     "device": "All",
     "method": "Alternate",
     "records": [
+        {
+        "user": "NookGD",
+        "hz": "CBF",
+        "percent": 100
+        }
     ]
 }
