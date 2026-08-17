@@ -6,14 +6,14 @@
     "verifier": "longhet20110",
     "verification": "https://youtu.be/pf5_Qxqb82c",
     "percentToQualify": 100,
-    "fps": "60",
+    "fps": "CBF",
     "handcam": "recommended",
     "device": "All",
     "method": "Alternate",
     "records": [
         {
         "user": "giangdelt",
-        "hz": "60",
+        "hz": "CBF",
         "percent": 100
         }
     ]
