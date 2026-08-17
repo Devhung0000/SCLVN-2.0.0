@@ -11,6 +11,10 @@
     "device": "All",
     "method": "Alternate",
     "records": [
-        
+        {
+        "user": "giangdelt",
+        "hz": "CBF",
+        "percent": 100
+        }
     ]
 }
