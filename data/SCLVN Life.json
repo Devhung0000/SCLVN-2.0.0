@@ -1,0 +1,20 @@
+{
+    "id": 147015635,
+    "name": "SCLVN life",
+    "author": "Phuskhongbeo",
+    "creators": ["Phuskhongbeo"],
+    "verifier": "Phuskhongbeo",
+    "verification": "https://drive.google.com/open?id=1Axczi9dMKN0aQn12TW99r3NXYv118i1X",
+    "percentToQualify": 100,
+    "fps": "CBF",
+    "handcam": "recommended",
+    "device": "All",
+    "method": "Alternate",
+    "records": [
+        {
+        "user": "giangdelt",
+        "hz": "CBF",
+        "percent": 100
+        }
+    ]
+}
