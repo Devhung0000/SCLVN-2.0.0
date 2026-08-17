@@ -1,0 +1,20 @@
+{
+    "id": 146893319,
+    "name": "triple ufo spam",
+    "author": "longhet20110",
+    "creators": ["longhet20110"],
+    "verifier": "longhet20110",
+    "verification": "https://youtu.be/pf5_Qxqb82c",
+    "percentToQualify": 100,
+    "fps": "60",
+    "handcam": "recommended",
+    "device": "All",
+    "method": "Alternate",
+    "records": [
+        {
+        "user": "giangdelt",
+        "hz": "60",
+        "percent": 100
+        }
+    ]
+}
