@@ -12,7 +12,7 @@
         <link rel="icon" href="/assets/the sclvn logo.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="/css/typography.css" />
         <link rel="stylesheet" type="text/css" href="/css/main.css" />
@@ -23,11 +23,8 @@
         <link rel="stylesheet" type="text/css" href="/css/components/btn.css" />
         <link rel="stylesheet" type="text/css" href="/css/components/tabs.css" />
         
-        <!-- Vue Core Libraries -->
         <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
         <script src="https://unpkg.com/vue-router@4.0.14/dist/vue-router.global.prod.js"></script>
-        
-        <!-- App Entry Point (Đã xử lý nạp main.js và auth.js bên trong) -->
         <script type="module" src="/js/main.js"></script>
     </head>
     <body id="app">
@@ -58,18 +55,18 @@
                     </a>
                     <a class="nav__cta type-label-lg ripple" href="https://docs.google.com/forms/d/e/1FAIpQLSdEaM62aNoDCaapPlZzaeuMybWr6Bal3vse3x6SF1yavZMxNw/viewform?usp=dialog" target="_blank" style="white-space: nowrap;">Submit Record/Verification</a>
 
-                    <!-- Auth Container -->
-                    <div id="auth-container" style="display: inline-flex; align-items: center; gap: 10px; margin-left: 5px;">
-                        <button id="auth-open-btn" class="nav__cta type-label-lg ripple" style="cursor: pointer; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: #ffffff; font-weight: 700; border: 1px solid #c084fc; box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); white-space: nowrap;">
+                    <!-- Auth Block -->
+                    <div style="display: inline-flex; align-items: center; gap: 10px; margin-left: 5px;">
+                        <button v-if="!store.user" @click="store.showAuthModal = true" class="nav__cta type-label-lg ripple" style="cursor: pointer; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: #ffffff; font-weight: 700; border: 1px solid #c084fc; box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); white-space: nowrap;">
                             Login / Register
                         </button>
                         
-                        <div id="user-profile" style="display: none; align-items: center; gap: 10px;">
-                            <img id="user-avatar-display" src="/assets/the sclvn logo.png" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #a855f7;">
-                            <span id="user-name-display" style="color: #ffffff; font-weight: 700; font-size: 14px;"></span>
-                            <span id="admin-badge" style="display: none; background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold;">ADMIN</span>
-                            <button id="open-profile-btn" class="nav__cta type-label-lg ripple" style="background: #4f46e5; border: none; padding: 6px 12px; cursor: pointer;">Profile</button>
-                            <button id="logout-btn" class="nav__cta type-label-lg ripple" style="background: #374151; color: #f3f4f6; border: 1px solid #4b5563; padding: 6px 12px; cursor: pointer;">Logout</button>
+                        <div v-else style="display: flex; align-items: center; gap: 10px;">
+                            <img :src="store.user.avatar || '/assets/the sclvn logo.png'" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #a855f7;">
+                            <span style="color: #ffffff; font-weight: 700; font-size: 14px;">{{ store.user.username }}</span>
+                            <span v-if="store.user.role === 'admin'" style="background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold;">ADMIN</span>
+                            <button @click="store.openProfileModal()" class="nav__cta type-label-lg ripple" style="background: #4f46e5; border: none; padding: 6px 12px; cursor: pointer;">Profile</button>
+                            <button @click="store.handleLogout()" class="nav__cta type-label-lg ripple" style="background: #374151; color: #f3f4f6; border: 1px solid #4b5563; padding: 6px 12px; cursor: pointer;">Logout</button>
                         </div>
                     </div>
                 </div>
@@ -78,53 +75,53 @@
         
         <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
 
-        <!-- Modal Login / Register -->
-        <div id="auth-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.75); z-index: 99999; justify-content: center; align-items: center;">
+        <!-- Auth Modal -->
+        <div v-if="store.showAuthModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.75); z-index: 99999; justify-content: center; align-items: center;">
             <div style="background: #18181b; padding: 25px; border-radius: 8px; width: 320px; color: white; border: 1px solid #27272a; box-shadow: 0 10px 25px rgba(0,0,0,0.5); font-family: 'Poppins', sans-serif;">
-                <h3 id="modal-title" style="margin-top: 0; text-align: center; font-size: 18px; color: #fff;">Login</h3>
-                <form id="auth-form" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
-                    <div id="username-box" style="display: none;">
+                <h3 style="margin-top: 0; text-align: center; font-size: 18px; color: #fff;">{{ store.isLoginMode ? 'Login' : 'Register Player Account' }}</h3>
+                <form @submit.prevent="store.handleAuth()" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+                    <div v-if="!store.isLoginMode">
                         <label style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 4px;">Player Name (Gõ đúng tên trên Leaderboard cũ):</label>
-                        <input type="text" id="auth-username" placeholder="e.g. NookGD" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
+                        <input type="text" v-model="store.authUsername" placeholder="e.g. NookGD" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
                     </div>
                     <div>
                         <label style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 4px;">Email:</label>
-                        <input type="email" id="auth-email" required placeholder="name@example.com" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
+                        <input type="email" v-model="store.authEmail" required placeholder="name@example.com" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
                     </div>
                     <div>
                         <label style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 4px;">Password:</label>
-                        <input type="password" id="auth-password" required placeholder="••••••••" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
+                        <input type="password" v-model="store.authPassword" required placeholder="••••••••" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
                     </div>
-                    <button type="submit" id="auth-submit-btn" style="margin-top: 10px; padding: 10px; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); border: none; color: white; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: inherit;">Login</button>
+                    <button type="submit" style="margin-top: 10px; padding: 10px; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); border: none; color: white; border-radius: 4px; cursor: pointer; font-weight: bold;">{{ store.isLoginMode ? 'Login' : 'Create Account' }}</button>
                 </form>
                 <div style="margin-top: 15px; font-size: 13px; text-align: center; color: #a1a1aa;">
-                    <span id="toggle-text">Don't have an account?</span> 
-                    <a href="javascript:void(0)" id="toggle-auth-btn" style="color: #c084fc; text-decoration: underline; margin-left: 4px; font-weight: 600;">Register now</a>
+                    <span>{{ store.isLoginMode ? "Don't have an account?" : "Already have an account?" }}</span> 
+                    <a href="javascript:void(0)" @click="store.toggleAuthMode()" style="color: #c084fc; text-decoration: underline; margin-left: 4px; font-weight: 600;">{{ store.isLoginMode ? "Register now" : "Login" }}</a>
                 </div>
-                <button id="close-modal-btn" style="width: 100%; background: transparent; border: none; color: #71717a; cursor: pointer; margin-top: 10px; font-size: 12px;">Cancel</button>
+                <button @click="store.showAuthModal = false" style="width: 100%; background: transparent; border: none; color: #71717a; cursor: pointer; margin-top: 10px; font-size: 12px;">Cancel</button>
             </div>
         </div>
 
-        <!-- Modal Chỉnh sửa Profile -->
-        <div id="profile-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.75); z-index: 99999; justify-content: center; align-items: center;">
+        <!-- Edit Profile Modal -->
+        <div v-if="store.showProfileModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.75); z-index: 99999; justify-content: center; align-items: center;">
             <div style="background: #18181b; padding: 25px; border-radius: 8px; width: 360px; color: white; border: 1px solid #27272a; box-shadow: 0 10px 25px rgba(0,0,0,0.5); font-family: 'Poppins', sans-serif;">
                 <h3 style="margin-top: 0; text-align: center; font-size: 18px; color: #fff;">Edit Profile</h3>
-                <form id="profile-form" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+                <form @submit.prevent="store.handleUpdateProfile()" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
                     <div>
                         <label style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 4px;">Player Name (Khớp với Leaderboard):</label>
-                        <input type="text" id="edit-username" required style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
+                        <input type="text" v-model="store.editUsername" required style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
                     </div>
                     <div>
                         <label style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 4px;">Avatar URL (Link ảnh):</label>
-                        <input type="url" id="edit-avatar" placeholder="https://example.com/avatar.png" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
+                        <input type="url" v-model="store.editAvatar" placeholder="https://example.com/avatar.png" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
                     </div>
                     <div>
                         <label style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 4px;">Social Link (YouTube / Discord / Facebook):</label>
-                        <input type="url" id="edit-social" placeholder="https://youtube.com/@yourchannel" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
+                        <input type="url" v-model="store.editSocial" placeholder="https://youtube.com/@yourchannel" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
                     </div>
-                    <button type="submit" style="margin-top: 10px; padding: 10px; background: #22c55e; border: none; color: white; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: inherit;">Save Profile</button>
+                    <button type="submit" style="margin-top: 10px; padding: 10px; background: #22c55e; border: none; color: white; border-radius: 4px; cursor: pointer; font-weight: bold;">Save Profile</button>
                 </form>
-                <button id="close-profile-btn" style="width: 100%; background: transparent; border: none; color: #71717a; cursor: pointer; margin-top: 10px; font-size: 12px;">Close</button>
+                <button @click="store.showProfileModal = false" style="width: 100%; background: transparent; border: none; color: #71717a; cursor: pointer; margin-top: 10px; font-size: 12px;">Close</button>
             </div>
         </div>
     </body>
