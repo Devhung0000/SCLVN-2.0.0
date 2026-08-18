@@ -5,6 +5,7 @@ import Statistics from './pages/Statistics.js';
 import Login from './pages/Login.js';
 import Submit from './pages/Submit.js';
 import Admin from './pages/Admin.js';
+import Profile from './pages/Profile.js';
 
 export default [
     { path: '/', component: List },
@@ -14,4 +15,5 @@ export default [
     { path: '/login', component: Login },
     { path: '/submit', component: Submit },
     { path: '/admin', component: Admin },
+    { path: '/profile', component: Profile },
 ];
