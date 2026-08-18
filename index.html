@@ -55,7 +55,7 @@
                     </a>
                     <a class="nav__cta type-label-lg ripple" href="https://docs.google.com/forms/d/e/1FAIpQLSdEaM62aNoDCaapPlZzaeuMybWr6Bal3vse3x6SF1yavZMxNw/viewform?usp=dialog" target="_blank" style="white-space: nowrap;">Submit Record/Verification</a>
 
-                    <!-- Auth Actions -->
+                    <!-- Auth Block -->
                     <div style="display: inline-flex; align-items: center; gap: 10px; margin-left: 5px;">
                         <button v-if="!store.user" @click="store.showAuthModal = true" class="nav__cta type-label-lg ripple" style="cursor: pointer; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: #ffffff; font-weight: 700; border: 1px solid #c084fc; box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); white-space: nowrap;">
                             Login / Register
@@ -75,7 +75,7 @@
         
         <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
 
-        <!-- Modal Login / Register -->
+        <!-- Auth Modal -->
         <div v-if="store.showAuthModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.75); z-index: 99999; justify-content: center; align-items: center;">
             <div style="background: #18181b; padding: 25px; border-radius: 8px; width: 320px; color: white; border: 1px solid #27272a; box-shadow: 0 10px 25px rgba(0,0,0,0.5); font-family: 'Poppins', sans-serif;">
                 <h3 style="margin-top: 0; text-align: center; font-size: 18px; color: #fff;">{{ store.isLoginMode ? 'Login' : 'Register Player Account' }}</h3>
@@ -102,7 +102,7 @@
             </div>
         </div>
 
-        <!-- Modal Edit Profile -->
+        <!-- Edit Profile Modal -->
         <div v-if="store.showProfileModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.75); z-index: 99999; justify-content: center; align-items: center;">
             <div style="background: #18181b; padding: 25px; border-radius: 8px; width: 360px; color: white; border: 1px solid #27272a; box-shadow: 0 10px 25px rgba(0,0,0,0.5); font-family: 'Poppins', sans-serif;">
                 <h3 style="margin-top: 0; text-align: center; font-size: 18px; color: #fff;">Edit Profile</h3>
