@@ -17,16 +17,13 @@
         <link rel="stylesheet" type="text/css" href="/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="/css/typography.css" />
         <link rel="stylesheet" type="text/css" href="/css/main.css" />
-        <link rel="stylesheet" type="text/css" href="/css/pages/list.css" />
-        <link rel="stylesheet" type="text/css" href="/css/pages/leaderboard.css" />
-        <link rel="stylesheet" type="text/css" href="/css/pages/roulette.css" />
         
         <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
         <script src="https://unpkg.com/vue-router@4.0.14/dist/vue-router.global.prod.js"></script>
         <script type="module" src="/js/main.js"></script>
     </head>
     <body id="app">
-        <!-- Sidebar Navigation Cân Bằng Căn Giữa -->
+        <!-- Sidebar Căn Giữa Icon & Cố Định Trái -->
         <aside class="sidebar">
             <a href="/" class="sidebar-logo">
                 <img src="/assets/the sclvn logo.png" alt="SCLVN Logo">
@@ -34,63 +31,63 @@
             </a>
 
             <nav class="sidebar-nav">
-                <router-link to="/" class="nav-item">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                <router-link to="/" class="nav-item" title="List">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
                     <span class="nav-item-text">List</span>
                 </router-link>
 
-                <router-link to="/leaderboard" class="nav-item">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <router-link to="/leaderboard" class="nav-item" title="Leaderboard">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                     <span class="nav-item-text">Leaderboard</span>
                 </router-link>
 
-                <router-link to="/roulette" class="nav-item">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <router-link to="/roulette" class="nav-item" title="Roulette">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span class="nav-item-text">Roulette</span>
                 </router-link>
 
-                <router-link to="/statistics" class="nav-item">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path></svg>
+                <router-link to="/statistics" class="nav-item" title="Statistics">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path></svg>
                     <span class="nav-item-text">Statistics</span>
                 </router-link>
 
-                <router-link to="/submit" class="nav-item">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                <router-link to="/submit" class="nav-item" title="Submit Record">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     <span class="nav-item-text">Submit Record</span>
                 </router-link>
 
-                <a href="https://discord.gg/Qcj5JSRKa" target="_blank" class="nav-item">
+                <a href="https://discord.gg/Qcj5JSRKa" target="_blank" class="nav-item" title="Discord">
                     <img src="/assets/discord.svg" style="filter: invert(1);" alt="Discord">
                     <span class="nav-item-text">Discord Server</span>
                 </a>
             </nav>
 
             <div class="sidebar-bottom">
-                <button class="nav-item" @click.prevent="store.toggleDark()">
+                <button class="nav-item" @click.prevent="store.toggleDark()" title="Theme">
                     <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" style="filter: invert(1);" alt="Theme">
                     <span class="nav-item-text">Toggle Theme</span>
                 </button>
 
                 <router-link v-if="!store.user" to="/login" class="nav-item" style="color: #c084fc;">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
                     <span class="nav-item-text">Login / Register</span>
                 </router-link>
 
                 <template v-else>
-                    <router-link to="/profile" class="nav-item">
+                    <router-link to="/profile" class="nav-item" title="Profile">
                         <img :src="store.user.avatar || '/assets/the sclvn logo.png'" style="border-radius: 50%; object-fit: cover;">
                         <span class="nav-item-text">{{ store.user.username }}</span>
                     </router-link>
 
-                    <button @click="store.handleLogout()" class="nav-item" style="color: #ef4444;">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <button @click="store.handleLogout()" class="nav-item" style="color: #ef4444;" title="Logout">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         <span class="nav-item-text">Logout</span>
                     </button>
                 </template>
             </div>
         </aside>
 
-        <!-- Khung Nội Dung Chính -->
+        <!-- Dynamic View Router Content -->
         <main class="main-content">
             <router-view></router-view>
         </main>
