@@ -10,28 +10,26 @@ import {
     getFirestore, 
     doc, 
     getDoc, 
-    setDoc 
+    setDoc,
+    updateDoc 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Khai báo lại hoặc lấy app Firebase đã init
 let auth, db;
 try {
     const app = getApps().length > 0 ? getApps()[0] : null;
     if (app) {
         auth = getAuth(app);
         db = getFirestore(app);
-    } else {
-        console.error("Firebase App chưa được khởi tạo! Hãy kiểm tra main.js hoặc firebase-init.js");
     }
 } catch (e) {
-    console.error("Lỗi khi tải Firebase Auth:", e);
+    console.error("Lỗi khi kết nối Firebase:", e);
 }
 
 let isLoginMode = true;
 export let currentUser = null;
 
-// Lấy các phần tử DOM
 document.addEventListener('DOMContentLoaded', () => {
+    // DOM Auth
     const authModal = document.getElementById('auth-modal');
     const authOpenBtn = document.getElementById('auth-open-btn');
     const closeModalBtn = document.getElementById('close-modal-btn');
@@ -44,28 +42,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const userProfile = document.getElementById('user-profile');
     const userNameDisplay = document.getElementById('user-name-display');
+    const userAvatarDisplay = document.getElementById('user-avatar-display');
     const adminBadge = document.getElementById('admin-badge');
     const logoutBtn = document.getElementById('logout-btn');
 
-    if (!authOpenBtn || !authModal) return;
+    // DOM Profile
+    const profileModal = document.getElementById('profile-modal');
+    const openProfileBtn = document.getElementById('open-profile-btn');
+    const closeProfileBtn = document.getElementById('close-profile-btn');
+    const profileForm = document.getElementById('profile-form');
 
-    // 1. Mở / Đóng Modal
-    authOpenBtn.onclick = () => {
-        authModal.style.display = 'flex';
-    };
+    if (!authOpenBtn) return;
 
-    closeModalBtn.onclick = () => {
-        authModal.style.display = 'none';
-    };
+    // 1. Mở/Đóng Auth Modal
+    authOpenBtn.onclick = () => { authModal.style.display = 'flex'; };
+    closeModalBtn.onclick = () => { authModal.style.display = 'none'; };
 
-    // Đóng khi click ngoài khung modal
-    window.onclick = (e) => {
-        if (e.target === authModal) {
-            authModal.style.display = 'none';
+    // 2. Mở/Đóng Profile Modal
+    openProfileBtn.onclick = () => {
+        if (currentUser) {
+            document.getElementById('edit-username').value = currentUser.username || '';
+            document.getElementById('edit-avatar').value = currentUser.avatar || '';
+            document.getElementById('edit-social').value = currentUser.socialLink || '';
+            profileModal.style.display = 'flex';
         }
     };
+    closeProfileBtn.onclick = () => { profileModal.style.display = 'none'; };
 
-    // 2. Chuyển đổi Đăng nhập <-> Đăng ký
+    // 3. Toggle Đăng ký <-> Đăng nhập
     toggleAuthBtn.onclick = () => {
         isLoginMode = !isLoginMode;
         modalTitle.innerText = isLoginMode ? 'Login' : 'Register Player Account';
@@ -75,42 +79,34 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleAuthBtn.innerText = isLoginMode ? "Register now" : "Login";
     };
 
-    // 3. Xử lý Đăng ký / Đăng nhập khi bấm Submit Form
+    // 4. Xử lý Form Auth
     authForm.onsubmit = async (e) => {
         e.preventDefault();
         const email = document.getElementById('auth-email').value;
         const password = document.getElementById('auth-password').value;
         const username = document.getElementById('auth-username').value.trim();
 
-        if (!auth) {
-            alert("Chưa kết nối được với Firebase. Vui lòng kiểm tra lại cấu hình Firebase!");
-            return;
-        }
-
         try {
             if (isLoginMode) {
-                // Đăng nhập
                 await signInWithEmailAndPassword(auth, email, password);
                 alert('Đăng nhập thành công!');
             } else {
-                // Đăng ký
                 if (!username) {
                     alert('Vui lòng nhập tên Player!');
                     return;
                 }
-                
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const uid = userCredential.user.uid;
 
-                // Tự động lưu thông tin user vào Firestore
                 await setDoc(doc(db, 'users', uid), {
                     username: username,
                     username_lowercase: username.toLowerCase(),
                     email: email,
-                    role: 'player', // Mặc định là player
+                    avatar: '',
+                    socialLink: '',
+                    role: 'player',
                     createdAt: new Date().toISOString()
                 });
-
                 alert('Đăng ký tài khoản thành công!');
             }
             authModal.style.display = 'none';
@@ -119,15 +115,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 4. Xử lý Đăng xuất
+    // 5. Lưu thông tin Profile mới
+    profileForm.onsubmit = async (e) => {
+        e.preventDefault();
+        if (!currentUser) return;
+
+        const newUsername = document.getElementById('edit-username').value.trim();
+        const newAvatar = document.getElementById('edit-avatar').value.trim();
+        const newSocial = document.getElementById('edit-social').value.trim();
+
+        try {
+            await updateDoc(doc(db, 'users', currentUser.uid), {
+                username: newUsername,
+                username_lowercase: newUsername.toLowerCase(),
+                avatar: newAvatar,
+                socialLink: newSocial
+            });
+
+            currentUser.username = newUsername;
+            currentUser.avatar = newAvatar;
+            currentUser.socialLink = newSocial;
+
+            userNameDisplay.innerText = newUsername;
+            if (newAvatar) userAvatarDisplay.src = newAvatar;
+
+            alert('Cập nhật Profile thành công!');
+            profileModal.style.display = 'none';
+        } catch (err) {
+            alert('Lỗi khi cập nhật profile: ' + err.message);
+        }
+    };
+
+    // 6. Xử lý Đăng xuất có xác nhận
     logoutBtn.onclick = async () => {
-        if (auth) {
+        const confirmLogout = confirm("Are you sure you want to log out?");
+        if (confirmLogout && auth) {
             await signOut(auth);
             alert("Đã đăng xuất!");
         }
     };
 
-    // 5. Theo dõi trạng thái tài khoản
+    // 7. Lắng nghe trạng thái User
     if (auth) {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -136,12 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (userSnap.exists()) {
                         currentUser = { uid: user.uid, ...userSnap.data() };
                         userNameDisplay.innerText = currentUser.username;
+                        if (currentUser.avatar) userAvatarDisplay.src = currentUser.avatar;
                         adminBadge.style.display = currentUser.role === 'admin' ? 'inline-block' : 'none';
                     } else {
                         userNameDisplay.innerText = user.email.split('@')[0];
                     }
                 } catch (err) {
-                    console.error("Lỗi lấy thông tin user:", err);
+                    console.error("Lỗi lấy user:", err);
                 }
                 authOpenBtn.style.display = 'none';
                 userProfile.style.display = 'flex';
