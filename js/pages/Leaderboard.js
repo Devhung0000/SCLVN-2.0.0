@@ -86,25 +86,13 @@ export default {
                                 </h1>
                                 
                                 <!-- Dòng 1: Nút điểm số Pts -->
-                                <!-- Điểm số Pts -->
                                 <div class="player-stats-row">
                                     <span class="stat-badge score-gold">
                                         ⚡ {{ localize(entry.total) }} pts
                                     </span>
                                 </div>
-
-                                <!-- Dòng 2: Discord nằm ở DƯỚI Pts (Không khung, chỉ icon + text) -->
-                                <div 
-                                    v-if="currentSocials && currentSocials.discord" 
-                                    class="discord-text-row"
-                                    :title="'Discord: ' + currentSocials.discord"
-                                >
-                                    <img src="assets/discord.svg" class="discord-text-icon" alt="Discord" />
-                                    <span class="discord-text-id">{{ currentSocials.discord }}</span>
-                                </div>
                             </div>
 
-                            <!-- Khối Avatar + Icons Mạng Xã Hội (YT, FB, GDVN) -->
                             <!-- Khối Avatar + Social Icons (Gồm Discord, YT, FB, GDVN) -->
                             <div class="profile-avatar-box">
                                 <img 
@@ -115,9 +103,8 @@ export default {
                                 />
 
                                 <!-- Social Icons dưới Avatar -->
-                                <!-- Dòng Social Icons nằm ngay dưới Avatar -->
                                 <div v-if="currentSocials" class="player-socials-row">
-                                    <!-- Discord Tag cùng hàng -->
+                                    <!-- Discord Tag -->
                                     <div 
                                         v-if="currentSocials.discord" 
                                         class="discord-tag"
