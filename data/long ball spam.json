@@ -20,6 +20,11 @@
         "user": "infasaegd",
         "hz": "60",
         "percent": 100
+        },
+        {
+        "user": "NookGD",
+        "hz": "CBF",
+        "percent": 100
         }
     ]
 }
