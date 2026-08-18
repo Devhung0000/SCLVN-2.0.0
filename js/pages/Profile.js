@@ -3,7 +3,7 @@ import { db, doc, updateDoc } from '../firebase-init.js';
 
 export default {
     template: `
-        <div style="padding: 40px; max-width: 900px; margin: 0 auto; box-sizing: border-box; width: 100%;">
+        <div style="padding: 40px; max-width: 900px; margin: 0 auto; box-sizing: border-box; width: 100%; color: #ffffff;">
             <div v-if="!store.user" style="text-align: center; color: #a1a1aa; padding: 60px 20px; background: #18181b; border-radius: 16px; border: 1px solid #27272a;">
                 <h2 style="font-size: 20px; margin-bottom: 15px; color: #fff;">Vui lòng đăng nhập để xem và chỉnh sửa Profile!</h2>
                 <router-link to="/login" style="background: #a855f7; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600;">Đi tới trang Đăng nhập</router-link>
@@ -13,7 +13,7 @@ export default {
                 <h2 style="margin: 0 0 24px 0; font-size: 26px; border-bottom: 1px solid #27272a; padding-bottom: 16px; color: #c084fc; font-weight: 700;">Account Profile</h2>
                 
                 <div style="display: flex; gap: 40px; flex-wrap: wrap;">
-                    <!-- Avatar Upload -->
+                    <!-- Avatar Upload Area -->
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; width: 200px;">
                         <div style="width: 160px; height: 160px; border-radius: 20px; overflow: hidden; border: 2px solid #a855f7; background: #000; box-shadow: 0 8px 24px rgba(168,85,247,0.2);">
                             <img :src="previewAvatar || store.user.avatar || '/assets/the sclvn logo.png'" style="width: 100%; height: 100%; object-fit: cover;">
@@ -22,10 +22,10 @@ export default {
                             Upload Ảnh PNG
                             <input type="file" accept="image/png, image/jpeg" @change="handleFileUpload" style="display: none;">
                         </label>
-                        <span style="font-size: 12px; color: #71717a; text-align: center;">Chấp nhận file .PNG / .JPG (< 2MB)</span>
+                        <span style="font-size: 12px; color: #71717a; text-align: center;">Chấp nhận file .PNG / .JPG (&lt; 2MB)</span>
                     </div>
 
-                    <!-- Input Form -->
+                    <!-- Input Fields -->
                     <form @submit.prevent="saveProfile" style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">
                         <div>
                             <label style="font-size: 14px; color: #a1a1aa; display: block; margin-bottom: 8px; font-weight: 500;">Player Name (Khớp tên trên Leaderboard):</label>
@@ -128,7 +128,7 @@ export default {
 
             const reader = new FileReader();
             reader.onload = (evt) => {
-                this.previewAvatar = evt.result;
+                this.previewAvatar = evt.target.result;
             };
             reader.readAsDataURL(file);
         },
