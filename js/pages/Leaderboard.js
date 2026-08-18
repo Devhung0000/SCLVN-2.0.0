@@ -174,12 +174,12 @@ export default {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="level-card hardest-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url(' + getLevelThumb(hardestLevel.level) + ')' }"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url(' + getLevelThumb(hardestLevel.level || hardestLevel.name) + ')' }"
                                 >
                                     <div class="level-card-info">
                                         <span class="level-rank">#{{ hardestLevel.rank }}</span>
                                         <div class="level-name-wrap">
-                                            <span class="level-title">{{ hardestLevel.level }}</span>
+                                            <span class="level-title">{{ hardestLevel.level || hardestLevel.name }}</span>
                                         </div>
                                     </div>
                                     <div class="level-card-score">
@@ -195,16 +195,16 @@ export default {
                             <div v-if="entry.completed && entry.completed.length > 0" class="level-grid">
                                 <a 
                                     v-for="score in entry.completed"
-                                    :key="score.level"
+                                    :key="score.level || score.name"
                                     :href="getScoreLink(score)"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="level-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level || score.name) + ')' }"
                                 >
                                     <div class="level-card-info">
                                         <span class="level-rank">#{{ score.rank }}</span>
-                                        <span class="level-title">{{ score.level }}</span>
+                                        <span class="level-title">{{ score.level || score.name }}</span>
                                     </div>
                                     <div class="level-card-score">
                                         +{{ localize(score.score) }} pts
@@ -219,14 +219,14 @@ export default {
                             <div v-if="uncompletedLevels.length > 0" class="level-grid">
                                 <a 
                                     v-for="level in uncompletedLevels"
-                                    :key="level.name || level.level || level"
-                                    :href="'/#/level/' + getLevelSlug(level.name || level.level || level)"
+                                    :key="getLevelName(level)"
+                                    :href="'/#/level/' + getLevelSlug(getLevelName(level))"
                                     class="level-card uncompleted-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(level.name || level.level || level) + ')' }"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(getLevelName(level)) + ')' }"
                                 >
                                     <div class="level-card-info">
                                         <span class="level-rank" v-if="level.rank">#{{ level.rank }}</span>
-                                        <span class="level-title">{{ level.name || level.level || level }}</span>
+                                        <span class="level-title">{{ getLevelName(level) }}</span>
                                     </div>
                                 </a>
                             </div>
@@ -238,16 +238,16 @@ export default {
                             <div v-if="entry.verified && entry.verified.length > 0" class="level-grid">
                                 <a 
                                     v-for="score in entry.verified"
-                                    :key="score.level"
+                                    :key="score.level || score.name"
                                     :href="getScoreLink(score)"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="level-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level || score.name) + ')' }"
                                 >
                                     <div class="level-card-info">
                                         <span class="level-rank">#{{ score.rank }}</span>
-                                        <span class="level-title">{{ score.level }}</span>
+                                        <span class="level-title">{{ score.level || score.name }}</span>
                                     </div>
                                     <div class="level-card-score">
                                         +{{ localize(score.score) }} pts
@@ -276,19 +276,27 @@ export default {
             return allBeats.reduce((min, current) => (current.rank < min.rank ? current : min), allBeats[0]);
         },
         uncompletedLevels() {
-            if (!this.entry || !this.list) return [];
-            
-            // Lấy danh sách tên tất cả level player đã làm (Verified + Completed + Progressed)
+            if (!this.entry || !this.list || !Array.isArray(this.list)) return [];
+
+            // 1. Gom tên tất cả level player đã vượt qua hoặc làm (Verified, Completed, Progressed)
             const beatenNames = new Set([
-                ...(this.entry.verified || []).map(l => (l.level || '').toLowerCase()),
-                ...(this.entry.completed || []).map(l => (l.level || '').toLowerCase()),
-                ...(this.entry.progressed || []).map(l => (l.level || '').toLowerCase())
+                ...(this.entry.verified || []).map(l => (l.level || l.name || '').toString().toLowerCase().trim()),
+                ...(this.entry.completed || []).map(l => (l.level || l.name || '').toString().toLowerCase().trim()),
+                ...(this.entry.progressed || []).map(l => (l.level || l.name || '').toString().toLowerCase().trim())
             ]);
 
-            // Lọc ra các level trong tổng danh sách chưa được player chinh phục
-            return this.list.filter(item => {
-                const name = typeof item === 'string' ? item : (item.name || item.level || '');
-                return name && !beatenNames.has(name.toLowerCase());
+            // 2. Lọc danh sách tổng level chưa có trong beatenNames
+            return this.list.filter((item, index) => {
+                if (!item) return false;
+                const name = this.getLevelName(item);
+                const cleanName = name.toLowerCase().trim();
+
+                // Gán thứ hạng rank nếu item là object mà chưa có thuộc tính rank
+                if (typeof item === 'object' && item !== null && !item.rank) {
+                    item.rank = index + 1;
+                }
+
+                return cleanName.length > 0 && !beatenNames.has(cleanName);
             });
         },
         currentSocials() {
@@ -299,11 +307,19 @@ export default {
     async mounted() {
         try {
             const [leaderboard, err] = await fetchLeaderboard();
-            this.list = await fetchList();
+            const rawList = await fetchList();
+
+            // Xử lý trường hợp fetchList() trả về mảng lồng dạng [ list, err ]
+            if (Array.isArray(rawList) && Array.isArray(rawList[0])) {
+                this.list = rawList[0];
+            } else {
+                this.list = rawList || [];
+            }
+
             this.leaderboard = leaderboard || [];
             this.err = err || [];
         } catch (e) {
-            console.error("Lỗi fetchLeaderboard:", e);
+            console.error("Lỗi fetchLeaderboard/fetchList:", e);
         }
 
         try {
@@ -328,6 +344,15 @@ export default {
     },
     methods: {
         localize,
+        getLevelName(item) {
+            if (!item) return '';
+            if (typeof item === 'string') {
+                // Trường hợp item là chuỗi đường dẫn "data/level-slug"
+                if (item.includes('/')) return item.split('/').pop().replace(/-/g, ' ');
+                return item;
+            }
+            return item.name || item.level || (item[0] && item[0].name) || '';
+        },
         getLevelSlug(name) {
             if (!name) return '';
             return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -342,7 +367,7 @@ export default {
             if (proofUrl) {
                 return proofUrl;
             }
-            return `/#/level/${this.getLevelSlug(score.level)}`;
+            return `/#/level/${this.getLevelSlug(score.level || score.name)}`;
         },
         copyDiscord(username) {
             if (!username) return;
