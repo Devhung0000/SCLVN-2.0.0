@@ -15,6 +15,11 @@
         "user": "giangdelt",
         "hz": "CBF",
         "percent": 100
+        },
+        {
+        "user": "infasaegd",
+        "hz": "60",
+        "percent": 100
         }
     ]
 }
