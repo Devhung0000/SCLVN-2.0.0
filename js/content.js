@@ -1,11 +1,8 @@
 import { round, score } from './score.js';
 import {
-    db, doc, getDoc, getDocs, collection,
+    db, doc, getDoc, getDocs, collection
 } from './firebase-init.js';
 
-/**
- * Lấy danh sách level theo đúng thứ tự, đọc từ Firestore.
- */
 export async function fetchList() {
     let params = new URLSearchParams(document.location.search);
     let whichList = params.get("list");
@@ -106,10 +103,6 @@ export async function fetchScratchIds() {
         return null;
     }
 }
-
-// ------------------------------------------------------------------
-// Các hàm Leaderboard & Calculations
-// ------------------------------------------------------------------
 
 export async function fetchWhichLeaderboard() {
     let params = new URLSearchParams(document.location.search);
@@ -248,7 +241,7 @@ export async function fetchCreatorLeaderboard() {
                 completed.push({
                     rank: rank + 1,
                     level: level.name,
-                    score: 0,
+                    score: score(rank + 1, 100, level.percentToQualify),
                     link: record.link,
                 });
                 return;
@@ -258,7 +251,7 @@ export async function fetchCreatorLeaderboard() {
                 rank: rank + 1,
                 level: level.name,
                 percent: record.percent,
-                score: 0,
+                score: score(rank + 1, record.percent, level.percentToQualify),
                 link: record.link,
             });
         });
