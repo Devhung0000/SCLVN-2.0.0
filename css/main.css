@@ -1003,4 +1003,51 @@ input[type="radio"] {
     border: 1px solid rgba(76, 201, 240, 0.3) !important;
 
 } 
+/* ================= FILTER TABS ================= */
+.filter-tabs {
+    display: flex !important;
+    gap: 10px !important;
+    margin-bottom: 20px !important;
+    flex-wrap: wrap !important;
+}
+
+.filter-tabs button {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ccc !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.filter-tabs button:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #fff !important;
+}
+
+.filter-tabs button.active {
+    background: #ffd700 !important;
+    color: #000 !important;
+    border-color: #ffd700 !important;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4) !important;
+}
+
+.empty-msg {
+    color: #888 !important;
+    font-style: italic !important;
+    padding: 10px 0 !important;
+}
+
+.uncompleted-card {
+    opacity: 0.75 !important;
+    filter: grayscale(0.2) !important;
+}
+
+.uncompleted-card:hover {
+    opacity: 1 !important;
+    filter: grayscale(0) !important;
+}
 
