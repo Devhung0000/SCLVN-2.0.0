@@ -1,4 +1,4 @@
-import { fetchLeaderboard } from '../content.js';
+import { fetchLeaderboard, fetchList, fetchPlayers } from '../content.js';
 import { localize } from '../util.js';
 import Spinner from '../components/Spinner.js';
 
@@ -50,7 +50,7 @@ export default {
                             <div class="user-icon-container">
                                 <img 
                                     class="board-user-icon" 
-                                    :src="'assets/avatars/' + ientry.user + '.png'" 
+                                    :src="getAvatar(ientry.user)" 
                                     alt=""
                                     @error="$event.target.style.display='none'"
                                 />
@@ -97,7 +97,7 @@ export default {
                             <div class="profile-avatar-box">
                                 <img 
                                     class="profile-user-avatar" 
-                                    :src="'assets/avatars/' + entry.user + '.png'" 
+                                    :src="getAvatar(entry.user)" 
                                     alt=""
                                     @error="$event.target.src='assets/avatars/default.png'"
                                 />
@@ -324,73 +324,36 @@ export default {
     },
     async mounted() {
         try {
-            // Lấy dữ liệu Bảng xếp hạng
+            // Lấy dữ liệu Bảng xếp hạng (đã đọc từ Firestore bên trong content.js)
             const [leaderboard, err] = await fetchLeaderboard();
             this.leaderboard = leaderboard || [];
             this.err = err || [];
 
-            // ĐỌC TRỰC TIẾP FILE LIST TỪ `data/_list.json` HOẶC `data/list.json`
-            let listData = [];
-            try {
-                const listRes = await fetch('data/_list.json');
-                if (listRes.ok) {
-                    listData = await listRes.json();
-                } else {
-                    const fallbackRes = await fetch('data/list.json');
-                    if (fallbackRes.ok) listData = await fallbackRes.json();
-                }
-            } catch (errList) {
-                console.warn("Không đọc được _list.json trực tiếp:", errList);
-            }
-
-            // Tiến hành đọc nội dung chi tiết tên level nếu _list.json chứa danh sách đường dẫn
-            if (Array.isArray(listData) && listData.length > 0) {
-                const fullList = await Promise.all(listData.map(async (path, index) => {
-                    if (typeof path === 'object') return path;
-                    
-                    const levelSlug = path.replace('.json', '');
-                    try {
-                        const levelRes = await fetch(`data/${levelSlug}.json`);
-                        if (levelRes.ok) {
-                            const levelJson = await levelRes.json();
-                            return {
-                                name: levelJson.name || levelSlug,
-                                rank: index + 1
-                            };
-                        }
-                    } catch (e) {}
-
-                    // Fallback nếu không load được file level chi tiết
-                    return {
-                        name: levelSlug.replace(/[-_]/g, ' '),
-                        rank: index + 1
-                    };
-                }));
-
-                this.list = fullList;
-            }
+            // Lấy danh sách tên level + hạng, dùng lại fetchList() thay vì
+            // fetch trực tiếp data/_list.json (không còn tồn tại dưới dạng file tĩnh)
+            const list = await fetchList();
+            this.list = (list || [])
+                .map(([level, err], index) => (level ? { name: level.name, rank: index + 1 } : null))
+                .filter(Boolean);
 
         } catch (e) {
             console.error("Lỗi khởi tạo Leaderboard:", e);
         }
 
-        // Fetch Social Media Players
+        // Lấy social links người chơi từ Firestore (thay cho data/_players.json)
         try {
-            const res = await fetch('data/_players.json');
-            if (res.ok) {
-                const socialsArray = await res.json();
-                const map = {};
-                if (Array.isArray(socialsArray)) {
-                    socialsArray.forEach(item => {
-                        if (item && item.name) {
-                            map[item.name.toLowerCase()] = item;
-                        }
-                    });
-                }
-                this.playerSocials = map;
+            const socialsArray = await fetchPlayers();
+            const map = {};
+            if (Array.isArray(socialsArray)) {
+                socialsArray.forEach(item => {
+                    if (item && item.name) {
+                        map[item.name.toLowerCase()] = item;
+                    }
+                });
             }
+            this.playerSocials = map;
         } catch (e) {
-            console.warn("Chưa tìm thấy data/_players.json", e);
+            console.warn("Chưa tải được players từ Firestore", e);
         }
 
         this.loading = false;
@@ -412,6 +375,13 @@ export default {
                 return proofUrl;
             }
             return `/#/level/${this.getLevelSlug(score.level || score.name)}`;
+        },
+        // Ưu tiên avatarUrl do chính player tự nhập (Firestore),
+        // nếu không có thì dùng file ảnh tĩnh cũ trong assets/avatars/
+        getAvatar(user) {
+            const social = this.playerSocials[(user || '').toLowerCase()];
+            if (social && social.avatarUrl) return social.avatarUrl;
+            return 'assets/avatars/' + user + '.png';
         },
         copyDiscord(username) {
             if (!username) return;
