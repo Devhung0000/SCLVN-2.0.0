@@ -1,357 +1,148 @@
-:root {
-    --bg-dark: #0a0c10;
-    --card-bg: rgba(22, 27, 34, 0.7);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --gold: #ffd700;
-    --gold-glow: rgba(255, 215, 0, 0.25);
-    --silver: #c0c0c0;
-    --bronze: #cd7f32;
-    --text-main: #f0f6fc;
-    --text-muted: #8b949e;
-}
-
-/* ---------------- KHU VỰC LEADERBOARD PAGE ---------------- */
-.page-leaderboard-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
-    color: var(--text-main);
-}
-
-.page-leaderboard-container * {
-    box-sizing: border-box;
-}
-
-.page-leaderboard-container .page-leaderboard {
-    display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 24px;
-    align-items: start;
-}
-
-/* CỘT TRÁI: BẢNG XẾP HẠNG PLAYER */
-.page-leaderboard-container .board-container {
-    background: var(--card-bg) !important;
-    border: 1px solid var(--card-border) !important;
-    border-radius: 16px !important;
-    backdrop-filter: blur(12px) !important;
-    overflow: hidden !important;
-    max-height: calc(100vh - 120px) !important;
-    position: sticky !important;
-    top: 20px !important;
-}
-
-.page-leaderboard-container .board {
-    overflow-y: auto !important;
-    max-height: calc(100vh - 120px) !important;
-    padding: 8px !important;
-}
-
-.page-leaderboard-container .board-row {
+.player-stats-row {
     display: flex !important;
     align-items: center !important;
-    padding: 10px 14px !important;
-    border-radius: 10px !important;
-    margin-bottom: 6px !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-    border: 1px solid transparent !important;
-    background: transparent !important;
-    min-height: auto !important;
-    height: auto !important;
+    margin-bottom: 8px !important;
+    margin-bottom: 0 !important;
 }
 
-.page-leaderboard-container .board-row:hover {
-    background: rgba(255, 255, 255, 0.04) !important;
+@@ -272,11 +273,40 @@ input[type="radio"] {
+    box-shadow: 0 0 12px rgba(255, 183, 3, 0.2) !important;
 }
 
-.page-leaderboard-container .board-row.active {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-.page-leaderboard-container .rank {
-    width: 36px !important;
-    font-weight: 700 !important;
-    color: var(--text-muted) !important;
-}
-
-.page-leaderboard-container .user-icon-container {
-    width: 36px !important;
-    height: 36px !important;
-    margin-right: 12px !important;
-    flex-shrink: 0 !important;
-}
-
-.page-leaderboard-container .board-user-icon {
-    width: 100% !important;
-    height: 100% !important;
-    border-radius: 50% !important;
-    object-fit: cover !important;
-}
-
-.page-leaderboard-container .user {
-    flex: 1 !important;
-    font-weight: 600 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-}
-
-.page-leaderboard-container .total {
-    font-weight: 700 !important;
-    font-size: 0.9rem !important;
-    color: var(--gold) !important;
-}
-
-/* Sửa lỗi màu Top 1, Top 2, Top 3 */
-.page-leaderboard-container .board-row.top-1 .rank { color: var(--gold) !important; }
-.page-leaderboard-container .board-row.top-2 .rank { color: var(--silver) !important; }
-.page-leaderboard-container .board-row.top-3 .rank { color: var(--bronze) !important; }
-
-
-/* CỘT PHẢI: PROFILE PLAYER */
-.page-leaderboard-container .player-container {
-    background: var(--card-bg) !important;
-    border: 1px solid var(--card-border) !important;
-    border-radius: 16px !important;
-    padding: 28px !important;
-    backdrop-filter: blur(12px) !important;
-}
-
-.page-leaderboard-container .profile-header-card {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: flex-start !important;
-    padding-bottom: 24px !important;
-    margin-bottom: 24px !important;
-    border-bottom: 1px solid var(--card-border) !important;
-}
-
-.page-leaderboard-container .player-title {
-    font-size: 2rem !important;
-    font-weight: 800 !important;
-    margin: 0 0 12px 0 !important;
-}
-
-.page-leaderboard-container .player-title.top-1 { color: var(--gold) !important; text-shadow: 0 0 15px var(--gold-glow) !important; }
-.page-leaderboard-container .player-title.top-2 { color: var(--silver) !important; }
-.page-leaderboard-container .player-title.top-3 { color: var(--bronze) !important; }
-
-.page-leaderboard-container .stat-badge {
-    display: inline-flex !important;
-    align-items: center !important;
-    padding: 6px 14px !important;
-    background: rgba(255, 215, 0, 0.1) !important;
-    border: 1px solid rgba(255, 215, 0, 0.3) !important;
-    color: var(--gold) !important;
-    border-radius: 20px !important;
-    font-weight: 700 !important;
-    font-size: 0.95rem !important;
-}
-
-.page-leaderboard-container .profile-avatar-box {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 10px !important;
-}
-
-.page-leaderboard-container .profile-user-avatar {
-    width: 80px !important;
-    height: 80px !important;
-    border-radius: 50% !important;
-    object-fit: cover !important;
-    border: 2px solid var(--card-border) !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
-}
-
-.page-leaderboard-container .player-socials-row {
+/* Dòng Discord nằm dưới Pts (TRÂN TRẦN, KHÔNG KHUNG) */
+.discord-text-row {
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
+    padding-left: 2px !important;
+    margin-top: 4px !important;
+    background: transparent !important;
+    border: none !important;
 }
 
-.page-leaderboard-container .social-icon {
+.discord-text-icon,
+.discord-badge-icon {
     width: 20px !important;
     height: 20px !important;
-    opacity: 0.7 !important;
-    transition: all 0.2s ease !important;
-    cursor: pointer !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
 }
 
-.page-leaderboard-container .social-icon:hover {
-    opacity: 1 !important;
-    transform: translateY(-2px) !important;
-}
-
-.page-leaderboard-container .discord-tag {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    background: rgba(88, 101, 242, 0.15) !important;
-    border: 1px solid rgba(88, 101, 242, 0.4) !important;
-    padding: 3px 8px !important;
-    border-radius: 6px !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-}
-
-.page-leaderboard-container .discord-tag:hover {
-    background: rgba(88, 101, 242, 0.3) !important;
-}
-
-.page-leaderboard-container .discord-icon {
-    width: 16px !important;
-    height: 16px !important;
-}
-
-.page-leaderboard-container .discord-username {
-    font-size: 0.8rem !important;
+.discord-text-id {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 1.05rem !important;
     font-weight: 600 !important;
-    color: #5865F2 !important;
+    color: #ffffff !important;
 }
 
-.page-leaderboard-container .copy-toast {
-    position: absolute !important;
-    top: -25px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    background: #5865F2 !important;
-    color: #fff !important;
-    font-size: 0.7rem !important;
-    padding: 2px 6px !important;
-    border-radius: 4px !important;
-    white-space: nowrap !important;
-}
-
-/* ---------------- PROFILE TABS ---------------- */
-.page-leaderboard-container .profile-tabs {
-    display: flex !important;
-    gap: 10px !important;
-    margin-bottom: 24px !important;
-    flex-wrap: wrap !important;
-    border-bottom: 1px solid var(--card-border) !important;
-    padding-bottom: 14px !important;
-}
-
-.page-leaderboard-container .tab-btn {
-    background: rgba(255, 255, 255, 0.04) !important;
-    border: 1px solid var(--card-border) !important;
-    color: var(--text-muted) !important;
-    padding: 8px 18px !important;
-    border-radius: 8px !important;
-    font-size: 0.9rem !important;
-    font-weight: 700 !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-}
-
-.page-leaderboard-container .tab-btn:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
-    color: var(--text-main) !important;
-    transform: translateY(-1px) !important;
-}
-
-.page-leaderboard-container .tab-btn.active {
-    background: var(--gold) !important;
-    color: #000 !important;
-    border-color: var(--gold) !important;
-    box-shadow: 0 0 12px var(--gold-glow) !important;
-}
-
-.page-leaderboard-container .tab-content {
-    min-height: 150px !important;
-}
-
-/* ---------------- LEVEL CARDS & GRID ---------------- */
-.page-leaderboard-container .level-grid {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
-    gap: 12px !important;
-}
-
-.page-leaderboard-container .level-card {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 14px !important;
-    border-radius: 10px !important;
-    background-size: cover !important;
-    background-position: center !important;
-    border: 1px solid var(--card-border) !important;
-    text-decoration: none !important;
-    color: #fff !important;
-    transition: all 0.2s ease !important;
-    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.4) !important;
-}
-
-.page-leaderboard-container .level-card:hover {
-    transform: translateY(-2px) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.2) !important;
-}
-
-.page-leaderboard-container .hardest-card {
-    padding: 20px !important;
-    border-color: rgba(255, 215, 0, 0.3) !important;
-}
-
-.page-leaderboard-container .level-card-info {
+/* --- Khung Avatar & Social Icons --- */
+.profile-avatar-box {
+    flex-shrink: 0 !important;
     display: flex !important;
     flex-direction: column !important;
+    align-items: center !important;
+    align-items: flex-end !important;
+    gap: 10px !important;
+}
+@@ -291,11 +321,14 @@ input[type="radio"] {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
-.page-leaderboard-container .level-rank {
-    font-size: 0.8rem !important;
-    font-weight: 800 !important;
-    color: var(--gold) !important;
-}
-
-.page-leaderboard-container .level-title {
-    font-weight: 700 !important;
-    font-size: 0.95rem !important;
-}
-
-.page-leaderboard-container .level-card-score {
-    font-weight: 700 !important;
-    font-size: 0.85rem !important;
-    color: rgba(255, 255, 255, 0.8) !important;
-    background: rgba(0, 0, 0, 0.4) !important;
-    padding: 4px 8px !important;
-    border-radius: 6px !important;
-}
-
-.page-leaderboard-container .empty-msg {
-    color: var(--text-muted) !important;
-    font-style: italic !important;
-    text-align: left !important;
-    padding: 10px 0 !important;
-}
-
-.page-leaderboard-container .level-card.uncompleted-card {
+/* Social icons nằm hàng ngang dưới Avatar */
+/* Social icons + Discord Tag nằm hàng ngang dưới Avatar */
+.player-socials-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    width: 100% !important;
+@@ -366,25 +399,30 @@ input[type="radio"] {
+    width: 22px !important;
+    height: 22px !important;
+    object-fit: contain !important;
     opacity: 0.8 !important;
-    filter: grayscale(0.2) !important;
-    border-color: rgba(255, 255, 255, 0.05) !important;
+    opacity: 0.85 !important;
+    transition: transform 0.2s ease, opacity 0.2s ease !important;
+    display: block !important;
 }
 
-.page-leaderboard-container .level-card.uncompleted-card:hover {
+.player-socials-row .social-icon:hover {
     opacity: 1 !important;
-    filter: grayscale(0) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
+    transform: scale(1.25) !important;
+    transform: scale(1.2) !important;
 }
 
-@media (max-width: 900px) {
-    .page-leaderboard-container .page-leaderboard {
-        grid-template-columns: 1fr !important;
-    }
-    .page-leaderboard-container .board-container {
-        position: static !important;
-        max-height: 400px !important;
-    }
+/* Icon tùy chỉnh cho GDVN */
+.social-icon.gdvn-icon {
+    width: auto !important;
+    height: 28px !important;
+    height: 26px !important;
+    max-width: 60px !important;
+    border-radius: 4px !important;
+    object-fit: contain !important;
+}
+
+.social-icon.gdvn-icon:hover {
+    transform: scale(1.15) !important;
+    transform: scale(1.1) !important;
+}
+
+@@ -463,53 +501,3 @@ input[type="radio"] {
+    border-radius: 6px !important;
+    border: 1px solid rgba(76, 201, 240, 0.3) !important;
+}
+/* ================= TABS SWITCHER (COMPLETED / UNCOMPLETED) ================= */
+
+.tab-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #2a2a35;
+  padding-bottom: 8px;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: #8a8a9a;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+  color: #ffffff;
+  background: #2a2a38;
+  border-bottom: 3px solid #ffbf00;
+}
+
+/* Thẻ Uncompleted mờ nhẹ hơn để phân biệt */
+.uncompleted-card {
+  opacity: 0.75;
+  filter: grayscale(30%);
+  transition: all 0.2s ease;
+}
+
+.uncompleted-card:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+.empty-msg {
+  color: #777;
+  font-style: italic;
+  padding: 12px 0;
 }
