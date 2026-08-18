@@ -311,12 +311,31 @@ export default {
     },
     async mounted() {
         try {
+            // 1. Fetch Leaderboard
             const [leaderboard, err] = await fetchLeaderboard();
-            this.list = await fetchList();
             this.leaderboard = leaderboard || [];
             this.err = err || [];
+            
+            // 2. Fetch List (Tự động bóc tách tuple/array)
+            const rawList = await fetchList();
+            if (Array.isArray(rawList) && Array.isArray(rawList[0])) {
+                this.list = rawList[0] || [];
+            } else {
+                this.list = rawList || [];
+            }
+
+            // 3. Dự phòng: Nếu file list hỏng/rỗng, tự gom danh sách từ leaderboard
+            if (!this.list || this.list.length === 0) {
+                const fallbackSet = new Set();
+                this.leaderboard.forEach(p => {
+                    (p.verified || []).forEach(l => fallbackSet.add(l.level || l.name));
+                    (p.completed || []).forEach(l => fallbackSet.add(l.level || l.name));
+                });
+                this.list = Array.from(fallbackSet).filter(Boolean);
+            }
+
         } catch (e) {
-            console.error("Lỗi fetchLeaderboard:", e);
+            console.error("Lỗi fetch data:", e);
         }
 
         try {
