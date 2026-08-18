@@ -26,24 +26,24 @@
         <script type="module" src="/js/main.js"></script>
 
         <style>
-            body {
+            html, body {
                 margin: 0;
                 padding: 0;
-                display: flex;
-                background-color: #09090b;
-                color: #ffffff;
+                background-color: #09090b !important;
+                color: #ffffff !important;
                 font-family: 'Poppins', sans-serif;
                 min-height: 100vh;
+                overflow-x: hidden;
             }
 
-            /* Layout chính */
             #app {
                 display: flex;
                 width: 100vw;
                 min-height: 100vh;
+                background-color: #09090b;
             }
 
-            /* Sidebar dọc kiểu GDListHub */
+            /* Sidebar Dọc */
             .sidebar {
                 width: 64px;
                 height: 100vh;
@@ -65,7 +65,7 @@
                 width: 220px;
                 align-items: flex-start;
                 padding-left: 12px;
-                box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+                box-shadow: 10px 0 30px rgba(0,0,0,0.8);
             }
 
             .sidebar-logo {
@@ -122,6 +122,7 @@
                 border: none;
                 width: 100%;
                 text-align: left;
+                box-sizing: border-box;
             }
 
             .nav-item:hover, .nav-item.router-link-active {
@@ -161,6 +162,7 @@
                 width: calc(100vw - 64px);
                 min-height: 100vh;
                 box-sizing: border-box;
+                background-color: #09090b;
             }
         </style>
     </head>
@@ -229,9 +231,9 @@
             </div>
         </aside>
 
-        <!-- Dynamic Main Content -->
+        <!-- Main Content Wrapper -->
         <main class="main-content">
-            <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
+            <router-view></router-view>
         </main>
     </body>
 </html>
