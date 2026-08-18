@@ -11,10 +11,8 @@ export default {
         list: [],
         loading: true,
         selected: 0,
-        tab: 'hardest', // Mặc định hiển thị Hardest
+        tab: 'hardest',
         err: [],
-        playerSocials: {},
-        copiedDiscord: false,
     }),
     template: `
         <main v-if="loading">
@@ -93,7 +91,6 @@ export default {
                                 </div>
                             </div>
 
-                            <!-- Khối Avatar + Social Icons -->
                             <div class="profile-avatar-box">
                                 <img 
                                     class="profile-user-avatar" 
@@ -101,52 +98,6 @@ export default {
                                     alt=""
                                     @error="$event.target.src='assets/avatars/default.png'"
                                 />
-
-                                <div v-if="currentSocials" class="player-socials-row">
-                                    <div 
-                                        v-if="currentSocials.discord" 
-                                        class="discord-tag"
-                                        :title="'Click để copy: ' + currentSocials.discord"
-                                        @click="copyDiscord(currentSocials.discord)"
-                                    >
-                                        <img src="assets/discord.svg" class="discord-icon" alt="Discord" />
-                                        <span class="discord-username">{{ currentSocials.discord }}</span>
-                                        <span v-if="copiedDiscord" class="copy-toast">Copied!</span>
-                                    </div>
-
-                                    <a 
-                                        v-if="currentSocials.youtube" 
-                                        :href="currentSocials.youtube" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        title="YouTube"
-                                        @click.stop
-                                    >
-                                        <img src="assets/youtube.svg" class="social-icon" alt="YouTube" />
-                                    </a>
-
-                                    <a 
-                                        v-if="currentSocials.facebook" 
-                                        :href="currentSocials.facebook" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        title="Facebook"
-                                        @click.stop
-                                    >
-                                        <img src="assets/facebook.svg" class="social-icon" alt="Facebook" />
-                                    </a>
-
-                                    <a 
-                                        v-if="currentSocials.gdvn" 
-                                        :href="currentSocials.gdvn" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        title="GDVN Profile"
-                                        @click.stop
-                                    >
-                                        <img src="assets/gdvn.png" class="social-icon gdvn-icon" alt="GDVN" />
-                                    </a>
-                                </div>
                             </div>
                         </div>
 
@@ -218,15 +169,15 @@ export default {
                         <div v-if="tab === 'uncompleted'" class="profile-section">
                             <div v-if="uncompletedLevels.length > 0" class="level-grid">
                                 <a 
-                                    v-for="level in uncompletedLevels"
-                                    :key="level.level"
-                                    :href="'/#/level/' + getLevelSlug(level.level)"
+                                    v-for="score in uncompletedLevels"
+                                    :key="score.level"
+                                    :href="'/#/level/' + getLevelSlug(score.level)"
                                     class="level-card uncompleted-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(level.level) + ')' }"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(score.level) + ')' }"
                                 >
                                     <div class="level-card-info">
-                                        <span class="level-rank">#{{ level.rank }}</span>
-                                        <span class="level-title">{{ level.level }}</span>
+                                        <span class="level-rank">#{{ score.rank }}</span>
+                                        <span class="level-title">{{ score.level }}</span>
                                     </div>
                                 </a>
                             </div>
@@ -275,88 +226,40 @@ export default {
             if (allBeats.length === 0) return null;
             return allBeats.reduce((min, current) => (current.rank < min.rank ? current : min), allBeats[0]);
         },
+        // ĐƠN GIẢN NGHỊCH ĐẢO VỚI COMPLETED:
         uncompletedLevels() {
-            if (!this.entry || !this.list || this.list.length === 0) return [];
+            if (!this.entry || !this.list) return [];
+            
+            // Lấy danh sách tên các level đã completed (hoặc verified)
+            const completedNames = (this.entry.completed || []).map(c => c.level);
+            const verifiedNames = (this.entry.verified || []).map(v => v.level);
+            const doneSet = new Set([...completedNames, ...verifiedNames]);
 
-            const normalize = (name) => {
-                if (!name) return '';
-                return String(name).trim().toLowerCase();
-            };
-
-            const beatenNames = new Set([
-                ...(this.entry.verified || []).map(l => normalize(l.level || l.name)),
-                ...(this.entry.completed || []).map(l => normalize(l.level || l.name)),
-                ...(this.entry.progressed || []).map(l => normalize(l.level || l.name))
-            ]);
-
-            return this.list.filter((item) => {
-                const levelName = typeof item === 'string' ? item : (item.name || item.level || '');
-                const normalizedName = normalize(levelName);
-                return normalizedName && !beatenNames.has(normalizedName);
-            }).map((item, index) => {
-                if (typeof item === 'string') {
-                    return { level: item, rank: index + 1 };
-                }
-                return {
-                    ...item,
-                    level: item.name || item.level,
-                    rank: item.rank || (index + 1)
-                };
-            });
-        },
-        currentSocials() {
-            if (!this.entry || !this.entry.user) return null;
-            return this.playerSocials[this.entry.user.toLowerCase()] || null;
+            // Lọc ra các level nằm trong list tổng mà CHƯA có trong doneSet
+            return this.list.filter(item => {
+                const levelName = item.level || item.name || (typeof item === 'string' ? item : '');
+                return !doneSet.has(levelName);
+            }).map((item, index) => ({
+                level: item.level || item.name || item,
+                rank: item.rank || (index + 1)
+            }));
         }
     },
     async mounted() {
         try {
-            // 1. Fetch Leaderboard
             const [leaderboard, err] = await fetchLeaderboard();
             this.leaderboard = leaderboard || [];
             this.err = err || [];
             
-            // 2. Fetch List (Tự động bóc tách tuple/array)
-            const rawList = await fetchList();
-            if (Array.isArray(rawList) && Array.isArray(rawList[0])) {
-                this.list = rawList[0] || [];
-            } else {
-                this.list = rawList || [];
-            }
-
-            // 3. Dự phòng: Nếu file list hỏng/rỗng, tự gom danh sách từ leaderboard
-            if (!this.list || this.list.length === 0) {
-                const fallbackSet = new Set();
-                this.leaderboard.forEach(p => {
-                    (p.verified || []).forEach(l => fallbackSet.add(l.level || l.name));
-                    (p.completed || []).forEach(l => fallbackSet.add(l.level || l.name));
-                });
-                this.list = Array.from(fallbackSet).filter(Boolean);
-            }
-
+            const listRes = await fetchList();
+            // Nếu fetchList trả về [list, err] thì lấy phần tử [0], ngược lại lấy chính nó
+            this.list = (Array.isArray(listRes) && Array.isArray(listRes[0])) ? listRes[0] : (listRes || []);
         } catch (e) {
-            console.error("Lỗi fetch data:", e);
+            console.error(e);
+        } finally {
+            // Đảm bảo luôn luôn tắt loading dù có lỗi xảy ra hay không
+            this.loading = false;
         }
-
-        try {
-            const res = await fetch('data/_players.json');
-            if (res.ok) {
-                const socialsArray = await res.json();
-                const map = {};
-                if (Array.isArray(socialsArray)) {
-                    socialsArray.forEach(item => {
-                        if (item && item.name) {
-                            map[item.name.toLowerCase()] = item;
-                        }
-                    });
-                }
-                this.playerSocials = map;
-            }
-        } catch (e) {
-            console.warn("Chưa tìm thấy hoặc lỗi đọc file data/_players.json", e);
-        }
-
-        this.loading = false;
     },
     methods: {
         localize,
@@ -365,25 +268,11 @@ export default {
             return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         },
         getLevelThumb(name) {
-            const slug = this.getLevelSlug(name);
-            return `data/${slug}/thumbnail.png`;
+            return `data/${this.getLevelSlug(name)}/thumbnail.png`;
         },
         getScoreLink(score) {
             if (!score) return '#';
-            const proofUrl = score.link || score.video || score.proof || score.url;
-            if (proofUrl) {
-                return proofUrl;
-            }
-            return `/#/level/${this.getLevelSlug(score.level)}`;
-        },
-        copyDiscord(username) {
-            if (!username) return;
-            navigator.clipboard.writeText(username).then(() => {
-                this.copiedDiscord = true;
-                setTimeout(() => {
-                    this.copiedDiscord = false;
-                }, 1500);
-            });
+            return score.link || score.video || score.proof || score.url || `/#/level/${this.getLevelSlug(score.level)}`;
         }
     }
 };
