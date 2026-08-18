@@ -11,7 +11,7 @@ export default {
         list: [],
         loading: true,
         selected: 0,
-        tab: 'hardest', // Mặc định hiển thị Hardest
+        tab: 'hardest',
         err: [],
         playerSocials: {},
         copiedDiscord: false,
@@ -278,28 +278,40 @@ export default {
         uncompletedLevels() {
             if (!this.entry || !this.list || this.list.length === 0) return [];
             
-            // Lấy danh sách tên tất cả level player đã chinh phục (Verified + Completed + Progressed)
+            // Lấy toàn bộ danh sách tên level đã làm (viết thường để so sánh)
             const beatenNames = new Set([
-                ...(this.entry.verified || []).map(l => (l.level || '').toLowerCase()),
-                ...(this.entry.completed || []).map(l => (l.level || '').toLowerCase()),
-                ...(this.entry.progressed || []).map(l => (l.level || '').toLowerCase())
+                ...(this.entry.verified || []).map(l => (l.level || l.name || '').toString().toLowerCase()),
+                ...(this.entry.completed || []).map(l => (l.level || l.name || '').toString().toLowerCase()),
+                ...(this.entry.progressed || []).map(l => (l.level || l.name || '').toString().toLowerCase())
             ]);
 
             const uncompleted = [];
-            
-            // Duyệt danh sách list tổng thể
+
             this.list.forEach((item, index) => {
                 if (!item) return;
-                
-                // Giải mã phần tử trong trường hợp list bị bọc trong tuple [item, err]
-                const levelObj = Array.isArray(item) ? item[0] : item;
-                const name = typeof levelObj === 'string' ? levelObj : (levelObj.name || levelObj.level || '');
-                const rank = levelObj.rank || (index + 1);
 
-                if (name && !beatenNames.has(name.toLowerCase())) {
+                // Xử lý các dạng dữ liệu khác nhau của item trong list
+                let rawItem = item;
+                if (Array.isArray(item)) rawItem = item[0];
+
+                let name = '';
+                if (typeof rawItem === 'string') {
+                    name = rawItem;
+                } else if (typeof rawItem === 'object' && rawItem !== null) {
+                    name = rawItem.name || rawItem.level || rawItem.path || '';
+                }
+
+                // Nếu name là dạng đường dẫn file (vd: "knee_guards_chal_5.json" hoặc "knee-guards-chal-5")
+                // Tiến hành chuẩn hóa để lấy tên hiển thị
+                if (name.endsWith('.json')) {
+                    name = name.replace('.json', '');
+                }
+
+                const cleanName = name.trim();
+                if (cleanName && !beatenNames.has(cleanName.toLowerCase())) {
                     uncompleted.push({
-                        name: name,
-                        rank: rank
+                        name: cleanName,
+                        rank: rawItem.rank || (index + 1)
                     });
                 }
             });
@@ -314,17 +326,29 @@ export default {
     async mounted() {
         try {
             const [leaderboard, err] = await fetchLeaderboard();
-            const listData = await fetchList();
-            
-            // Bóc tách nếu fetchList() trả về [list, err]
-            if (Array.isArray(listData) && Array.isArray(listData[0])) {
-                this.list = listData[0];
+            const listRes = await fetchList();
+
+            // Kiểm tra cấu trúc trả về từ fetchList()
+            if (Array.isArray(listRes)) {
+                // Nếu fetchList trả về [listData, err]
+                if (Array.isArray(listRes[0])) {
+                    this.list = listRes[0];
+                } else {
+                    this.list = listRes;
+                }
+            } else if (listRes && Array.isArray(listRes.list)) {
+                this.list = listRes.list;
             } else {
-                this.list = listData || [];
+                this.list = [];
             }
 
             this.leaderboard = leaderboard || [];
             this.err = err || [];
+
+            // In ra Console để debug nếu cần kiểm tra
+            console.log("Dữ liệu list đã load:", this.list);
+            console.log("Dữ liệu leaderboard đã load:", this.leaderboard);
+
         } catch (e) {
             console.error("Lỗi fetchLeaderboard / fetchList:", e);
         }
@@ -365,7 +389,7 @@ export default {
             if (proofUrl) {
                 return proofUrl;
             }
-            return `/#/level/${this.getLevelSlug(score.level)}`;
+            return `/#/level/${this.getLevelSlug(score.level || score.name)}`;
         },
         copyDiscord(username) {
             if (!username) return;
