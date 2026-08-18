@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Tự động lưu thông tin user vào Firestore
                 await setDoc(doc(db, 'users', uid), {
                     username: username,
+                    username_lowercase: username.toLowerCase(),
                     email: email,
                     role: 'player', // Mặc định là player
                     createdAt: new Date().toISOString()
