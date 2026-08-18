@@ -463,3 +463,53 @@ input[type="radio"] {
     border-radius: 6px !important;
     border: 1px solid rgba(76, 201, 240, 0.3) !important;
 }
+/* ================= TABS SWITCHER (COMPLETED / UNCOMPLETED) ================= */
+
+.tab-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #2a2a35;
+  padding-bottom: 8px;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: #8a8a9a;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+  color: #ffffff;
+  background: #2a2a38;
+  border-bottom: 3px solid #ffbf00;
+}
+
+/* Thẻ Uncompleted mờ nhẹ hơn để phân biệt */
+.uncompleted-card {
+  opacity: 0.75;
+  filter: grayscale(30%);
+  transition: all 0.2s ease;
+}
+
+.uncompleted-card:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+.empty-msg {
+  color: #777;
+  font-style: italic;
+  padding: 12px 0;
+}
