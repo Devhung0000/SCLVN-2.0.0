@@ -1,4 +1,4 @@
-/* ================= GLOBAL RESET & THEME CONFIG ================= */
+/* ================= GLOBAL RESET & VARS ================= */
 :root {
     --bg-dark: #0b0c10;
     --card-bg: #121318;
@@ -10,186 +10,82 @@
     --input-bg: #181920;
 }
 
-* {
+*, *::before, *::after {
     box-sizing: border-box !important;
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
 }
 
 html, body {
-    width: 100%;
-    min-height: 100vh;
     background-color: var(--bg-dark) !important;
     color: var(--text-main) !important;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
 }
 
-/* KHỐI NỘI DUNG CHÍNH (LOẠI BỎ OVERFLOW VÀ MARGIN ÉP CỨNG) */
-main, .main-content {
-    flex: 1;
-    min-height: 100vh;
-    padding: 32px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* ================= 1. FIX LOGO & AVATAR (CHỐNG VỠ ẢNH) ================= */
+/* Giới hạn avatar người chơi ở Leaderboard */
+.board-row img,
+.leaderboard-container img,
+.player-avatar,
+.user-avatar,
+.profile-card img:not(.banner) {
+    width: 45px !important;
+    height: 45px !important;
+    max-width: 45px !important;
+    max-height: 45px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    flex-shrink: 0 !important;
+    display: inline-block !important;
 }
 
-/* FIX INPUT & FORM TẤT CẢ CÁC TRANG */
+/* Giữ Logo/Sidebar nguyên bản không bị phóng to */
+.sidebar img, 
+.nav-logo, 
+header img {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* ================= 2. FIX INPUT & FORM TRẮNG THÙ LÙ ================= */
 input[type="text"], 
 input[type="number"], 
 input[type="url"],
 select, 
 textarea {
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
     background: var(--input-bg) !important;
     border: 1px solid var(--border-color) !important;
     border-radius: 8px !important;
     color: var(--text-main) !important;
     padding: 10px 14px !important;
-    font-size: 0.95rem;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-size: 0.95rem !important;
+    outline: none !important;
 }
 
 input:focus, select:focus, textarea:focus {
     border-color: var(--accent-purple) !important;
-    box-shadow: 0 0 0 2px rgba(192, 132, 252, 0.2);
+    box-shadow: 0 0 0 2px rgba(192, 132, 252, 0.2) !important;
 }
 
-
-/* ================= 1. FIX TRANG LIST LEVEL ================= */
-.list-view, .level-list-container {
-    width: 100%;
-    max-width: 1000px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.level-card, .list-item {
-    background: var(--card-bg) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 12px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.level-card:hover, .list-item:hover {
-    background: var(--card-hover) !important;
-}
-
-
-/* ================= 2. FIX LEADERBOARD & AVATAR VỠ ================= */
-.leaderboard-view, .board-container {
-    width: 100%;
-    max-width: 1100px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-/* GIỚI HẠN KÍCH THƯỚC AVATAR CHỐNG PHÓNG TO TRÀN MÀN HÌNH */
-.board-row img, 
-.profile-card img, 
-.user-avatar, 
-.profile-header img,
-.leaderboard-list img {
-    width: 44px !important;
-    height: 44px !important;
-    max-width: 44px !important;
-    max-height: 44px !important;
-    border-radius: 50% !important;
-    object-fit: cover !important;
-    flex-shrink: 0 !important;
-}
-
-.profile-banner img, .user-banner {
-    width: 100%;
-    max-height: 180px;
-    object-fit: cover;
-    border-radius: 12px;
-}
-
-.board-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px 20px;
-    background: var(--card-bg) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 10px;
-}
-
-
-/* ================= 3. FIX TRANG ROULETTE ================= */
-.roulette-view, .roulette-container {
-    width: 100%;
-    max-width: 850px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
+/* ================= 3. FIX CARD / LIST ITEMS ================= */
+.list-item, 
+.level-card, 
+.board-row,
 .roulette-card {
     background: var(--card-bg) !important;
     border: 1px solid var(--border-color) !important;
-    border-radius: 16px;
-    padding: 24px;
+    border-radius: 10px !important;
+    transition: background 0.15s ease !important;
 }
 
-
-/* ================= 4. FIX TRANG SUBMIT RECORD ================= */
-.submit-view, .submit-container {
-    width: 100%;
-    max-width: 650px;
-    background: var(--card-bg) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 16px;
-    padding: 32px;
+.list-item:hover, 
+.level-card:hover {
+    background: var(--card-hover) !important;
+    cursor: pointer !important;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.form-group label {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
-
-/* ================= 5. ACCOUNT PROFILE ================= */
-.account-profile-container {
-    width: 100%;
-    max-width: 750px;
-    background: var(--card-bg) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 16px;
-    padding: 32px;
-}
-
-
-/* ================= SIDEBAR & RESPONSIVE ================= */
+/* ================= 4. GIỮ KHÔNG DÂN LAYOUT SIDEBAR ================= */
 .sidebar {
-    background: var(--card-bg);
-    border-right: 1px solid var(--border-color);
-    z-index: 100;
-}
-
-@media screen and (max-width: 960px) {
-    main, .main-content {
-        padding: 16px;
-    }
+    background: var(--card-bg) !important;
+    border-right: 1px solid var(--border-color) !important;
 }
