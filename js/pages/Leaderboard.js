@@ -11,8 +11,10 @@ export default {
         list: [],
         loading: true,
         selected: 0,
-        tab: 'hardest',
+        tab: 'hardest', // Mặc định hiển thị Hardest
         err: [],
+        playerSocials: {},
+        copiedDiscord: false,
     }),
     template: `
         <main v-if="loading">
@@ -31,7 +33,7 @@ export default {
                     <div class="board">
                         <div
                             v-for="(ientry, i) in leaderboard"
-                            :key="i"
+                            :key="ientry.user || i"
                             class="board-row"
                             :class="{
                                 'top-1': i === 0,
@@ -73,7 +75,14 @@ export default {
                         <!-- Card Header Player -->
                         <div class="profile-header-card">
                             <div class="profile-info">
-                                <h1 class="player-title">
+                                <h1
+                                    class="player-title"
+                                    :class="{
+                                        'top-1': selected === 0,
+                                        'top-2': selected === 1,
+                                        'top-3': selected === 2
+                                    }"
+                                >
                                     #{{ selected + 1 }} - {{ entry.user }}
                                 </h1>
                                 
@@ -84,6 +93,7 @@ export default {
                                 </div>
                             </div>
 
+                            <!-- Khối Avatar + Social Icons -->
                             <div class="profile-avatar-box">
                                 <img 
                                     class="profile-user-avatar" 
@@ -91,6 +101,52 @@ export default {
                                     alt=""
                                     @error="$event.target.src='assets/avatars/default.png'"
                                 />
+
+                                <div v-if="currentSocials" class="player-socials-row">
+                                    <div 
+                                        v-if="currentSocials.discord" 
+                                        class="discord-tag"
+                                        :title="'Click để copy: ' + currentSocials.discord"
+                                        @click="copyDiscord(currentSocials.discord)"
+                                    >
+                                        <img src="assets/discord.svg" class="discord-icon" alt="Discord" />
+                                        <span class="discord-username">{{ currentSocials.discord }}</span>
+                                        <span v-if="copiedDiscord" class="copy-toast">Copied!</span>
+                                    </div>
+
+                                    <a 
+                                        v-if="currentSocials.youtube" 
+                                        :href="currentSocials.youtube" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        title="YouTube"
+                                        @click.stop
+                                    >
+                                        <img src="assets/youtube.svg" class="social-icon" alt="YouTube" />
+                                    </a>
+
+                                    <a 
+                                        v-if="currentSocials.facebook" 
+                                        :href="currentSocials.facebook" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        title="Facebook"
+                                        @click.stop
+                                    >
+                                        <img src="assets/facebook.svg" class="social-icon" alt="Facebook" />
+                                    </a>
+
+                                    <a 
+                                        v-if="currentSocials.gdvn" 
+                                        :href="currentSocials.gdvn" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        title="GDVN Profile"
+                                        @click.stop
+                                    >
+                                        <img src="assets/gdvn.png" class="social-icon gdvn-icon" alt="GDVN" />
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -162,15 +218,15 @@ export default {
                         <div v-if="tab === 'uncompleted'" class="profile-section">
                             <div v-if="uncompletedLevels.length > 0" class="level-grid">
                                 <a 
-                                    v-for="item in uncompletedLevels"
-                                    :key="item.level"
-                                    :href="'/#/level/' + getLevelSlug(item.level)"
+                                    v-for="level in uncompletedLevels"
+                                    :key="level.name || level.level || level"
+                                    :href="'/#/level/' + getLevelSlug(level.name || level.level || level)"
                                     class="level-card uncompleted-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(item.level) + ')' }"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(level.name || level.level || level) + ')' }"
                                 >
                                     <div class="level-card-info">
-                                        <span class="level-rank">#{{ item.rank }}</span>
-                                        <span class="level-title">{{ item.level }}</span>
+                                        <span class="level-rank" v-if="level.rank">#{{ level.rank }}</span>
+                                        <span class="level-title">{{ level.name || level.level || level }}</span>
                                     </div>
                                 </a>
                             </div>
@@ -208,7 +264,7 @@ export default {
     `,
     computed: {
         entry() {
-            if (!this.leaderboard || !this.leaderboard.length) return null;
+            if (!this.leaderboard || this.leaderboard.length === 0) return null;
             return this.leaderboard[this.selected] || null;
         },
         hardestLevel() {
@@ -216,60 +272,86 @@ export default {
             const verified = this.entry.verified || [];
             const completed = this.entry.completed || [];
             const allBeats = [...verified, ...completed];
-            if (!allBeats.length) return null;
+            if (allBeats.length === 0) return null;
             return allBeats.reduce((min, current) => (current.rank < min.rank ? current : min), allBeats[0]);
         },
         uncompletedLevels() {
-            if (!this.entry || !this.list || !this.list.length) return [];
-
-            // Lấy toàn bộ danh sách level player ĐÃ hoàn thành
-            const doneSet = new Set([
-                ...(this.entry.completed || []).map(c => String(c.level || c).toLowerCase()),
-                ...(this.entry.verified || []).map(v => String(v.level || v).toLowerCase())
+            if (!this.entry || !this.list) return [];
+            
+            // Lấy danh sách tên tất cả level player đã làm (Verified + Completed + Progressed)
+            const beatenNames = new Set([
+                ...(this.entry.verified || []).map(l => (l.level || '').toLowerCase()),
+                ...(this.entry.completed || []).map(l => (l.level || '').toLowerCase()),
+                ...(this.entry.progressed || []).map(l => (l.level || '').toLowerCase())
             ]);
 
-            // Lọc ra những level trong list tổng CHƯA có trong doneSet
-            return this.list
-                .filter(item => {
-                    const name = typeof item === 'string' ? item : (item.name || item.level || '');
-                    return name && !doneSet.has(name.toLowerCase());
-                })
-                .map((item, index) => {
-                    const name = typeof item === 'string' ? item : (item.name || item.level || '');
-                    return {
-                        level: name,
-                        rank: item.rank || (index + 1)
-                    };
-                });
+            // Lọc ra các level trong tổng danh sách chưa được player chinh phục
+            return this.list.filter(item => {
+                const name = typeof item === 'string' ? item : (item.name || item.level || '');
+                return name && !beatenNames.has(name.toLowerCase());
+            });
+        },
+        currentSocials() {
+            if (!this.entry || !this.entry.user) return null;
+            return this.playerSocials[this.entry.user.toLowerCase()] || null;
         }
     },
     async mounted() {
         try {
-            const lbRes = await fetchLeaderboard();
-            this.leaderboard = (Array.isArray(lbRes) && lbRes[0]) ? lbRes[0] : (lbRes || []);
-            this.err = (Array.isArray(lbRes) && lbRes[1]) ? lbRes[1] : [];
-
-            const listRes = await fetchList();
-            this.list = (Array.isArray(listRes) && Array.isArray(listRes[0])) ? listRes[0] : (listRes || []);
+            const [leaderboard, err] = await fetchLeaderboard();
+            this.list = await fetchList();
+            this.leaderboard = leaderboard || [];
+            this.err = err || [];
         } catch (e) {
-            console.error("Lỗi tải dữ liệu:", e);
-        } finally {
-            // Ép buộc tắt màn hình Loading bất chấp có lỗi hay không
-            this.loading = false;
+            console.error("Lỗi fetchLeaderboard:", e);
         }
+
+        try {
+            const res = await fetch('data/_players.json');
+            if (res.ok) {
+                const socialsArray = await res.json();
+                const map = {};
+                if (Array.isArray(socialsArray)) {
+                    socialsArray.forEach(item => {
+                        if (item && item.name) {
+                            map[item.name.toLowerCase()] = item;
+                        }
+                    });
+                }
+                this.playerSocials = map;
+            }
+        } catch (e) {
+            console.warn("Chưa tìm thấy hoặc lỗi đọc file data/_players.json", e);
+        }
+
+        this.loading = false;
     },
     methods: {
         localize,
         getLevelSlug(name) {
             if (!name) return '';
-            return String(name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         },
         getLevelThumb(name) {
-            return `data/${this.getLevelSlug(name)}/thumbnail.png`;
+            const slug = this.getLevelSlug(name);
+            return `data/${slug}/thumbnail.png`;
         },
         getScoreLink(score) {
             if (!score) return '#';
-            return score.link || score.video || score.proof || score.url || `/#/level/${this.getLevelSlug(score.level)}`;
+            const proofUrl = score.link || score.video || score.proof || score.url;
+            if (proofUrl) {
+                return proofUrl;
+            }
+            return `/#/level/${this.getLevelSlug(score.level)}`;
+        },
+        copyDiscord(username) {
+            if (!username) return;
+            navigator.clipboard.writeText(username).then(() => {
+                this.copiedDiscord = true;
+                setTimeout(() => {
+                    this.copiedDiscord = false;
+                }, 1500);
+            });
         }
     }
 };
