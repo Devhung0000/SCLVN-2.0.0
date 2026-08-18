@@ -4,14 +4,26 @@ import {
     onAuthStateChanged,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signOut
+    signOut,
+    GoogleAuthProvider,
+    signInWithPopup,
+    updateProfile,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 import {
     getFirestore,
     doc,
     getDoc,
+    getDocs,
     setDoc,
-    updateDoc
+    updateDoc,
+    addDoc,
+    deleteDoc,
+    collection,
+    query,
+    where,
+    orderBy,
+    arrayUnion,
+    serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -28,14 +40,29 @@ const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 
 export {
+    firebaseApp,
     auth,
     db,
-    doc,
-    getDoc,
-    setDoc,
-    updateDoc,
+    // Auth functions
     onAuthStateChanged,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signOut
+    signOut,
+    GoogleAuthProvider,
+    signInWithPopup,
+    updateProfile,
+    // Firestore functions
+    doc,
+    getDoc,
+    getDocs,
+    setDoc,
+    updateDoc,
+    addDoc,
+    deleteDoc,
+    collection,
+    query,
+    where,
+    orderBy,
+    arrayUnion,
+    serverTimestamp,
 };
