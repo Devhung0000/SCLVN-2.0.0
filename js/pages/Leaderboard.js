@@ -219,14 +219,14 @@ export default {
                             <div v-if="uncompletedLevels.length > 0" class="level-grid">
                                 <a 
                                     v-for="level in uncompletedLevels"
-                                    :key="level.name || level.level || level"
-                                    :href="'/#/level/' + getLevelSlug(level.name || level.level || level)"
+                                    :key="level.level"
+                                    :href="'/#/level/' + getLevelSlug(level.level)"
                                     class="level-card uncompleted-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(level.name || level.level || level) + ')' }"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(level.level) + ')' }"
                                 >
                                     <div class="level-card-info">
-                                        <span class="level-rank" v-if="level.rank">#{{ level.rank }}</span>
-                                        <span class="level-title">{{ level.name || level.level || level }}</span>
+                                        <span class="level-rank">#{{ level.rank }}</span>
+                                        <span class="level-title">{{ level.level }}</span>
                                     </div>
                                 </a>
                             </div>
@@ -276,19 +276,32 @@ export default {
             return allBeats.reduce((min, current) => (current.rank < min.rank ? current : min), allBeats[0]);
         },
         uncompletedLevels() {
-            if (!this.entry || !this.list) return [];
-            
-            // Lấy danh sách tên tất cả level player đã làm (Verified + Completed + Progressed)
+            if (!this.entry || !this.list || this.list.length === 0) return [];
+
+            const normalize = (name) => {
+                if (!name) return '';
+                return String(name).trim().toLowerCase();
+            };
+
             const beatenNames = new Set([
-                ...(this.entry.verified || []).map(l => (l.level || '').toLowerCase()),
-                ...(this.entry.completed || []).map(l => (l.level || '').toLowerCase()),
-                ...(this.entry.progressed || []).map(l => (l.level || '').toLowerCase())
+                ...(this.entry.verified || []).map(l => normalize(l.level || l.name)),
+                ...(this.entry.completed || []).map(l => normalize(l.level || l.name)),
+                ...(this.entry.progressed || []).map(l => normalize(l.level || l.name))
             ]);
 
-            // Lọc ra các level trong tổng danh sách chưa được player chinh phục
-            return this.list.filter(item => {
-                const name = typeof item === 'string' ? item : (item.name || item.level || '');
-                return name && !beatenNames.has(name.toLowerCase());
+            return this.list.filter((item) => {
+                const levelName = typeof item === 'string' ? item : (item.name || item.level || '');
+                const normalizedName = normalize(levelName);
+                return normalizedName && !beatenNames.has(normalizedName);
+            }).map((item, index) => {
+                if (typeof item === 'string') {
+                    return { level: item, rank: index + 1 };
+                }
+                return {
+                    ...item,
+                    level: item.name || item.level,
+                    rank: item.rank || (index + 1)
+                };
             });
         },
         currentSocials() {
