@@ -11,7 +11,7 @@ export default {
         list: [],
         loading: true,
         selected: 0,
-        tab: 'hardest', // Mặc định hiển thị Hardest
+        tab: 'hardest',
         err: [],
         playerSocials: {},
         copiedDiscord: false,
@@ -218,15 +218,15 @@ export default {
                         <div v-if="tab === 'uncompleted'" class="profile-section">
                             <div v-if="uncompletedLevels.length > 0" class="level-grid">
                                 <a 
-                                    v-for="level in uncompletedLevels"
-                                    :key="getLevelName(level)"
-                                    :href="'/#/level/' + getLevelSlug(getLevelName(level))"
+                                    v-for="item in uncompletedLevels"
+                                    :key="getLevelSlug(item.name)"
+                                    :href="'/#/level/' + getLevelSlug(item.name)"
                                     class="level-card uncompleted-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(getLevelName(level)) + ')' }"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(item.name) + ')' }"
                                 >
                                     <div class="level-card-info">
-                                        <span class="level-rank" v-if="level.rank">#{{ level.rank }}</span>
-                                        <span class="level-title">{{ getLevelName(level) }}</span>
+                                        <span class="level-rank">#{{ item.rank }}</span>
+                                        <span class="level-title">{{ item.name }}</span>
                                     </div>
                                 </a>
                             </div>
@@ -278,26 +278,43 @@ export default {
         uncompletedLevels() {
             if (!this.entry || !this.list || !Array.isArray(this.list)) return [];
 
-            // 1. Gom tên tất cả level player đã vượt qua hoặc làm (Verified, Completed, Progressed)
-            const beatenNames = new Set([
-                ...(this.entry.verified || []).map(l => (l.level || l.name || '').toString().toLowerCase().trim()),
-                ...(this.entry.completed || []).map(l => (l.level || l.name || '').toString().toLowerCase().trim()),
-                ...(this.entry.progressed || []).map(l => (l.level || l.name || '').toString().toLowerCase().trim())
+            // Tập hợp tên các level đã qua (chuyển hết về slug chuẩn để so sánh)
+            const beatenSlugs = new Set([
+                ...(this.entry.verified || []).map(l => this.normalizeName(l.level || l.name)),
+                ...(this.entry.completed || []).map(l => this.normalizeName(l.level || l.name)),
+                ...(this.entry.progressed || []).map(l => this.normalizeName(l.level || l.name))
             ]);
 
-            // 2. Lọc danh sách tổng level chưa có trong beatenNames
-            return this.list.filter((item, index) => {
-                if (!item) return false;
-                const name = this.getLevelName(item);
-                const cleanName = name.toLowerCase().trim();
+            const uncompleted = [];
 
-                // Gán thứ hạng rank nếu item là object mà chưa có thuộc tính rank
-                if (typeof item === 'object' && item !== null && !item.rank) {
-                    item.rank = index + 1;
+            this.list.forEach((item, index) => {
+                let rawName = '';
+                if (typeof item === 'string') {
+                    rawName = item;
+                } else if (item && typeof item === 'object') {
+                    rawName = item.name || item.level || (item[0] && item[0].name) || '';
                 }
 
-                return cleanName.length > 0 && !beatenNames.has(cleanName);
+                const slug = this.normalizeName(rawName);
+
+                // Nếu level có tên hợp lệ và CHƯA có trong danh sách đã chơi
+                if (slug && !beatenSlugs.has(slug)) {
+                    // Lấy lại tên đẹp (vd: "knee guards chal 5")
+                    let displayName = rawName;
+                    if (typeof item === 'string' && item.includes('/')) {
+                        displayName = item.split('/').pop().replace(/_/g, ' ').replace(/-/g, ' ');
+                    } else if (typeof item === 'object' && item.name) {
+                        displayName = item.name;
+                    }
+
+                    uncompleted.push({
+                        rank: index + 1,
+                        name: displayName
+                    });
+                }
             });
+
+            return uncompleted;
         },
         currentSocials() {
             if (!this.entry || !this.entry.user) return null;
@@ -309,7 +326,6 @@ export default {
             const [leaderboard, err] = await fetchLeaderboard();
             const rawList = await fetchList();
 
-            // Xử lý trường hợp fetchList() trả về mảng lồng dạng [ list, err ]
             if (Array.isArray(rawList) && Array.isArray(rawList[0])) {
                 this.list = rawList[0];
             } else {
@@ -344,14 +360,11 @@ export default {
     },
     methods: {
         localize,
-        getLevelName(item) {
-            if (!item) return '';
-            if (typeof item === 'string') {
-                // Trường hợp item là chuỗi đường dẫn "data/level-slug"
-                if (item.includes('/')) return item.split('/').pop().replace(/-/g, ' ');
-                return item;
-            }
-            return item.name || item.level || (item[0] && item[0].name) || '';
+        normalizeName(str) {
+            if (!str) return '';
+            let s = String(str);
+            if (s.includes('/')) s = s.split('/').pop();
+            return s.toLowerCase().replace(/[^a-z0-9]/g, ''); // Xóa sạch ký tự đặc biệt, space, - và _
         },
         getLevelSlug(name) {
             if (!name) return '';
