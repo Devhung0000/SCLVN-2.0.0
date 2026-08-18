@@ -19,7 +19,6 @@ export async function fetchList() {
         if (!orderSnap.exists()) throw new Error("missing order doc");
         
         const data = orderSnap.data();
-        // Lấy thứ tự linh hoạt từ order, data hoặc list
         const order = data.order || data.data || data.list || [];
 
         return await Promise.all(
@@ -109,7 +108,7 @@ export async function fetchScratchIds() {
 }
 
 // ------------------------------------------------------------------
-// Các hàm Leaderboard & Calculations giữ nguyên
+// Các hàm Leaderboard & Calculations
 // ------------------------------------------------------------------
 
 export async function fetchWhichLeaderboard() {
@@ -138,8 +137,9 @@ export async function fetchLeaderboard() {
         }
 
         const verifier = Object.keys(scoreMap).find(
-            (u) => u.toLowerCase() === level.verifier.toLowerCase(),
-        ) || level.verifier;
+            (u) => u.trim().toLowerCase() === level.verifier.trim().toLowerCase(),
+        ) || level.verifier.trim();
+
         scoreMap[verifier] ??= {
             verified: [],
             completed: [],
@@ -156,8 +156,9 @@ export async function fetchLeaderboard() {
 
         level.records.forEach((record) => {
             const user = Object.keys(scoreMap).find(
-                (u) => u.toLowerCase() === record.user.toLowerCase(),
-            ) || record.user;
+                (u) => u.trim().toLowerCase() === record.user.trim().toLowerCase(),
+            ) || record.user.trim();
+
             scoreMap[user] ??= {
                 verified: [],
                 completed: [],
@@ -214,8 +215,9 @@ export async function fetchCreatorLeaderboard() {
         }
 
         const verifier = Object.keys(scoreMap).find(
-            (u) => u.toLowerCase() === level.verifier.toLowerCase(),
-        ) || level.verifier;
+            (u) => u.trim().toLowerCase() === level.verifier.trim().toLowerCase(),
+        ) || level.verifier.trim();
+
         scoreMap[verifier] ??= {
             verified: [],
             completed: [],
@@ -232,8 +234,9 @@ export async function fetchCreatorLeaderboard() {
 
         level.records.forEach((record) => {
             const user = Object.keys(scoreMap).find(
-                (u) => u.toLowerCase() === record.user.toLowerCase(),
-            ) || record.user;
+                (u) => u.trim().toLowerCase() === record.user.trim().toLowerCase(),
+            ) || record.user.trim();
+
             scoreMap[user] ??= {
                 verified: [],
                 completed: [],
@@ -262,8 +265,9 @@ export async function fetchCreatorLeaderboard() {
 
         for (let index = 0; index < level.creators.length; index++) {
             const creator = Object.keys(scoreMap).find(
-                (u) => u.toLowerCase() === level.creators[index].toLowerCase(),
-            ) || level.creators[index];
+                (u) => u.trim().toLowerCase() === level.creators[index].trim().toLowerCase(),
+            ) || level.creators[index].trim();
+
             scoreMap[creator] ??= {
                 verified: [],
                 completed: [],
@@ -309,8 +313,9 @@ export async function fetchScratchPFPs() {
         }
         for (let index = 0; index < level.creators.length; index++) {
             const creator = Object.keys(scoreMap).find(
-                (u) => u.toLowerCase() === level.creators[index].toLowerCase(),
-            ) || level.creators[index];
+                (u) => u.trim().toLowerCase() === level.creators[index].trim().toLowerCase(),
+            ) || level.creators[index].trim();
+
             scoreMap[creator] ??= {
                 verified: [],
                 completed: [],
