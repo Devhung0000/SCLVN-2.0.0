@@ -18,205 +18,178 @@
 }
 
 html, body {
-    width: 100% !important;
-    min-height: 100vh !important;
+    width: 100%;
+    min-height: 100vh;
     background-color: var(--bg-dark) !important;
     color: var(--text-main) !important;
-    overflow-x: hidden;
 }
 
-#app {
-    display: flex !important;
-    width: 100vw !important;
-    min-height: 100vh !important;
-}
-
-/* KHỐI NỘI DUNG CHÍNH CĂN GIỮA */
+/* KHỐI NỘI DUNG CHÍNH (LOẠI BỎ OVERFLOW VÀ MARGIN ÉP CỨNG) */
 main, .main-content {
-    margin-left: 72px !important;
-    width: calc(100vw - 72px) !important;
-    min-height: 100vh !important;
-    padding: 40px 24px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    overflow-y: auto !important;
+    flex: 1;
+    min-height: 100vh;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* FIX INPUT & FORM TRÊN TOÀN MẠNG SYSTEM (DÀNH CHO LIST, SUBMIT, ROULETTE) */
+/* FIX INPUT & FORM TẤT CẢ CÁC TRANG */
 input[type="text"], 
 input[type="number"], 
 input[type="url"],
 select, 
 textarea {
-    width: 100% !important;
+    width: 100%;
     background: var(--input-bg) !important;
     border: 1px solid var(--border-color) !important;
     border-radius: 8px !important;
     color: var(--text-main) !important;
     padding: 10px 14px !important;
-    font-size: 0.95rem !important;
-    outline: none !important;
-    transition: all 0.2s ease !important;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 input:focus, select:focus, textarea:focus {
     border-color: var(--accent-purple) !important;
-    box-shadow: 0 0 0 2px rgba(192, 132, 252, 0.2) !important;
-}
-
-/* KHỐI CHỐNG KHÓA VỠ ẢNH TOÀN TRANG (FIX LỖI ẢNH ĐÈ LEADERBOARD) */
-img {
-    max-width: 100%;
-    height: auto;
+    box-shadow: 0 0 0 2px rgba(192, 132, 252, 0.2);
 }
 
 
 /* ================= 1. FIX TRANG LIST LEVEL ================= */
 .list-view, .level-list-container {
-    width: 100% !important;
-    max-width: 1100px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 16px !important;
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .level-card, .list-item {
     background: var(--card-bg) !important;
     border: 1px solid var(--border-color) !important;
-    border-radius: 12px !important;
-    padding: 16px 20px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    transition: background 0.2s ease !important;
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-.level-card:hover {
+.level-card:hover, .list-item:hover {
     background: var(--card-hover) !important;
 }
 
 
-/* ================= 2. FIX LEADERBOARD (KHOANH VÙNG ẢNH AVATAR) ================= */
+/* ================= 2. FIX LEADERBOARD & AVATAR VỠ ================= */
 .leaderboard-view, .board-container {
-    display: grid !important;
-    grid-template-columns: 380px 1fr !important;
-    gap: 32px !important;
-    width: 100% !important;
-    max-width: 1400px !important;
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-/* FIX TRIỆT ĐỂ LỖI AVATAR PHÓNG TO TRÀN MÀN HÌNH */
+/* GIỚI HẠN KÍCH THƯỚC AVATAR CHỐNG PHÓNG TO TRÀN MÀN HÌNH */
 .board-row img, 
 .profile-card img, 
 .user-avatar, 
-.profile-header img {
-    width: 48px !important;
-    height: 48px !important;
+.profile-header img,
+.leaderboard-list img {
+    width: 44px !important;
+    height: 44px !important;
+    max-width: 44px !important;
+    max-height: 44px !important;
     border-radius: 50% !important;
     object-fit: cover !important;
     flex-shrink: 0 !important;
 }
 
 .profile-banner img, .user-banner {
-    width: 100% !important;
-    max-height: 200px !important;
-    object-fit: cover !important;
-    border-radius: 12px !important;
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
 }
 
 .board-row {
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    padding: 12px 16px !important;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 20px;
     background: var(--card-bg) !important;
     border: 1px solid var(--border-color) !important;
-    border-radius: 10px !important;
-    margin-bottom: 8px !important;
-}
-
-.profile-display-card {
-    background: var(--card-bg) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 16px !important;
-    padding: 24px !important;
-    width: 100% !important;
+    border-radius: 10px;
 }
 
 
 /* ================= 3. FIX TRANG ROULETTE ================= */
 .roulette-view, .roulette-container {
-    width: 100% !important;
-    max-width: 900px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 20px !important;
+    width: 100%;
+    max-width: 850px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .roulette-card {
     background: var(--card-bg) !important;
     border: 1px solid var(--border-color) !important;
-    border-radius: 16px !important;
-    padding: 24px !important;
+    border-radius: 16px;
+    padding: 24px;
 }
 
 
 /* ================= 4. FIX TRANG SUBMIT RECORD ================= */
-.submit-view, .submit-container, form {
-    width: 100% !important;
-    max-width: 680px !important;
+.submit-view, .submit-container {
+    width: 100%;
+    max-width: 650px;
     background: var(--card-bg) !important;
     border: 1px solid var(--border-color) !important;
-    border-radius: 16px !important;
-    padding: 32px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 18px !important;
+    border-radius: 16px;
+    padding: 32px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
 .form-group {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 6px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .form-group label {
-    font-size: 0.9rem !important;
-    color: var(--text-muted) !important;
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }
 
 
-/* ================= 5. GIỮ NGUYÊN HOÀN HẢO ACCOUNT PROFILE ================= */
+/* ================= 5. ACCOUNT PROFILE ================= */
 .account-profile-container {
-    width: 100% !important;
-    max-width: 800px !important;
+    width: 100%;
+    max-width: 750px;
     background: var(--card-bg) !important;
     border: 1px solid var(--border-color) !important;
-    border-radius: 16px !important;
-    padding: 32px !important;
+    border-radius: 16px;
+    padding: 32px;
 }
 
 
-/* ================= SIDEBAR CỐ ĐỊNH BAN ĐẦU ================= */
+/* ================= SIDEBAR & RESPONSIVE ================= */
 .sidebar {
-    width: 72px;
-    height: 100vh;
     background: var(--card-bg);
     border-right: 1px solid var(--border-color);
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 1000;
+    z-index: 100;
 }
 
 @media screen and (max-width: 960px) {
     main, .main-content {
-        margin-left: 0 !important;
-        width: 100vw !important;
-        padding: 16px !important;
-    }
-    .leaderboard-view, .board-container {
-        grid-template-columns: 1fr !important;
+        padding: 16px;
     }
 }
