@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=1024" />
-        <meta proprety="og:url" content="https://thespamchallengelistvietnam.pages.dev/"/>
+        <meta property="og:url" content="https://thespamchallengelistvietnam.pages.dev/"/>
         <meta property="og:title" content="The Spam Challenge List Vietnam" />
         <meta property="og:description" content="This is a website for the hardest spam challenges in Vietnam!" />
         <meta property="og:image" content="https://thespamchallengelistvietnam2.pages.dev//assets/the%20sclvn%20logo.png" />
@@ -11,9 +11,9 @@
 
         <!-- Replace your server icon by uploading an image file named "list_icon.png"-->
         <link rel="icon" href="/assets/the sclvn logo.png" />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="/css/typography.css" />
         <link rel="stylesheet" type="text/css" href="/css/main.css" />
@@ -39,7 +39,7 @@
         <header :class="{ dark: store.dark, 'darker': store.darker }">
             <div class="logo" style="display: flex; align-items: center; gap: 10px;">
                 <a href="https://thespamchallengelistvietnam2.pages.dev/">
-                <img src="./assets/the sclvn logo.png" style="height: 50px; border-radius: 10%;" href="https://thespamchallengelistvietnam2.pages.dev/" target="_blank"/>
+                    <img src="./assets/the sclvn logo.png" style="height: 50px; border-radius: 10%;" target="_blank"/>
                 </a>
                 <h2>SCLVN</h2>
                 <p style="margin-top: 15px;">v2.0</p>
@@ -62,14 +62,14 @@
                         <img
                             :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'"
                             alt=""
-							style="filter: var(--the-button-on-top)"
+                            style="filter: var(--the-button-on-top)"
                         />
                     </button>
-                    <!-- Replace the '#' with your discord server's invite-->
+                    <!-- Discord link -->
                     <a class="nav__icon ripple" href="https://discord.gg/Qcj5JSRKa" target="_blank">
                         <img style="filter: var(--the-button-on-top)" src="/assets/discord.svg" alt="Discord Logo" />
                     </a>
-                    <!-- List record submission form, add a link to replace the '#' when putting a link to your list submission form-->
+                    <!-- List record submission form -->
                     <a
                         class="nav__cta type-label-lg ripple"
                         href="https://docs.google.com/forms/d/e/1FAIpQLSdEaM62aNoDCaapPlZzaeuMybWr6Bal3vse3x6SF1yavZMxNw/viewform?usp=dialog"
@@ -77,9 +77,55 @@
                         style="white-space: nowrap;"
                         >Submit Record/Verification</a
                     >
+
+                    <!-- Authentication Container (Nút Đăng nhập/Profile) -->
+                    <div id="auth-container" style="display: inline-flex; align-items: center; gap: 10px; margin-left: 5px;">
+                        <button id="auth-open-btn" class="nav__cta type-label-lg ripple" style="cursor: pointer; background: #4f46e5; border: none; white-space: nowrap;">Login / Register</button>
+                        
+                        <div id="user-profile" style="display: none; align-items: center; gap: 8px;">
+                            <span id="user-name-display" style="color: #fff; font-weight: bold; font-size: 14px;"></span>
+                            <span id="admin-badge" style="display: none; background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold;">ADMIN</span>
+                            <button id="logout-btn" class="nav__cta type-label-lg ripple" style="background: #374151; border: none; padding: 6px 12px; cursor: pointer;">Logout</button>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </header>
         <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
+
+        <!-- Popup Modal Đăng ký / Đăng nhập -->
+        <div id="auth-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.75); z-index: 99999; justify-content: center; align-items: center;">
+            <div style="background: #18181b; padding: 25px; border-radius: 8px; width: 320px; color: white; border: 1px solid #27272a; box-shadow: 0 10px 25px rgba(0,0,0,0.5); font-family: 'Poppins', sans-serif;">
+                <h3 id="modal-title" style="margin-top: 0; text-align: center; font-size: 18px; color: #fff;">Login</h3>
+                
+                <form id="auth-form" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+                    <div id="username-box" style="display: none;">
+                        <label style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 4px;">Player Name (In-game):</label>
+                        <input type="text" id="auth-username" placeholder="e.g. Mraow" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
+                    </div>
+
+                    <div>
+                        <label style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 4px;">Email:</label>
+                        <input type="email" id="auth-email" required placeholder="name@example.com" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
+                    </div>
+
+                    <div>
+                        <label style="font-size: 12px; color: #a1a1aa; display: block; margin-bottom: 4px;">Password:</label>
+                        <input type="password" id="auth-password" required placeholder="••••••••" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
+                    </div>
+
+                    <button type="submit" id="auth-submit-btn" style="margin-top: 10px; padding: 10px; background: #4f46e5; border: none; color: white; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: inherit;">Login</button>
+                </form>
+
+                <div style="margin-top: 15px; font-size: 13px; text-align: center; color: #a1a1aa;">
+                    <span id="toggle-text">Don't have an account?</span> 
+                    <a href="javascript:void(0)" id="toggle-auth-btn" style="color: #6366f1; text-decoration: underline; margin-left: 4px;">Register now</a>
+                </div>
+                <button id="close-modal-btn" style="width: 100%; background: transparent; border: none; color: #71717a; cursor: pointer; margin-top: 10px; font-size: 12px;">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Script xử lý Auth -->
+        <script type="module" src="/js/auth.js"></script>
     </body>
 </html>
