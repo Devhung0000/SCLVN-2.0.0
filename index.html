@@ -22,15 +22,19 @@
         <link rel="stylesheet" type="text/css" href="/css/components/nav.css" />
         <link rel="stylesheet" type="text/css" href="/css/components/btn.css" />
         <link rel="stylesheet" type="text/css" href="/css/components/tabs.css" />
+        
+        <!-- Vue Core Libraries -->
         <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
         <script src="https://unpkg.com/vue-router@4.0.14/dist/vue-router.global.prod.js"></script>
+        
+        <!-- App Entry Point (Đã xử lý nạp main.js và auth.js bên trong) -->
         <script type="module" src="/js/main.js"></script>
     </head>
     <body id="app">
         <header :class="{ dark: store.dark, 'darker': store.darker }">
             <div class="logo" style="display: flex; align-items: center; gap: 10px;">
                 <a href="https://thespamchallengelistvietnam2.pages.dev/">
-                    <img src="./assets/the sclvn logo.png" style="height: 50px; border-radius: 10%;" target="_blank"/>
+                    <img src="./assets/the sclvn logo.png" style="height: 50px; border-radius: 10%;" />
                 </a>
                 <h2>SCLVN</h2>
                 <p style="margin-top: 15px;">v2.0</p>
@@ -71,6 +75,7 @@
                 </div>
             </nav>
         </header>
+        
         <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
 
         <!-- Modal Login / Register -->
@@ -122,7 +127,5 @@
                 <button id="close-profile-btn" style="width: 100%; background: transparent; border: none; color: #71717a; cursor: pointer; margin-top: 10px; font-size: 12px;">Close</button>
             </div>
         </div>
-
-        <script type="module" src="/js/auth.js"></script>
     </body>
 </html>
