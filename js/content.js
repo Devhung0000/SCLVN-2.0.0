@@ -1,46 +1,45 @@
 import { round, score } from './score.js';
+import {
+    db, doc, getDoc, getDocs, collection,
+} from './firebase-init.js';
 
 /**
- * Path to directory containing `_list.json` and all levels
+ * Lấy danh sách level theo đúng thứ tự, đọc từ Firestore.
+ * Trả về CÙNG SHAPE như bản cũ: mảng các tuple [level, err]
+ * -> List.js, Leaderboard.js không cần sửa gì để dùng hàm này.
  */
-const dir = '/data';
-
 export async function fetchList() {
-    let params = new URLSearchParams(document.location.search); 
+    let params = new URLSearchParams(document.location.search);
     let whichList = params.get("list");
-    let listFileName = "_list";
-    console.log(whichList);
-    if (whichList != null) {
-        if (whichList == "challenge") {
-            listFileName = "_challenge-list";
-        } else if (whichList == "nsgdc") {
-            listFileName = "_nsgdc-list";
-        } else if (whichList == "maybenew") {
-            listFileName = "_maybenewlist";
-        }
-    }
-    console.log(listFileName);
-    const listResult = await fetch(`${dir}/${listFileName}.json`);
+    let orderId = "list";
+    if (whichList === "challenge") orderId = "challenge-list";
+    else if (whichList === "nsgdc") orderId = "nsgdc-list";
+    else if (whichList === "maybenew") orderId = "maybenewlist";
+
     try {
-        const list = await listResult.json();
+        const orderSnap = await getDoc(doc(db, "meta", orderId));
+        if (!orderSnap.exists()) throw new Error("missing order doc");
+        const order = orderSnap.data().order || [];
+
         return await Promise.all(
-            list.map(async (path, rank) => {
-                const levelResult = await fetch(`${dir}/${path}.json`);
+            order.map(async (levelId, rank) => {
                 try {
-                    const level = await levelResult.json();
+                    const levelSnap = await getDoc(doc(db, "levels", levelId));
+                    if (!levelSnap.exists()) throw new Error("missing level");
+                    const level = levelSnap.data();
                     return [
                         {
                             ...level,
-                            path,
-                            records: level.records.sort(
-                                (a, b) => b.percent - a.percent,
-                            ),
+                            path: levelId,
+                            records: (level.records || [])
+                                .slice()
+                                .sort((a, b) => b.percent - a.percent),
                         },
                         null,
                     ];
                 } catch {
-                    console.error(`Failed to load level #${rank + 1} ${path}.`);
-                    return [null, path];
+                    console.error(`Failed to load level #${rank + 1} ${levelId}.`);
+                    return [null, levelId];
                 }
             }),
         );
@@ -49,25 +48,22 @@ export async function fetchList() {
         return null;
     }
 }
+
 export async function fetchPacks() {
-    const packsResult = await fetch(`${dir}/_packs.json`);
     try {
-        const packs = await packsResult.json();
+        const orderSnap = await getDoc(doc(db, "meta", "packOrder"));
+        if (!orderSnap.exists()) return [];
+        const order = orderSnap.data().order || [];
+
         return await Promise.all(
-            packs.map(async (path, rank) => {
-                console.error(`${dir}/packs/${path}.json`);
-                const packResult = await fetch(`../data/packs/${path}.json`);
+            order.map(async (packId, rank) => {
                 try {
-                    const pack = await packResult.json();
-                    return [
-                        {
-                            ...pack,
-                        },
-                        null,
-                    ];
+                    const packSnap = await getDoc(doc(db, "packs", packId));
+                    if (!packSnap.exists()) throw new Error("missing pack");
+                    return [{ ...packSnap.data() }, null];
                 } catch {
-                    console.error(`Failed to load pack #${rank + 1} ${path}.`);
-                    return [null, path];
+                    console.error(`Failed to load pack #${rank + 1} ${packId}.`);
+                    return [null, packId];
                 }
             }),
         );
@@ -76,42 +72,50 @@ export async function fetchPacks() {
         return null;
     }
 }
+
 export async function fetchEditors() {
     try {
-        const editorsResults = await fetch(`${dir}/_editors.json`);
-        const editors = await editorsResults.json();
-        return editors;
+        const snap = await getDoc(doc(db, "meta", "editors"));
+        if (!snap.exists()) return null;
+        return snap.data().list || null;
     } catch {
         return null;
     }
 }
 
-export async function fetchSwagger() {
+/**
+ * Thay thế cho fetch('data/_players.json').
+ * Trả về mảng giống hệt _players.json cũ: [{ name, youtube, facebook, gdvn, discord, avatarUrl? }, ...]
+ */
+export async function fetchPlayers() {
     try {
-        const swaggerResults = await fetch(`${dir}/_players.json`);
-        const swagger = swaggerResults.json();
-        console.error("h1");
-        console.log(swagger);
-        console.log(swaggerResults);
-        console.log(swaggers);
-        return swagger;
+        const snap = await getDocs(collection(db, "players"));
+        return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     } catch {
         return null;
     }
 }
+
+// Giữ lại tên cũ để không phá bất kỳ file nào khác (Roulette.js, Statistics.js...)
+// lỡ có import fetchSwagger / fetchScratchIds mà mình chưa thấy qua.
+export const fetchSwagger = fetchPlayers;
+
 export async function fetchScratchIds() {
     try {
-        const fetchIds = await fetch(`${dir}/_scratch-ids.json`);
-        const ids = fetchIds.json();
-        console.log(fetchIds);
-        console.log(ids);
-        return ids;
+        const snap = await getDoc(doc(db, "meta", "scratchIds"));
+        return snap.exists() ? snap.data().ids : null;
     } catch {
         return null;
     }
 }
+
+// ------------------------------------------------------------------
+// Các hàm dưới đây GIỮ NGUYÊN 100% logic gốc — chỉ phụ thuộc vào
+// fetchList() ở trên nên tự động hoạt động với Firestore, không cần sửa.
+// ------------------------------------------------------------------
+
 export async function fetchWhichLeaderboard() {
-    let params = new URLSearchParams(document.location.search); 
+    let params = new URLSearchParams(document.location.search);
     if (!params.get("type")) {
         return await fetchLeaderboard();
     }
@@ -122,6 +126,7 @@ export async function fetchWhichLeaderboard() {
         return await fetchLeaderboard();
     }
 }
+
 export async function fetchLeaderboard() {
     const list = await fetchList();
 
@@ -133,7 +138,6 @@ export async function fetchLeaderboard() {
             return;
         }
 
-        // Verification
         const verifier = Object.keys(scoreMap).find(
             (u) => u.toLowerCase() === level.verifier.toLowerCase(),
         ) || level.verifier;
@@ -151,7 +155,6 @@ export async function fetchLeaderboard() {
             link: level.verification,
         });
 
-        // Records
         level.records.forEach((record) => {
             const user = Object.keys(scoreMap).find(
                 (u) => u.toLowerCase() === record.user.toLowerCase(),
@@ -181,31 +184,8 @@ export async function fetchLeaderboard() {
                 link: record.link,
             });
         });
-        
-        // Creator (Dit me thang Hung)
-        /*
-        for (let index = 0; index < level.creators.length; index++) {      
-            const creator = Object.keys(scoreMap).find(
-            (u) => u.toLowerCase() === level.creators.map(creator => creator.toLowerCase()),
-            ) || level.creators[index];
-            scoreMap[creator] ??= {
-                verified: [],
-                completed: [],
-                progressed: [],
-                created: [],
-            };  
-            const { created } = scoreMap[creator];
-            created.push({
-                rank: rank + 1,
-                level: level.name,
-                score: 0,
-                link: level.verification,
-            });
-        }
-        */
     });
 
-    // Wrap in extra Object containing the user and total score
     const res = Object.entries(scoreMap).map(([user, scores]) => {
         const { created, verified, completed, progressed } = scores;
         const total = [created, verified, completed, progressed]
@@ -219,9 +199,9 @@ export async function fetchLeaderboard() {
         };
     });
 
-    // Sort by total score
     return [res.sort((a, b) => b.total - a.total), errs];
 }
+
 export async function fetchCreatorLeaderboard() {
     const list = await fetchList();
 
@@ -233,7 +213,6 @@ export async function fetchCreatorLeaderboard() {
             return;
         }
 
-        // Verification
         const verifier = Object.keys(scoreMap).find(
             (u) => u.toLowerCase() === level.verifier.toLowerCase(),
         ) || level.verifier;
@@ -251,7 +230,6 @@ export async function fetchCreatorLeaderboard() {
             link: level.verification,
         });
 
-        // Records
         level.records.forEach((record) => {
             const user = Object.keys(scoreMap).find(
                 (u) => u.toLowerCase() === record.user.toLowerCase(),
@@ -281,18 +259,17 @@ export async function fetchCreatorLeaderboard() {
                 link: record.link,
             });
         });
-        
-        // Creator
-        for (let index = 0; index < level.creators.length; index++) {      
+
+        for (let index = 0; index < level.creators.length; index++) {
             const creator = Object.keys(scoreMap).find(
-            (u) => u.toLowerCase() === level.creators.map(creator => creator.toLowerCase()),
+                (u) => u.toLowerCase() === level.creators.map(c => c.toLowerCase()),
             ) || level.creators[index];
             scoreMap[creator] ??= {
                 verified: [],
                 completed: [],
                 progressed: [],
                 created: [],
-            };  
+            };
             const { created } = scoreMap[creator];
             created.push({
                 rank: rank + 1,
@@ -303,13 +280,11 @@ export async function fetchCreatorLeaderboard() {
         }
     });
 
-    // Wrap in extra Object containing the user and total score
     const res = Object.entries(scoreMap).map(([user, scores]) => {
         const { created, verified, completed, progressed } = scores;
         const total = [created, verified, completed, progressed]
             .flat()
             .reduce((prev, cur) => prev + cur.score, 0);
-            
 
         return {
             user,
@@ -318,9 +293,9 @@ export async function fetchCreatorLeaderboard() {
         };
     });
 
-    // Sort by total score
     return [res.sort((a, b) => b.total - a.total), errs];
 }
+
 export async function fetchScratchPFPs() {
     const list = await fetchList();
 
@@ -331,15 +306,15 @@ export async function fetchScratchPFPs() {
             errs.push(err);
             return;
         }
-        for (let index = 0; index < level.creators.length; index++) {      
+        for (let index = 0; index < level.creators.length; index++) {
             const creator = Object.keys(scoreMap).find(
-            (u) => u.toLowerCase() === level.creators.map(creator => creator.toLowerCase()),
+                (u) => u.toLowerCase() === level.creators.map(c => c.toLowerCase()),
             ) || level.creators[index];
             scoreMap[creator] ??= {
                 verified: [],
                 completed: [],
                 progressed: [],
-            };  
+            };
             const { verified } = scoreMap[creator];
             verified.push({
                 rank: rank + 1,
@@ -348,11 +323,8 @@ export async function fetchScratchPFPs() {
                 link: level.verification,
             });
         }
-
- 
     });
 
-    // Wrap in extra Object containing the user and total score
     const res = Object.entries(scoreMap).map(([user, scores]) => {
         const { verified, completed, progressed } = scores;
         const total = [verified, completed, progressed]
@@ -366,6 +338,5 @@ export async function fetchScratchPFPs() {
         };
     });
 
-    // Sort by total score
     return [res.sort((a, b) => b.total - a.total), errs];
 }
