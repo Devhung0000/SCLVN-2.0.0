@@ -1,172 +1,164 @@
 // https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
 export function getYoutubeIdFromUrl(url) {
+    if (!url) return '';
     return url.match(
         /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&]*).*/,
-    )?.[ 1 ] ?? '';
+    )?.[1] ?? '';
 }
 
 export function getMedalIdFromUrl(url) {
-    return url.match(/medal\.tv\/(?:clip|clips|games\/[^\/]+\/clips)\/([^\/?#]+)/)?.[ 1 ] ?? '';
+    if (!url) return '';
+    return url.match(/medal\.tv\/(?:clip|clips|games\/[^\/]+\/clips)\/([^\/?#]+)/)?.[1] ?? '';
 }
 
-// ilovegoodies445
-// nah nvm
 export function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
+    return Math.floor(Math.random() * max);
 }
-export function getScratchPFP(username) {
-    return "https://uploads.scratch.mit.edu/get_image/user/111315218_90x90.png?v=";
-    let b = getAPI(username);
-    b.then(hsdkjhwsfkjwh => { return hsdkjhwsfkjwh })
+
+// Sửa lỗi hàm getScratchPFP (Hỗ trợ Async/Await chuẩn)
+export async function getScratchPFP(username) {
+    if (!username) return "https://uploads.scratch.mit.edu/get_image/user/1_90x90.png";
+    return await getAPI(username);
 }
+
 async function getAPI(username) {
-    const res = await fetch(`https://cors.gays3xlol.workers.dev/https://api.scratch.mit.edu/users/${encodeURIComponent(username)}`);
+    try {
+        const res = await fetch(`https://cors.gays3xlol.workers.dev/https://api.scratch.mit.edu/users/${encodeURIComponent(username)}`);
+        if (!res.ok) throw new Error("Fetch failed");
         const obj = await res.json();
-        const objParsed = JSON.parse(JSON.stringify(obj));
-        if (objParsed.profile) {
-            return `https://uploads.scratch.mit.edu/get_image/user/${objParsed.profile.id}_90x90.png`;
-        } else {
-            return "https://uploads.scratch.mit.edu/get_image/user/1_90x90.png"
+        if (obj && obj.profile) {
+            return `https://uploads.scratch.mit.edu/get_image/user/${obj.profile.id}_90x90.png`;
         }
+    } catch (err) {
+        // Fallback nếu gặp lỗi mạng
     }
+    return "https://uploads.scratch.mit.edu/get_image/user/1_90x90.png";
+}
+
+// Tắt hoàn toàn console.log rác làm lag/đơ trang
 export function getLevelThumbnail(levelPos, list) {
-            if (list == undefined || levelPos == undefined) {
-                return 0;
-            } else {
-                console.log("The List:");
-                console.log(list);
-                console.log("The Level Position:");
-                console.log(levelPos);
-                const currentLevel = list[ levelPos ][ 0 ];
-                /* console.error(currentLevel);
-                console.log("The List:");
-                console.log(list);
-                console.log("The Level Position:");
-                console.log(levelPos);
-                console.log("The Current Level:");
-                console.log(currentLevel); */
-                // do not close WHY CLOSE!!!!!!!
-                // old code (yt thumbnail)
-                // return `background-image: url(https://img.youtube.com/vi/${getYoutubeIdFromUrl(currentLevel.verification)}/mqdefault.jpg);`;
-                return setUpThumbnailStyle(currentLevel.name);
-            }
+    if (list === undefined || levelPos === undefined || !list[levelPos]) {
+        return '';
+    } else {
+        const currentLevel = list[levelPos][0] || list[levelPos];
+        return setUpThumbnailStyle(currentLevel.name);
+    }
 }
+
 export function getLevelThumbnailR(levelPos, list) {
-            if (list == undefined || levelPos == undefined) {
-                return 0;
-            } else {
-                console.log("The List:");
-                console.log(list);
-                console.log("The Level Position:");
-                console.log(levelPos);
-                const currentLevel = list[ levelPos ];
-                return setUpThumbnailStyle(currentLevel.name);
-            }
+    if (list === undefined || levelPos === undefined || !list[levelPos]) {
+        return '';
+    } else {
+        const currentLevel = list[levelPos];
+        return setUpThumbnailStyle(currentLevel.name);
+    }
 }
+
 function setUpThumbnailStyle(levelName) {
-                if (levelName == "getting kicked out of train") {
-                    return `background-image: linear-gradient(rgb(0 0 0 / 0.5), rgb(0 0 0 / 0.5)), url(https://www.amtrak.com/content/dam/projects/dotcom/english/public/images/heros/couple-cafe-window-view.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;`
-                } else {
-                return `background-image: var(--level-button), url("${getThumbnailImage(levelName, "yea")}"); background-size: cover; background-repeat: no-repeat; background-position: center;`
-                }
-            }
+    if (levelName === "getting kicked out of train") {
+        return `background-image: linear-gradient(rgb(0 0 0 / 0.5), rgb(0 0 0 / 0.5)), url(https://www.amtrak.com/content/dam/projects/dotcom/english/public/images/heros/couple-cafe-window-view.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;`;
+    } else {
+        return `background-image: var(--level-button), url("${getThumbnailImage(levelName)}"); background-size: cover; background-repeat: no-repeat; background-position: center;`;
+    }
+}
+
 export function getThumbnailImage(lvlName) {
     return `../assets/levels/${encodeURIComponent(lvlName)}.png`;
 }
+
 export function embed(video) {
-        if(video.includes("medal.tv")) {
-            return `https://medal.tv/clip/${getMedalIdFromUrl(video)}`;
-        } else {
-            return `https://www.youtube.com/embed/${getYoutubeIdFromUrl(video)}?rel=0`;
-        }
+    if (!video) return '';
+    if (video.includes("medal.tv")) {
+        return `https://medal.tv/clip/${getMedalIdFromUrl(video)}`;
+    } else {
+        return `https://www.youtube.com/embed/${getYoutubeIdFromUrl(video)}?rel=0`;
+    }
 }
+
 export function mamaMia(swaggers) {
-     console.log("../assets/" + swaggers + ".svg");
-     return "../assets/" + swaggers + ".svg";
+    return "../assets/" + swaggers + ".svg";
 }
+
 export async function getPeople() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-           // Typical action to be performed when the document is ready:
-           console.log("yes sir");
-           document.getElementById("displayVisits").innerHTML = xhttp.responseText;
+            const displayVisits = document.getElementById("displayVisits");
+            if (displayVisits) {
+                displayVisits.innerHTML = xhttp.responseText;
+            }
         }
     };
     xhttp.open("GET", "../data/stats/displayVisits.php", true);
     xhttp.send();
 }
+
 export async function incVisits() {
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-           // Typical action to be performed when the document is ready:
-        }
-    };
     xhttp.open("GET", "../data/stats/incrementVisits.php", true);
     xhttp.send();
 }
+
 var incGDR = 0;
 export async function otherStats(list) {
+    if (!list) return;
     incGDR = 0;
     for (let i = 0; i < list.length; i++) {
-        console.log(list[ i ].find(isGDR));
+        if (Array.isArray(list[i])) {
+            list[i].find(isGDR);
+        }
     }
-    var timeDifference;
-    var j;
-    j = new Date();
-    timeDifference = Math.floor(((new Date() / 1000) - 1763410264) / 86400);
-    console.log(timeDifference);
-    console.log(incGDR);
-    document.getElementById("displayListLength").innerHTML = list.length;
-    document.getElementById("displayMostUsedEngine").innerHTML = incGDR;
-    document.getElementById("displayDaysSincePublic").innerHTML = timeDifference;
+    
+    var timeDifference = Math.floor(((new Date() / 1000) - 1763410264) / 86400);
+
+    const elListLength = document.getElementById("displayListLength");
+    const elMostUsed = document.getElementById("displayMostUsedEngine");
+    const elDaysSince = document.getElementById("displayDaysSincePublic");
+
+    if (elListLength) elListLength.innerHTML = list.length;
+    if (elMostUsed) elMostUsed.innerHTML = incGDR;
+    if (elDaysSince) elDaysSince.innerHTML = timeDifference;
 }
 
 function isGDR(level) {
-  if (level === null) {
-      return 0;
-  } else {
-      if (level.engine === "GDR") {
-          incGDR++;
-      }
-      return level.engine === "GDR";
-  }
+    if (level === null || level === undefined) {
+        return false;
+    } else {
+        if (level.engine === "GDR") {
+            incGDR++;
+        }
+        return level.engine === "GDR";
+    }
 }
+
 export function localize(num) {
+    if (typeof num !== 'number') return num;
     return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
 }
 
 export function doStuff(levelName) {
     return "background-image: url('../assets/levels/Greyhound.webp');";
 }
+
 export function getEngineSelect() {
-    console.log("juz pomnie,.");
     let params = new URLSearchParams(document.location.search); 
-    console.log(params.get("engine"));
-    if (params.get("engine") == "All") {
-        return null;
-    } else {
-        return params.get("engine");
-    }
+    let engine = params.get("engine");
+    return (engine === "All" || !engine) ? null : engine;
 }
+
 export function getSelectSelect(list) {
-    console.log("Yayers");
+    if (!list) return null;
     let params = new URLSearchParams(document.location.search); 
     let selectedInt = parseInt(params.get("selected"));
-    console.log(params.get("selected"));
-    if (selectedInt == null || isNaN(selectedInt) || selectedInt - 1 > list.length || selectedInt - 1 < 0) {
+    if (isNaN(selectedInt) || selectedInt - 1 >= list.length || selectedInt - 1 < 0) {
         return null;
-    } else {
-        return selectedInt - 1;
     }
     return selectedInt - 1;
 }
 
 export function selectRandomLevel(levels) {
-    console.log("They done clicked the egg button!!!");
-    let randomLevel = getRandomInt(levels.length)
-    return randomLevel;
+    if (!levels || levels.length === 0) return 0;
+    return getRandomInt(levels.length);
 }
 
 export function getThumbnailFromId(id) {
@@ -177,44 +169,44 @@ export function getThumbnailFromId(id) {
     return `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
 }
 
+// Fix lỗi phủ định điều kiện Null (Syntax bug cũ: !document.getElementById(...) == null)
 export function listLevelNameFilter() {
-    if (!document.getElementById("filterForLevelName") == null)
-        document.getElementById("filterForLevelName").addEventListener("keyup", () => {
-        console.log(`Name: ${document.getElementById("filterForLevelName").value}`);
-    });
+    const el = document.getElementById("filterForLevelName");
+    if (el) {
+        el.addEventListener("keyup", () => {
+            // Filter logic
+        });
+    }
 }
+
 export function listPlayerFilter() {
-    if (!document.getElementById("filterForPlayerlName") == null)
-        document.getElementById("filterForPlayerName").addEventListener("keyup", () => {
-        console.log(`Name: ${document.getElementById("filterForPlayerName").value}`);
-    });
+    const el = document.getElementById("filterForPlayerName");
+    if (el) {
+        el.addEventListener("keyup", () => {
+            // Filter logic
+        });
+    }
 }
+
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 export function shuffle(array) {
     let currentIndex = array.length, randomIndex;
 
-    // While there remain elements to shuffle.
     while (currentIndex != 0) {
-        // Pick a remaining element.
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
-        // And swap it with the current element.
-        [ array[ currentIndex ], array[ randomIndex ] ] = [
-            array[ randomIndex ],
-            array[ currentIndex ],
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex],
+            array[currentIndex],
         ];
     }
 
     return array;
 }
+
 export function getFpsSelect() {
-    console.log("work hello please");
     let params = new URLSearchParams(document.location.search); 
-    console.log(params.get("fps"));
-    if (params.get("fps") == "") {
-        return null;
-    } else {
-        return params.get("fps");
-    }
+    let fps = params.get("fps");
+    return (!fps) ? null : fps;
 }
