@@ -88,4 +88,25 @@ input:focus, select:focus, textarea:focus {
 .sidebar {
     background: var(--card-bg) !important;
     border-right: 1px solid var(--border-color) !important;
+}/* ==========================================
+   BỘ CODE CỨU HỎA SIÊU AN TOÀN - CHỈ FIX AVATAR
+   ========================================== */
+
+/* Chỉ nhắm đúng vào ảnh nằm trong danh sách người chơi */
+.board-row img,
+.leaderboard-container img,
+.player-avatar,
+.user-avatar {
+    width: 40px !important;
+    height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    display: inline-block !important;
+}
+
+/* Khôi phục ô Input về mặc định để mất cái khối màu trắng tràn màn hình */
+input, select, textarea {
+    max-width: 100% !important;
 }
