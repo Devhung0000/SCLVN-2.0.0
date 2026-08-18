@@ -31,7 +31,7 @@ export default {
                     <div class="board">
                         <div
                             v-for="(ientry, i) in leaderboard"
-                            :key="ientry.user || i"
+                            :key="i"
                             class="board-row"
                             :class="{
                                 'top-1': i === 0,
@@ -73,14 +73,7 @@ export default {
                         <!-- Card Header Player -->
                         <div class="profile-header-card">
                             <div class="profile-info">
-                                <h1
-                                    class="player-title"
-                                    :class="{
-                                        'top-1': selected === 0,
-                                        'top-2': selected === 1,
-                                        'top-3': selected === 2
-                                    }"
-                                >
+                                <h1 class="player-title">
                                     #{{ selected + 1 }} - {{ entry.user }}
                                 </h1>
                                 
@@ -169,15 +162,15 @@ export default {
                         <div v-if="tab === 'uncompleted'" class="profile-section">
                             <div v-if="uncompletedLevels.length > 0" class="level-grid">
                                 <a 
-                                    v-for="score in uncompletedLevels"
-                                    :key="score.level"
-                                    :href="'/#/level/' + getLevelSlug(score.level)"
+                                    v-for="item in uncompletedLevels"
+                                    :key="item.level"
+                                    :href="'/#/level/' + getLevelSlug(item.level)"
                                     class="level-card uncompleted-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(score.level) + ')' }"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(item.level) + ')' }"
                                 >
                                     <div class="level-card-info">
-                                        <span class="level-rank">#{{ score.rank }}</span>
-                                        <span class="level-title">{{ score.level }}</span>
+                                        <span class="level-rank">#{{ item.rank }}</span>
+                                        <span class="level-title">{{ item.level }}</span>
                                     </div>
                                 </a>
                             </div>
@@ -215,7 +208,7 @@ export default {
     `,
     computed: {
         entry() {
-            if (!this.leaderboard || this.leaderboard.length === 0) return null;
+            if (!this.leaderboard || !this.leaderboard.length) return null;
             return this.leaderboard[this.selected] || null;
         },
         hardestLevel() {
@@ -223,41 +216,45 @@ export default {
             const verified = this.entry.verified || [];
             const completed = this.entry.completed || [];
             const allBeats = [...verified, ...completed];
-            if (allBeats.length === 0) return null;
+            if (!allBeats.length) return null;
             return allBeats.reduce((min, current) => (current.rank < min.rank ? current : min), allBeats[0]);
         },
-        // ĐƠN GIẢN NGHỊCH ĐẢO VỚI COMPLETED:
         uncompletedLevels() {
-            if (!this.entry || !this.list) return [];
-            
-            // Lấy danh sách tên các level đã completed (hoặc verified)
-            const completedNames = (this.entry.completed || []).map(c => c.level);
-            const verifiedNames = (this.entry.verified || []).map(v => v.level);
-            const doneSet = new Set([...completedNames, ...verifiedNames]);
+            if (!this.entry || !this.list || !this.list.length) return [];
 
-            // Lọc ra các level nằm trong list tổng mà CHƯA có trong doneSet
-            return this.list.filter(item => {
-                const levelName = item.level || item.name || (typeof item === 'string' ? item : '');
-                return !doneSet.has(levelName);
-            }).map((item, index) => ({
-                level: item.level || item.name || item,
-                rank: item.rank || (index + 1)
-            }));
+            // Lấy toàn bộ danh sách level player ĐÃ hoàn thành
+            const doneSet = new Set([
+                ...(this.entry.completed || []).map(c => String(c.level || c).toLowerCase()),
+                ...(this.entry.verified || []).map(v => String(v.level || v).toLowerCase())
+            ]);
+
+            // Lọc ra những level trong list tổng CHƯA có trong doneSet
+            return this.list
+                .filter(item => {
+                    const name = typeof item === 'string' ? item : (item.name || item.level || '');
+                    return name && !doneSet.has(name.toLowerCase());
+                })
+                .map((item, index) => {
+                    const name = typeof item === 'string' ? item : (item.name || item.level || '');
+                    return {
+                        level: name,
+                        rank: item.rank || (index + 1)
+                    };
+                });
         }
     },
     async mounted() {
         try {
-            const [leaderboard, err] = await fetchLeaderboard();
-            this.leaderboard = leaderboard || [];
-            this.err = err || [];
-            
+            const lbRes = await fetchLeaderboard();
+            this.leaderboard = (Array.isArray(lbRes) && lbRes[0]) ? lbRes[0] : (lbRes || []);
+            this.err = (Array.isArray(lbRes) && lbRes[1]) ? lbRes[1] : [];
+
             const listRes = await fetchList();
-            // Nếu fetchList trả về [list, err] thì lấy phần tử [0], ngược lại lấy chính nó
             this.list = (Array.isArray(listRes) && Array.isArray(listRes[0])) ? listRes[0] : (listRes || []);
         } catch (e) {
-            console.error(e);
+            console.error("Lỗi tải dữ liệu:", e);
         } finally {
-            // Đảm bảo luôn luôn tắt loading dù có lỗi xảy ra hay không
+            // Ép buộc tắt màn hình Loading bất chấp có lỗi hay không
             this.loading = false;
         }
     },
@@ -265,7 +262,7 @@ export default {
         localize,
         getLevelSlug(name) {
             if (!name) return '';
-            return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            return String(name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         },
         getLevelThumb(name) {
             return `data/${this.getLevelSlug(name)}/thumbnail.png`;
