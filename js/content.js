@@ -5,8 +5,6 @@ import {
 
 /**
  * Lấy danh sách level theo đúng thứ tự, đọc từ Firestore.
- * Trả về CÙNG SHAPE như bản cũ: mảng các tuple [level, err]
- * -> List.js, Leaderboard.js không cần sửa gì để dùng hàm này.
  */
 export async function fetchList() {
     let params = new URLSearchParams(document.location.search);
@@ -19,7 +17,10 @@ export async function fetchList() {
     try {
         const orderSnap = await getDoc(doc(db, "meta", orderId));
         if (!orderSnap.exists()) throw new Error("missing order doc");
-        const order = orderSnap.data().order || [];
+        
+        const data = orderSnap.data();
+        // Lấy thứ tự linh hoạt từ order, data hoặc list
+        const order = data.order || data.data || data.list || [];
 
         return await Promise.all(
             order.map(async (levelId, rank) => {
@@ -43,8 +44,8 @@ export async function fetchList() {
                 }
             }),
         );
-    } catch {
-        console.error(`Failed to load list.`);
+    } catch (err) {
+        console.error(`Failed to load list:`, err);
         return null;
     }
 }
@@ -53,7 +54,8 @@ export async function fetchPacks() {
     try {
         const orderSnap = await getDoc(doc(db, "meta", "packOrder"));
         if (!orderSnap.exists()) return [];
-        const order = orderSnap.data().order || [];
+        const data = orderSnap.data();
+        const order = data.order || data.data || [];
 
         return await Promise.all(
             order.map(async (packId, rank) => {
@@ -77,16 +79,13 @@ export async function fetchEditors() {
     try {
         const snap = await getDoc(doc(db, "meta", "editors"));
         if (!snap.exists()) return null;
-        return snap.data().list || null;
+        const data = snap.data();
+        return data.data || data.editors || data.list || null;
     } catch {
         return null;
     }
 }
 
-/**
- * Thay thế cho fetch('data/_players.json').
- * Trả về mảng giống hệt _players.json cũ: [{ name, youtube, facebook, gdvn, discord, avatarUrl? }, ...]
- */
 export async function fetchPlayers() {
     try {
         const snap = await getDocs(collection(db, "players"));
@@ -96,22 +95,21 @@ export async function fetchPlayers() {
     }
 }
 
-// Giữ lại tên cũ để không phá bất kỳ file nào khác (Roulette.js, Statistics.js...)
-// lỡ có import fetchSwagger / fetchScratchIds mà mình chưa thấy qua.
 export const fetchSwagger = fetchPlayers;
 
 export async function fetchScratchIds() {
     try {
         const snap = await getDoc(doc(db, "meta", "scratchIds"));
-        return snap.exists() ? snap.data().ids : null;
+        if (!snap.exists()) return null;
+        const data = snap.data();
+        return data.ids || data.data || null;
     } catch {
         return null;
     }
 }
 
 // ------------------------------------------------------------------
-// Các hàm dưới đây GIỮ NGUYÊN 100% logic gốc — chỉ phụ thuộc vào
-// fetchList() ở trên nên tự động hoạt động với Firestore, không cần sửa.
+// Các hàm Leaderboard & Calculations giữ nguyên
 // ------------------------------------------------------------------
 
 export async function fetchWhichLeaderboard() {
@@ -129,6 +127,7 @@ export async function fetchWhichLeaderboard() {
 
 export async function fetchLeaderboard() {
     const list = await fetchList();
+    if (!list) return [[], []];
 
     const scoreMap = {};
     const errs = [];
@@ -204,6 +203,7 @@ export async function fetchLeaderboard() {
 
 export async function fetchCreatorLeaderboard() {
     const list = await fetchList();
+    if (!list) return [[], []];
 
     const scoreMap = {};
     const errs = [];
@@ -262,7 +262,7 @@ export async function fetchCreatorLeaderboard() {
 
         for (let index = 0; index < level.creators.length; index++) {
             const creator = Object.keys(scoreMap).find(
-                (u) => u.toLowerCase() === level.creators.map(c => c.toLowerCase()),
+                (u) => u.toLowerCase() === level.creators[index].toLowerCase(),
             ) || level.creators[index];
             scoreMap[creator] ??= {
                 verified: [],
@@ -298,6 +298,7 @@ export async function fetchCreatorLeaderboard() {
 
 export async function fetchScratchPFPs() {
     const list = await fetchList();
+    if (!list) return [[], []];
 
     const scoreMap = {};
     const errs = [];
@@ -308,7 +309,7 @@ export async function fetchScratchPFPs() {
         }
         for (let index = 0; index < level.creators.length; index++) {
             const creator = Object.keys(scoreMap).find(
-                (u) => u.toLowerCase() === level.creators.map(c => c.toLowerCase()),
+                (u) => u.toLowerCase() === level.creators[index].toLowerCase(),
             ) || level.creators[index];
             scoreMap[creator] ??= {
                 verified: [],
