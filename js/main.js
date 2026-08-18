@@ -1,8 +1,16 @@
 import routes from './routes.js';
 import "./ripple.js";
-import './auth.js'; // Import để gắn listener cho Modal Auth
 import {
-    auth, db, doc, getDoc, onAuthStateChanged,
+    auth,
+    db,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
 } from './firebase-init.js';
 
 export const store = Vue.reactive({
@@ -10,6 +18,20 @@ export const store = Vue.reactive({
     darker: JSON.parse(localStorage.getItem('darker')) ?? false,
     user: null,
     authLoading: true,
+
+    // Modal state
+    showAuthModal: false,
+    showProfileModal: false,
+    isLoginMode: true,
+
+    // Form inputs
+    authEmail: '',
+    authPassword: '',
+    authUsername: '',
+    editUsername: '',
+    editAvatar: '',
+    editSocial: '',
+
     toggleDark() {
         if (this.dark == true && this.darker == false) {
             this.darker = true;
@@ -20,6 +42,84 @@ export const store = Vue.reactive({
         localStorage.setItem('dark', JSON.stringify(this.dark));
         localStorage.setItem('darker', JSON.stringify(this.darker));
     },
+
+    toggleAuthMode() {
+        this.isLoginMode = !this.isLoginMode;
+    },
+
+    openProfileModal() {
+        if (this.user) {
+            this.editUsername = this.user.username || '';
+            this.editAvatar = this.user.avatar || '';
+            this.editSocial = this.user.socialLink || '';
+            this.showProfileModal = true;
+        }
+    },
+
+    async handleAuth() {
+        try {
+            if (this.isLoginMode) {
+                await signInWithEmailAndPassword(auth, this.authEmail, this.authPassword);
+                alert('Đăng nhập thành công!');
+            } else {
+                if (!this.authUsername.trim()) {
+                    alert('Vui lòng nhập tên Player!');
+                    return;
+                }
+                const userCredential = await createUserWithEmailAndPassword(auth, this.authEmail, this.authPassword);
+                const uid = userCredential.user.uid;
+
+                await setDoc(doc(db, 'users', uid), {
+                    username: this.authUsername.trim(),
+                    username_lowercase: this.authUsername.trim().toLowerCase(),
+                    email: this.authEmail,
+                    avatar: '',
+                    socialLink: '',
+                    role: 'player',
+                    createdAt: new Date().toISOString()
+                });
+                alert('Đăng ký tài khoản thành công!');
+            }
+            this.showAuthModal = false;
+            this.authEmail = '';
+            this.authPassword = '';
+            this.authUsername = '';
+        } catch (err) {
+            alert('Lỗi: ' + err.message);
+        }
+    },
+
+    async handleUpdateProfile() {
+        if (!this.user) return;
+        try {
+            const username = this.editUsername.trim();
+            const avatar = this.editAvatar.trim();
+            const socialLink = this.editSocial.trim();
+
+            await updateDoc(doc(db, 'users', this.user.uid), {
+                username,
+                username_lowercase: username.toLowerCase(),
+                avatar,
+                socialLink
+            });
+
+            this.user.username = username;
+            this.user.avatar = avatar;
+            this.user.socialLink = socialLink;
+
+            alert('Cập nhật Profile thành công!');
+            this.showProfileModal = false;
+        } catch (err) {
+            alert('Lỗi khi cập nhật profile: ' + err.message);
+        }
+    },
+
+    async handleLogout() {
+        if (confirm("Are you sure you want to log out?")) {
+            await signOut(auth);
+            alert("Đã đăng xuất!");
+        }
+    }
 });
 
 // Lắng nghe trạng thái đăng nhập Firebase
@@ -32,8 +132,9 @@ onAuthStateChanged(auth, async (fbUser) => {
             store.user = {
                 uid: fbUser.uid,
                 email: fbUser.email,
-                displayName: userData.username || fbUser.displayName || fbUser.email.split('@')[0],
+                username: userData.username || fbUser.displayName || fbUser.email.split('@')[0],
                 avatar: userData.avatar || '',
+                socialLink: userData.socialLink || '',
                 role: userData.role || 'player',
             };
         } catch (e) {
@@ -41,8 +142,9 @@ onAuthStateChanged(auth, async (fbUser) => {
             store.user = {
                 uid: fbUser.uid,
                 email: fbUser.email,
-                displayName: fbUser.email.split('@')[0],
+                username: fbUser.email.split('@')[0],
                 avatar: '',
+                socialLink: '',
                 role: 'player',
             };
         }
@@ -64,7 +166,6 @@ const router = VueRouter.createRouter({
 app.use(router);
 app.mount("#app");
 
-// Hiệu ứng thanh gạch chân Navigation
 function initNavUnderline() {
     const nav = document.querySelector(".nav");
     if (!nav) return;
@@ -96,7 +197,6 @@ function initNavUnderline() {
     nav.onmouseleave = moveToActive;
 }
 
-// Lắng nghe sự kiện chuyển trang để vẽ lại underline
 Vue.nextTick(initNavUnderline);
 router.afterEach(() => {
     Vue.nextTick(initNavUnderline);
