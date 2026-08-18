@@ -11,6 +11,7 @@ export default {
         list: [],
         loading: true,
         selected: 0,
+        tab: 'hardest', // Mặc định hiển thị Hardest
         err: [],
         playerSocials: {},
         copiedDiscord: false,
@@ -85,7 +86,6 @@ export default {
                                     #{{ selected + 1 }} - {{ entry.user }}
                                 </h1>
                                 
-                                <!-- Dòng 1: Nút điểm số Pts -->
                                 <div class="player-stats-row">
                                     <span class="stat-badge score-gold">
                                         ⚡ {{ localize(entry.total) }} pts
@@ -93,7 +93,7 @@ export default {
                                 </div>
                             </div>
 
-                            <!-- Khối Avatar + Social Icons (Gồm Discord, YT, FB, GDVN) -->
+                            <!-- Khối Avatar + Social Icons -->
                             <div class="profile-avatar-box">
                                 <img 
                                     class="profile-user-avatar" 
@@ -102,9 +102,7 @@ export default {
                                     @error="$event.target.src='assets/avatars/default.png'"
                                 />
 
-                                <!-- Social Icons dưới Avatar -->
                                 <div v-if="currentSocials" class="player-socials-row">
-                                    <!-- Discord Tag -->
                                     <div 
                                         v-if="currentSocials.discord" 
                                         class="discord-tag"
@@ -116,7 +114,6 @@ export default {
                                         <span v-if="copiedDiscord" class="copy-toast">Copied!</span>
                                     </div>
 
-                                    <!-- YouTube -->
                                     <a 
                                         v-if="currentSocials.youtube" 
                                         :href="currentSocials.youtube" 
@@ -128,7 +125,6 @@ export default {
                                         <img src="assets/youtube.svg" class="social-icon" alt="YouTube" />
                                     </a>
 
-                                    <!-- Facebook -->
                                     <a 
                                         v-if="currentSocials.facebook" 
                                         :href="currentSocials.facebook" 
@@ -140,7 +136,6 @@ export default {
                                         <img src="assets/facebook.svg" class="social-icon" alt="Facebook" />
                                     </a>
 
-                                    <!-- GDVN -->
                                     <a 
                                         v-if="currentSocials.gdvn" 
                                         :href="currentSocials.gdvn" 
@@ -155,56 +150,49 @@ export default {
                             </div>
                         </div>
 
-                        <!-- HARDEST LEVEL CARD -->
-                        <div v-if="hardestLevel" class="profile-section">
-                            <h2 class="section-title">🏆 Hardest Beat</h2>
-                            <a 
-                                :href="getScoreLink(hardestLevel)"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="level-card hardest-card"
-                                :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url(' + getLevelThumb(hardestLevel.level) + ')' }"
-                            >
-                                <div class="level-card-info">
-                                    <span class="level-rank">#{{ hardestLevel.rank }}</span>
-                                    <div class="level-name-wrap">
-                                        <span class="level-title">{{ hardestLevel.level }}</span>
-                                    </div>
-                                </div>
-                                <div class="level-card-score">
-                                    +{{ localize(hardestLevel.score) }} pts
-                                </div>
-                            </a>
+                        <!-- 4 Nút Điều Hướng Tab Filter -->
+                        <div class="filter-tabs">
+                            <button :class="{ active: tab === 'hardest' }" @click="tab = 'hardest'">
+                                🏆 Hardest
+                            </button>
+                            <button :class="{ active: tab === 'completed' }" @click="tab = 'completed'">
+                                ✅ Completed ({{ (entry.completed || []).length }})
+                            </button>
+                            <button :class="{ active: tab === 'uncompleted' }" @click="tab = 'uncompleted'">
+                                ❌ Uncompleted ({{ uncompletedLevels.length }})
+                            </button>
+                            <button :class="{ active: tab === 'verified' }" @click="tab = 'verified'">
+                                👑 Verified ({{ (entry.verified || []).length }})
+                            </button>
                         </div>
 
-                        <!-- VERIFIED LEVELS -->
-                        <div v-if="entry.verified && entry.verified.length > 0" class="profile-section">
-                            <h2 class="section-title">👑 Verified ({{ entry.verified.length }})</h2>
-                            <div class="level-grid">
+                        <!-- TAB 1: HARDEST LEVEL CARD -->
+                        <div v-if="tab === 'hardest'" class="profile-section">
+                            <div v-if="hardestLevel">
                                 <a 
-                                    v-for="score in entry.verified"
-                                    :key="score.level"
-                                    :href="getScoreLink(score)"
+                                    :href="getScoreLink(hardestLevel)"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    class="level-card"
-                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url(' + getLevelThumb(score.level) + ')' }"
+                                    class="level-card hardest-card"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url(' + getLevelThumb(hardestLevel.level) + ')' }"
                                 >
                                     <div class="level-card-info">
-                                        <span class="level-rank">#{{ score.rank }}</span>
-                                        <span class="level-title">{{ score.level }}</span>
+                                        <span class="level-rank">#{{ hardestLevel.rank }}</span>
+                                        <div class="level-name-wrap">
+                                            <span class="level-title">{{ hardestLevel.level }}</span>
+                                        </div>
                                     </div>
                                     <div class="level-card-score">
-                                        +{{ localize(score.score) }} pts
+                                        +{{ localize(hardestLevel.score) }} pts
                                     </div>
                                 </a>
                             </div>
+                            <p v-else class="empty-msg">Chưa có level nào hoàn thành.</p>
                         </div>
 
-                        <!-- COMPLETED LEVELS -->
-                        <div v-if="entry.completed && entry.completed.length > 0" class="profile-section">
-                            <h2 class="section-title">✅ Completed ({{ entry.completed.length }})</h2>
-                            <div class="level-grid">
+                        <!-- TAB 2: COMPLETED LEVELS -->
+                        <div v-if="tab === 'completed'" class="profile-section">
+                            <div v-if="entry.completed && entry.completed.length > 0" class="level-grid">
                                 <a 
                                     v-for="score in entry.completed"
                                     :key="score.level"
@@ -223,14 +211,33 @@ export default {
                                     </div>
                                 </a>
                             </div>
+                            <p v-else class="empty-msg">Không có level đã hoàn thành.</p>
                         </div>
 
-                        <!-- PROGRESSED LEVELS -->
-                        <div v-if="entry.progressed && entry.progressed.length > 0" class="profile-section">
-                            <h2 class="section-title">🎯 Progressed ({{ entry.progressed.length }})</h2>
-                            <div class="level-grid">
+                        <!-- TAB 3: UNCOMPLETED LEVELS -->
+                        <div v-if="tab === 'uncompleted'" class="profile-section">
+                            <div v-if="uncompletedLevels.length > 0" class="level-grid">
                                 <a 
-                                    v-for="score in entry.progressed"
+                                    v-for="level in uncompletedLevels"
+                                    :key="level.name || level.level || level"
+                                    :href="'/#/level/' + getLevelSlug(level.name || level.level || level)"
+                                    class="level-card uncompleted-card"
+                                    :style="{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.85)), url(' + getLevelThumb(level.name || level.level || level) + ')' }"
+                                >
+                                    <div class="level-card-info">
+                                        <span class="level-rank" v-if="level.rank">#{{ level.rank }}</span>
+                                        <span class="level-title">{{ level.name || level.level || level }}</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <p v-else class="empty-msg">Đã hoàn thành toàn bộ danh sách!</p>
+                        </div>
+
+                        <!-- TAB 4: VERIFIED LEVELS -->
+                        <div v-if="tab === 'verified'" class="profile-section">
+                            <div v-if="entry.verified && entry.verified.length > 0" class="level-grid">
+                                <a 
+                                    v-for="score in entry.verified"
                                     :key="score.level"
                                     :href="getScoreLink(score)"
                                     target="_blank"
@@ -240,13 +247,14 @@ export default {
                                 >
                                     <div class="level-card-info">
                                         <span class="level-rank">#{{ score.rank }}</span>
-                                        <span class="level-title">{{ score.percent }}% {{ score.level }}</span>
+                                        <span class="level-title">{{ score.level }}</span>
                                     </div>
                                     <div class="level-card-score">
                                         +{{ localize(score.score) }} pts
                                     </div>
                                 </a>
                             </div>
+                            <p v-else class="empty-msg">Chưa verified level nào.</p>
                         </div>
 
                     </div>
@@ -266,6 +274,22 @@ export default {
             const allBeats = [...verified, ...completed];
             if (allBeats.length === 0) return null;
             return allBeats.reduce((min, current) => (current.rank < min.rank ? current : min), allBeats[0]);
+        },
+        uncompletedLevels() {
+            if (!this.entry || !this.list) return [];
+            
+            // Lấy danh sách tên tất cả level player đã làm (Verified + Completed + Progressed)
+            const beatenNames = new Set([
+                ...(this.entry.verified || []).map(l => (l.level || '').toLowerCase()),
+                ...(this.entry.completed || []).map(l => (l.level || '').toLowerCase()),
+                ...(this.entry.progressed || []).map(l => (l.level || '').toLowerCase())
+            ]);
+
+            // Lọc ra các level trong tổng danh sách chưa được player chinh phục
+            return this.list.filter(item => {
+                const name = typeof item === 'string' ? item : (item.name || item.level || '');
+                return name && !beatenNames.has(name.toLowerCase());
+            });
         },
         currentSocials() {
             if (!this.entry || !this.entry.user) return null;
