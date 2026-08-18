@@ -1,4 +1,4 @@
-import { fetchLeaderboard, fetchList } from '../content.js';
+import { fetchLeaderboard } from '../content.js';
 import { localize } from '../util.js';
 import Spinner from '../components/Spinner.js';
 
@@ -278,40 +278,39 @@ export default {
         uncompletedLevels() {
             if (!this.entry || !this.list || this.list.length === 0) return [];
             
-            // Lấy toàn bộ danh sách tên level đã làm (viết thường để so sánh)
-            const beatenNames = new Set([
-                ...(this.entry.verified || []).map(l => (l.level || l.name || '').toString().toLowerCase()),
-                ...(this.entry.completed || []).map(l => (l.level || l.name || '').toString().toLowerCase()),
-                ...(this.entry.progressed || []).map(l => (l.level || l.name || '').toString().toLowerCase())
+            // Hàm chuẩn hóa tên level loại bỏ ký tự đặc biệt để so sánh chính xác 100%
+            const normalizeName = (str) => {
+                if (!str) return '';
+                return str.toString()
+                    .toLowerCase()
+                    .replace(/\.json$/i, '')
+                    .replace(/[^a-z0-9]/g, '');
+            };
+
+            // Tập hợp các level player đã beat / verified / progress
+            const beatenSet = new Set([
+                ...(this.entry.verified || []).map(l => normalizeName(l.level || l.name)),
+                ...(this.entry.completed || []).map(l => normalizeName(l.level || l.name)),
+                ...(this.entry.progressed || []).map(l => normalizeName(l.level || l.name))
             ]);
 
             const uncompleted = [];
 
             this.list.forEach((item, index) => {
-                if (!item) return;
-
-                // Xử lý các dạng dữ liệu khác nhau của item trong list
-                let rawItem = item;
-                if (Array.isArray(item)) rawItem = item[0];
-
-                let name = '';
-                if (typeof rawItem === 'string') {
-                    name = rawItem;
-                } else if (typeof rawItem === 'object' && rawItem !== null) {
-                    name = rawItem.name || rawItem.level || rawItem.path || '';
+                let rawName = typeof item === 'string' ? item : (item.name || item.level || item.path || '');
+                
+                // Chuyển tên file slug thành tên đẹp hiển thị
+                let displayName = rawName.replace(/\.json$/i, '').replace(/[-_]/g, ' ');
+                if (typeof item === 'object' && item.name) {
+                    displayName = item.name;
                 }
 
-                // Nếu name là dạng đường dẫn file (vd: "knee_guards_chal_5.json" hoặc "knee-guards-chal-5")
-                // Tiến hành chuẩn hóa để lấy tên hiển thị
-                if (name.endsWith('.json')) {
-                    name = name.replace('.json', '');
-                }
+                const cleanKey = normalizeName(rawName);
 
-                const cleanName = name.trim();
-                if (cleanName && !beatenNames.has(cleanName.toLowerCase())) {
+                if (cleanKey && !beatenSet.has(cleanKey)) {
                     uncompleted.push({
-                        name: cleanName,
-                        rank: rawItem.rank || (index + 1)
+                        name: displayName,
+                        rank: item.rank || (index + 1)
                     });
                 }
             });
@@ -325,34 +324,57 @@ export default {
     },
     async mounted() {
         try {
+            // Lấy dữ liệu Bảng xếp hạng
             const [leaderboard, err] = await fetchLeaderboard();
-            const listRes = await fetchList();
-
-            // Kiểm tra cấu trúc trả về từ fetchList()
-            if (Array.isArray(listRes)) {
-                // Nếu fetchList trả về [listData, err]
-                if (Array.isArray(listRes[0])) {
-                    this.list = listRes[0];
-                } else {
-                    this.list = listRes;
-                }
-            } else if (listRes && Array.isArray(listRes.list)) {
-                this.list = listRes.list;
-            } else {
-                this.list = [];
-            }
-
             this.leaderboard = leaderboard || [];
             this.err = err || [];
 
-            // In ra Console để debug nếu cần kiểm tra
-            console.log("Dữ liệu list đã load:", this.list);
-            console.log("Dữ liệu leaderboard đã load:", this.leaderboard);
+            // ĐỌC TRỰC TIẾP FILE LIST TỪ `data/_list.json` HOẶC `data/list.json`
+            let listData = [];
+            try {
+                const listRes = await fetch('data/_list.json');
+                if (listRes.ok) {
+                    listData = await listRes.json();
+                } else {
+                    const fallbackRes = await fetch('data/list.json');
+                    if (fallbackRes.ok) listData = await fallbackRes.json();
+                }
+            } catch (errList) {
+                console.warn("Không đọc được _list.json trực tiếp:", errList);
+            }
+
+            // Tiến hành đọc nội dung chi tiết tên level nếu _list.json chứa danh sách đường dẫn
+            if (Array.isArray(listData) && listData.length > 0) {
+                const fullList = await Promise.all(listData.map(async (path, index) => {
+                    if (typeof path === 'object') return path;
+                    
+                    const levelSlug = path.replace('.json', '');
+                    try {
+                        const levelRes = await fetch(`data/${levelSlug}.json`);
+                        if (levelRes.ok) {
+                            const levelJson = await levelRes.json();
+                            return {
+                                name: levelJson.name || levelSlug,
+                                rank: index + 1
+                            };
+                        }
+                    } catch (e) {}
+
+                    // Fallback nếu không load được file level chi tiết
+                    return {
+                        name: levelSlug.replace(/[-_]/g, ' '),
+                        rank: index + 1
+                    };
+                }));
+
+                this.list = fullList;
+            }
 
         } catch (e) {
-            console.error("Lỗi fetchLeaderboard / fetchList:", e);
+            console.error("Lỗi khởi tạo Leaderboard:", e);
         }
 
+        // Fetch Social Media Players
         try {
             const res = await fetch('data/_players.json');
             if (res.ok) {
@@ -368,7 +390,7 @@ export default {
                 this.playerSocials = map;
             }
         } catch (e) {
-            console.warn("Chưa tìm thấy hoặc lỗi đọc file data/_players.json", e);
+            console.warn("Chưa tìm thấy data/_players.json", e);
         }
 
         this.loading = false;
