@@ -80,12 +80,14 @@
 
                     <!-- Authentication Container (Nút Đăng nhập/Profile) -->
                     <div id="auth-container" style="display: inline-flex; align-items: center; gap: 10px; margin-left: 5px;">
-                        <button id="auth-open-btn" class="nav__cta type-label-lg ripple" style="cursor: pointer; background: #4f46e5; border: none; white-space: nowrap;">Login / Register</button>
+                        <button id="auth-open-btn" class="nav__cta type-label-lg ripple" style="cursor: pointer; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: #ffffff; font-weight: 700; border: 1px solid #c084fc; box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); white-space: nowrap; transition: all 0.2s;">
+                            Login / Register
+                        </button>
                         
                         <div id="user-profile" style="display: none; align-items: center; gap: 8px;">
-                            <span id="user-name-display" style="color: #fff; font-weight: bold; font-size: 14px;"></span>
-                            <span id="admin-badge" style="display: none; background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold;">ADMIN</span>
-                            <button id="logout-btn" class="nav__cta type-label-lg ripple" style="background: #374151; border: none; padding: 6px 12px; cursor: pointer;">Logout</button>
+                            <span id="user-name-display" style="color: #ffffff; font-weight: 700; font-size: 14px; text-shadow: 0 0 5px rgba(255,255,255,0.3);"></span>
+                            <span id="admin-badge" style="display: none; background: #ef4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);">ADMIN</span>
+                            <button id="logout-btn" class="nav__cta type-label-lg ripple" style="background: #374151; color: #f3f4f6; border: 1px solid #4b5563; padding: 6px 12px; cursor: pointer;">Logout</button>
                         </div>
                     </div>
                 </div>
@@ -114,12 +116,12 @@
                         <input type="password" id="auth-password" required placeholder="••••••••" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #3f3f46; background: #27272a; color: white; box-sizing: border-box;">
                     </div>
 
-                    <button type="submit" id="auth-submit-btn" style="margin-top: 10px; padding: 10px; background: #4f46e5; border: none; color: white; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: inherit;">Login</button>
+                    <button type="submit" id="auth-submit-btn" style="margin-top: 10px; padding: 10px; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); border: none; color: white; border-radius: 4px; cursor: pointer; font-weight: bold; font-family: inherit;">Login</button>
                 </form>
 
                 <div style="margin-top: 15px; font-size: 13px; text-align: center; color: #a1a1aa;">
                     <span id="toggle-text">Don't have an account?</span> 
-                    <a href="javascript:void(0)" id="toggle-auth-btn" style="color: #6366f1; text-decoration: underline; margin-left: 4px;">Register now</a>
+                    <a href="javascript:void(0)" id="toggle-auth-btn" style="color: #c084fc; text-decoration: underline; margin-left: 4px; font-weight: 600;">Register now</a>
                 </div>
                 <button id="close-modal-btn" style="width: 100%; background: transparent; border: none; color: #71717a; cursor: pointer; margin-top: 10px; font-size: 12px;">Cancel</button>
             </div>
