@@ -257,6 +257,7 @@ input[type="radio"] {
 .player-stats-row {
     display: flex !important;
     align-items: center !important;
+    margin-bottom: 8px !important;
     margin-bottom: 0 !important;
 }
 
@@ -272,11 +273,40 @@ input[type="radio"] {
     box-shadow: 0 0 12px rgba(255, 183, 3, 0.2) !important;
 }
 
+/* Dòng Discord nằm dưới Pts (TRÂN TRẦN, KHÔNG KHUNG) */
+.discord-text-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding-left: 2px !important;
+    margin-top: 4px !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.discord-text-icon,
+.discord-badge-icon {
+    width: 20px !important;
+    height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
+}
+
+.discord-text-id {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+}
+
 /* --- Khung Avatar & Social Icons --- */
 .profile-avatar-box {
     flex-shrink: 0 !important;
     display: flex !important;
     flex-direction: column !important;
+    align-items: center !important;
     align-items: flex-end !important;
     gap: 10px !important;
 }
@@ -291,11 +321,14 @@ input[type="radio"] {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
+/* Social icons nằm hàng ngang dưới Avatar */
 /* Social icons + Discord Tag nằm hàng ngang dưới Avatar */
 .player-socials-row {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
     justify-content: flex-end !important;
     gap: 10px !important;
     width: 100% !important;
@@ -366,6 +399,7 @@ input[type="radio"] {
     width: 22px !important;
     height: 22px !important;
     object-fit: contain !important;
+    opacity: 0.8 !important;
     opacity: 0.85 !important;
     transition: transform 0.2s ease, opacity 0.2s ease !important;
     display: block !important;
@@ -373,11 +407,14 @@ input[type="radio"] {
 
 .player-socials-row .social-icon:hover {
     opacity: 1 !important;
+    transform: scale(1.25) !important;
     transform: scale(1.2) !important;
 }
 
+/* Icon tùy chỉnh cho GDVN */
 .social-icon.gdvn-icon {
     width: auto !important;
+    height: 28px !important;
     height: 26px !important;
     max-width: 60px !important;
     border-radius: 4px !important;
@@ -385,6 +422,7 @@ input[type="radio"] {
 }
 
 .social-icon.gdvn-icon:hover {
+    transform: scale(1.15) !important;
     transform: scale(1.1) !important;
 }
 
@@ -462,54 +500,4 @@ input[type="radio"] {
     padding: 4px 10px !important;
     border-radius: 6px !important;
     border: 1px solid rgba(76, 201, 240, 0.3) !important;
-}
-/* ================= TABS SWITCHER (COMPLETED / UNCOMPLETED) ================= */
-
-.tab-header {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-  border-bottom: 2px solid #2a2a35;
-  padding-bottom: 8px;
-}
-
-.tab-btn {
-  background: transparent;
-  border: none;
-  color: #8a8a9a;
-  font-size: 1.1rem;
-  font-weight: bold;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.tab-btn:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.tab-btn.active {
-  color: #ffffff;
-  background: #2a2a38;
-  border-bottom: 3px solid #ffbf00;
-}
-
-/* Thẻ Uncompleted mờ nhẹ hơn để phân biệt */
-.uncompleted-card {
-  opacity: 0.75;
-  filter: grayscale(30%);
-  transition: all 0.2s ease;
-}
-
-.uncompleted-card:hover {
-  opacity: 1;
-  filter: grayscale(0%);
-}
-
-.empty-msg {
-  color: #777;
-  font-style: italic;
-  padding: 12px 0;
 }
