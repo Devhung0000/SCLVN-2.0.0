@@ -99,16 +99,27 @@ export default {
             this.loading = true;
             try {
                 if (this.mode === 'register') {
-                    if (!this.displayName.trim()) {
+                    const cleanUsername = this.displayName.trim();
+                    if (!cleanUsername) {
                         throw new Error('Vui lòng nhập tên Geometry Dash (tên hiển thị).');
                     }
                     if (!this.email || !this.password) {
                         throw new Error('Vui lòng nhập đầy đủ Email và Mật khẩu.');
                     }
 
+                    // 1. Check trùng Tên GD trong Firestore trước khi cho Đăng ký
+                    const usersRef = collection(db, 'users');
+                    const checkQuery = query(usersRef, where('username_lowercase', '==', cleanUsername.toLowerCase()));
+                    const checkSnap = await getDocs(checkQuery);
+                    
+                    if (!checkSnap.empty) {
+                        throw new Error('Tên Geometry Dash này đã được sử dụng!');
+                    }
+
+                    // 2. Tiến hành tạo Auth
                     const cred = await createUserWithEmailAndPassword(auth, this.email, this.password);
-                    await updateProfile(cred.user, { displayName: this.displayName.trim() });
-                    await this.ensureUserDoc(cred.user.uid, this.email, this.displayName.trim());
+                    await updateProfile(cred.user, { displayName: cleanUsername });
+                    await this.ensureUserDoc(cred.user.uid, this.email, cleanUsername);
                 } else {
                     // Xử lý Đăng nhập bằng Tên GD hoặc Email
                     const input = this.usernameOrEmail.trim();
@@ -118,7 +129,7 @@ export default {
 
                     let targetEmail = input;
 
-                    // Nếu người dùng KHÔNG nhập email (không có ký tự '@'), tiến hành tra cứu từ Firestore
+                    // Nếu không phải là email (không chứa '@'), tìm Email tương ứng qua Tên GD
                     if (!input.includes('@')) {
                         const usersRef = collection(db, 'users');
                         const q = query(usersRef, where('username_lowercase', '==', input.toLowerCase()));
