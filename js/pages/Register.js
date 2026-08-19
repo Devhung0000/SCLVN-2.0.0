@@ -1,39 +1,35 @@
-import { 
-    auth, 
-    db, 
-    createUserWithEmailAndPassword, 
-    doc, 
-    setDoc 
-} from '../firebase-init.js';
+import { auth, db } from '../firebase-init.js';
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.x.x/firebase-auth.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore.js";
 
 export function RegisterPage() {
   return `
-    <div class="auth-container" style="max-width: 400px; margin: 40px auto; padding: 24px; background: #121216; border-radius: 12px; color: #fff;">
-      <h2 style="margin-bottom: 20px; text-align: center;">Tạo tài khoản</h2>
-      <form id="register-form" style="display: flex; flex-direction: column; gap: 16px;">
+    <div class="auth-container">
+      <h2>Tạo tài khoản</h2>
+      <form id="register-form">
         <div class="input-group">
-          <label style="display: block; margin-bottom: 6px; font-size: 14px;">Tên Geometry Dash (Player Name):</label>
-          <input type="text" id="reg-username" placeholder="Nhập GD Username..." required 
-                 style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #1a1a20; color: #fff;" />
+          <input type="text" id="reg-username" placeholder="Tên Geometry Dash (Player Name)" required />
         </div>
         <div class="input-group">
-          <label style="display: block; margin-bottom: 6px; font-size: 14px;">Mật khẩu:</label>
-          <input type="password" id="reg-password" placeholder="Tối thiểu 6 ký tự" required 
-                 style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #1a1a20; color: #fff;" />
+          <input type="email" id="reg-email" placeholder="Email của bạn" required />
+        </div>
+        <div class="input-group">
+          <input type="password" id="reg-password" placeholder="Mật khẩu" required />
         </div>
         
-        <p id="error-message" class="error-text" style="color: #ff4d4d; display: none; font-size: 14px; margin: 0;"></p>
+        <p id="error-message" class="error-text" style="color: #ff4d4d; display: none;"></p>
 
-        <button type="submit" class="btn-submit" style="padding: 12px; border-radius: 6px; border: none; background: #a855f7; color: #fff; font-weight: bold; cursor: pointer;">Đăng ký</button>
+        <button type="submit" class="btn-submit">Đăng ký</button>
       </form>
       
-      <p class="auth-switch" style="margin-top: 16px; text-align: center; font-size: 14px; color: #aaa;">
-        Đã có tài khoản? <a href="#/login" style="color: #a855f7;">Đăng nhập</a>
+      <p class="auth-switch">
+        Đã có tài khoản? <a href="#/login">Đăng nhập</a>
       </p>
     </div>
   `;
 }
 
+// Hàm gắn sự kiện Submit Form (Gọi sau khi render HTML ra màn hình)
 export function initRegisterEvents() {
   const form = document.getElementById('register-form');
   if (!form) return;
@@ -42,36 +38,34 @@ export function initRegisterEvents() {
     e.preventDefault();
 
     const username = document.getElementById('reg-username').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
     const password = document.getElementById('reg-password').value;
     const errorEl = document.getElementById('error-message');
 
     errorEl.style.display = 'none';
 
-    // Biến Username thành Email ảo hợp lệ cho Firebase
-    const cleanUsername = username.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const virtualEmail = `${cleanUsername}@sclvn.local`;
-
     try {
-      // 1. Tạo user trong Firebase Auth bằng Email ảo
-      const userCredential = await createUserWithEmailAndPassword(auth, virtualEmail, password);
+      // 1. Tạo tài khoản trong Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // 2. Lưu tên GD thật vào Firestore Database
+      // 2. Lưu profile user vào Firestore Database
       await setDoc(doc(db, "users", user.uid), {
         username: username,
-        username_lowercase: username.toLowerCase(),
+        username_lowercase: username.toLowerCase(), // Lưu để sau này đăng nhập bằng Username
+        email: email,
         role: "player",
         createdAt: new Date().toISOString()
       });
 
       alert("Đăng ký thành công!");
-      window.location.hash = "#/";
+      window.location.hash = "#/"; // Chuyển về trang chủ
 
     } catch (error) {
       console.error(error);
       errorEl.style.display = 'block';
       if (error.code === 'auth/email-already-in-use') {
-        errorEl.textContent = 'Tên Geometry Dash này đã được đăng ký!';
+        errorEl.textContent = 'Email này đã được đăng ký rồi.';
       } else if (error.code === 'auth/weak-password') {
         errorEl.textContent = 'Mật khẩu phải có ít nhất 6 ký tự.';
       } else {
@@ -80,10 +74,3 @@ export function initRegisterEvents() {
     }
   });
 }
-
-export default {
-    template: RegisterPage(),
-    mounted() {
-        initRegisterEvents();
-    }
-};
