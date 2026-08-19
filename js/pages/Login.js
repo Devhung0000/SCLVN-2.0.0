@@ -1,235 +1,210 @@
-import { store } from '../main.js';
+import routes from './routes.js';
+import "./ripple.js";
 import {
     auth,
     db,
     doc,
-    setDoc,
     getDoc,
-    collection,
-    query,
-    where,
-    getDocs,
+    setDoc,
+    updateDoc,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signInWithPopup,
     signOut,
-    GoogleAuthProvider,
-    updateProfile,
-} from '../firebase-init.js';
+    onAuthStateChanged
+} from './firebase-init.js';
 
-export default {
-    data: () => ({
-        mode: 'login',
-        usernameOrEmail: '',
-        email: '',
-        password: '',
-        displayName: '',
-        error: '',
-        loading: false,
-        store,
-    }),
-    template: `
-        <main class="page-auth" style="display:flex; justify-content:center; padding: 3rem 1rem;">
-            <div style="width: 100%; max-width: 400px; display:flex; flex-direction:column; gap:1rem;">
+export const store = Vue.reactive({
+    dark: JSON.parse(localStorage.getItem('dark')) ?? true,
+    darker: JSON.parse(localStorage.getItem('darker')) ?? false,
+    user: null,
+    authLoading: true,
 
-                <template v-if="store.user">
-                    <h1>Xin chào, {{ store.user.displayName || 'Player' }}!</h1>
-                    <p class="type-body-lg">Bạn đã đăng nhập bằng {{ store.user.email }}.</p>
-                    <router-link class="btn" to="/submit">Đi tới trang Nộp Record</router-link>
-                    <router-link v-if="store.user.role === 'admin'" class="btn" to="/admin">Đi tới trang Duyệt Record</router-link>
-                    <button class="btn" @click="logout">Đăng xuất</button>
-                </template>
+    // Modal state
+    showAuthModal: false,
+    showProfileModal: false,
+    isLoginMode: true,
 
-                <template v-else>
-                    <h1>{{ mode === 'login' ? 'Đăng nhập' : 'Tạo tài khoản' }}</h1>
+    // Form inputs
+    authEmail: '',
+    authPassword: '',
+    authUsername: '',
+    editUsername: '',
+    editAvatar: '',
+    editSocial: '',
 
-                    <!-- Form Đăng ký -->
-                    <template v-if="mode === 'register'">
-                        <input v-model="displayName" class="btn" type="text" placeholder="Tên Geometry Dash (Tên player của bạn)" />
-                        <input v-model="email" class="btn" type="email" placeholder="Email" />
-                    </template>
-
-                    <!-- Form Đăng nhập -->
-                    <template v-else>
-                        <input v-model="usernameOrEmail" class="btn" type="text" placeholder="Tên Geometry Dash" />
-                    </template>
-
-                    <input v-model="password" class="btn" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" @keyup.enter="submit" />
-
-                    <p v-if="error" class="error" style="color: #ff4d4d; margin: 0;">{{ error }}</p>
-
-                    <button class="btn" :disabled="loading" @click="submit">
-                        {{ loading ? 'Đang xử lý...' : (mode === 'login' ? 'Đăng nhập' : 'Đăng ký') }}
-                    </button>
-
-                    <button class="btn" :disabled="loading" @click="googleSignIn">
-                        Đăng nhập bằng Google
-                    </button>
-
-                    <p class="type-label-md" style="cursor:pointer; text-decoration:underline;" @click="toggleMode">
-                        {{ mode === 'login' ? 'Chưa có tài khoản? Đăng ký ngay' : 'Đã có tài khoản? Đăng nhập' }}
-                    </p>
-                </template>
-            </div>
-        </main>
-    `,
-    methods: {
-        toggleMode() {
-            this.mode = this.mode === 'login' ? 'register' : 'login';
-            this.error = '';
-        },
-
-        // Tìm data cũ của player (avatar/social) trong collection "players"
-        // (được seed từ _players.json / được các user khác cập nhật qua trang Profile)
-        async findClaimablePlayer(lowerUsername) {
-            try {
-                const playerSnap = await getDoc(doc(db, 'players', lowerUsername));
-                if (playerSnap.exists()) {
-                    return playerSnap.data();
-                }
-            } catch (e) {
-                console.warn('Không kiểm tra được dữ liệu leaderboard cũ:', e);
-            }
-            return null;
-        },
-
-        async saveUserToFirestore(uid, email, username, photoURL = '') {
-            const userRef = doc(db, 'users', uid);
-            const userSnap = await getDoc(userRef);
-            const cleanUsername = username.trim();
-            const lowerUsername = cleanUsername.toLowerCase();
-
-            if (!userSnap.exists()) {
-                // 1. Tìm xem tên này đã từng xuất hiện trên leaderboard/players chưa
-                const existingPlayer = await this.findClaimablePlayer(lowerUsername);
-
-                const socials = {
-                    youtube: existingPlayer?.youtube || '',
-                    facebook: existingPlayer?.facebook || '',
-                    gdvn: existingPlayer?.gdvn || '',
-                    discord: existingPlayer?.discord || '',
-                };
-                const avatar = photoURL || existingPlayer?.avatarUrl || '';
-
-                // 2. Tạo hồ sơ user (private, gắn với tài khoản đăng nhập)
-                await setDoc(userRef, {
-                    uid,
-                    email,
-                    username: cleanUsername,
-                    username_lowercase: lowerUsername,
-                    displayName: cleanUsername,
-                    avatar,
-                    socials,
-                    role: 'player',
-                    createdAt: new Date().toISOString(),
-                });
-
-                // 3. Đồng bộ / claim lại doc "players" (public, Leaderboard.js đọc từ đây)
-                //    merge:true để không mất dữ liệu cũ nếu tên đã có sẵn từ trước
-                await setDoc(doc(db, 'players', lowerUsername), {
-                    name: cleanUsername,
-                    youtube: socials.youtube,
-                    facebook: socials.facebook,
-                    gdvn: socials.gdvn,
-                    discord: socials.discord,
-                    avatarUrl: avatar,
-                    claimedBy: uid,
-                }, { merge: true });
-
-            } else {
-                const existingData = userSnap.data();
-                if (!existingData.username) {
-                    await setDoc(userRef, {
-                        username: cleanUsername,
-                        username_lowercase: lowerUsername,
-                        displayName: cleanUsername,
-                    }, { merge: true });
-                }
-            }
-        },
-        async submit() {
-            this.error = '';
-            this.loading = true;
-
-            try {
-                if (this.mode === 'register') {
-                    const gdName = this.displayName.trim();
-                    const inputEmail = this.email.trim();
-
-                    if (!gdName) throw new Error('Vui lòng nhập Tên Geometry Dash.');
-                    if (!inputEmail || !this.password) throw new Error('Vui lòng nhập Email và Mật khẩu.');
-
-                    const usersRef = collection(db, 'users');
-                    const q = query(usersRef, where('username_lowercase', '==', gdName.toLowerCase()));
-                    const querySnap = await getDocs(q);
-
-                    if (!querySnap.empty) {
-                        throw new Error('Tên Geometry Dash này đã được sử dụng!');
-                    }
-
-                    const cred = await createUserWithEmailAndPassword(auth, inputEmail, this.password);
-                    await updateProfile(cred.user, { displayName: gdName });
-                    await this.saveUserToFirestore(cred.user.uid, inputEmail, gdName);
-
-                } else {
-                    const input = this.usernameOrEmail.trim();
-                    if (!input || !this.password) throw new Error('Vui lòng điền đầy đủ thông tin.');
-
-                    let targetEmail = input;
-
-                    if (!input.includes('@')) {
-                        const usersRef = collection(db, 'users');
-                        const q = query(usersRef, where('username_lowercase', '==', input.toLowerCase()));
-                        const querySnap = await getDocs(q);
-
-                        if (querySnap.empty) {
-                            throw new Error('Tên Geometry Dash không tồn tại.');
-                        }
-
-                        const userData = querySnap.docs[0].data();
-                        targetEmail = userData.email;
-                    }
-
-                    await signInWithEmailAndPassword(auth, targetEmail, this.password);
-                }
-            } catch (e) {
-                console.error(e);
-                this.error = this.translateError(e);
-            } finally {
-                this.loading = false;
-            }
-        },
-        async googleSignIn() {
-            this.error = '';
-            this.loading = true;
-            try {
-                const provider = new GoogleAuthProvider();
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                
-                const inputName = this.displayName.trim();
-                const defaultName = inputName || user.displayName || user.email.split('@')[0];
-
-                await updateProfile(user, { displayName: defaultName });
-                await this.saveUserToFirestore(user.uid, user.email, defaultName, user.photoURL);
-            } catch (e) {
-                console.error(e);
-                this.error = this.translateError(e);
-            } finally {
-                this.loading = false;
-            }
-        },
-        async logout() {
-            await signOut(auth);
-        },
-        translateError(e) {
-            const code = e?.code || '';
-            if (e.message && !code) return e.message;
-            if (code.includes('email-already-in-use')) return 'Email này đã được đăng ký rồi.';
-            if (code.includes('invalid-credential') || code.includes('wrong-password') || code.includes('user-not-found')) return 'Sai tên đăng nhập/email hoặc mật khẩu.';
-            if (code.includes('weak-password')) return 'Mật khẩu phải từ 6 ký tự trở lên.';
-            if (code.includes('invalid-email')) return 'Định dạng Email không hợp lệ.';
-            return e.message || 'Có lỗi xảy ra, xin thử lại.';
-        },
+    toggleDark() {
+        if (this.dark == true && this.darker == false) {
+            this.darker = true;
+        } else {
+            this.darker = false;
+            this.dark = !this.dark;
+        }
+        localStorage.setItem('dark', JSON.stringify(this.dark));
+        localStorage.setItem('darker', JSON.stringify(this.darker));
     },
-};
+
+    toggleAuthMode() {
+        this.isLoginMode = !this.isLoginMode;
+    },
+
+    openProfileModal() {
+        if (this.user) {
+            this.editUsername = this.user.username || '';
+            this.editAvatar = this.user.avatar || '';
+            this.editSocial = this.user.socialLink || '';
+            this.showProfileModal = true;
+        }
+    },
+
+    async handleAuth() {
+        try {
+            if (this.isLoginMode) {
+                await signInWithEmailAndPassword(auth, this.authEmail, this.authPassword);
+                alert('Đăng nhập thành công!');
+            } else {
+                if (!this.authUsername.trim()) {
+                    alert('Vui lòng nhập tên Player!');
+                    return;
+                }
+                const userCredential = await createUserWithEmailAndPassword(auth, this.authEmail, this.authPassword);
+                const uid = userCredential.user.uid;
+
+                await setDoc(doc(db, 'users', uid), {
+                    username: this.authUsername.trim(),
+                    username_lowercase: this.authUsername.trim().toLowerCase(),
+                    email: this.authEmail,
+                    avatar: '',
+                    socialLink: '',
+                    role: 'player',
+                    createdAt: new Date().toISOString()
+                });
+                alert('Đăng ký tài khoản thành công!');
+            }
+            this.showAuthModal = false;
+            this.authEmail = '';
+            this.authPassword = '';
+            this.authUsername = '';
+        } catch (err) {
+            alert('Lỗi: ' + err.message);
+        }
+    },
+
+    async handleUpdateProfile() {
+        if (!this.user) return;
+        try {
+            const username = this.editUsername.trim();
+            const avatar = this.editAvatar.trim();
+            const socialLink = this.editSocial.trim();
+
+            await updateDoc(doc(db, 'users', this.user.uid), {
+                username,
+                username_lowercase: username.toLowerCase(),
+                avatar,
+                socialLink
+            });
+
+            this.user.username = username;
+            this.user.avatar = avatar;
+            this.user.socialLink = socialLink;
+
+            alert('Cập nhật Profile thành công!');
+            this.showProfileModal = false;
+        } catch (err) {
+            alert('Lỗi khi cập nhật profile: ' + err.message);
+        }
+    },
+
+    async handleLogout() {
+        if (confirm("Are you sure you want to log out?")) {
+            await signOut(auth);
+            alert("Đã đăng xuất!");
+        }
+    }
+});
+
+// Lắng nghe trạng thái đăng nhập Firebase
+onAuthStateChanged(auth, async (fbUser) => {
+    if (fbUser) {
+        try {
+            const snap = await getDoc(doc(db, 'users', fbUser.uid));
+            const userData = snap.exists() ? snap.data() : {};
+
+            store.user = {
+                uid: fbUser.uid,
+                email: fbUser.email,
+                username: userData.username || fbUser.displayName || fbUser.email.split('@')[0],
+                username_lowercase: userData.username_lowercase || '',
+                avatar: userData.avatar || '',
+                socialLink: userData.socialLink || '',
+                // Object social đầy đủ (youtube/facebook/gdvn/discord), dùng bởi Profile.js
+                socials: userData.socials || { youtube: '', facebook: '', gdvn: '', discord: '' },
+                role: userData.role || 'player',
+            };
+        } catch (e) {
+            console.error('Lỗi tải hồ sơ user:', e);
+            store.user = {
+                uid: fbUser.uid,
+                email: fbUser.email,
+                username: fbUser.email.split('@')[0],
+                avatar: '',
+                socialLink: '',
+                socials: { youtube: '', facebook: '', gdvn: '', discord: '' },
+                role: 'player',
+            };
+        }
+    } else {
+        store.user = null;
+    }
+    store.authLoading = false;
+});
+
+const app = Vue.createApp({
+    data: () => ({ store }),
+});
+
+const router = VueRouter.createRouter({
+    history: VueRouter.createWebHistory(),
+    routes,
+});
+
+app.use(router);
+app.mount("#app");
+
+function initNavUnderline() {
+    const nav = document.querySelector(".nav");
+    if (!nav) return;
+    
+    let underline = nav.querySelector(".nav-highlight");
+    if (!underline) {
+        underline = document.createElement("div");
+        underline.className = "nav-highlight";
+        nav.appendChild(underline);
+    }
+    const tabs = [...nav.querySelectorAll(".nav__tab")];
+    
+    function move(target) {
+        if (!target) return;
+        const navRect = nav.getBoundingClientRect();
+        const rect = target.getBoundingClientRect();
+        underline.style.left = `${rect.left - navRect.left}px`;
+        underline.style.width = `${rect.width}px`;
+    }
+    
+    function moveToActive() {
+        move(nav.querySelector(".router-link-active"));
+    }
+    
+    moveToActive();
+    tabs.forEach(tab => {
+        tab.onmouseenter = () => move(tab);
+    });
+    nav.onmouseleave = moveToActive;
+}
+
+Vue.nextTick(initNavUnderline);
+router.afterEach(() => {
+    Vue.nextTick(initNavUnderline);
+});
+window.addEventListener("resize", () => {
+    Vue.nextTick(initNavUnderline);
+});
