@@ -117,13 +117,8 @@ body {
 
 
 body {
-
-    display: flex;
-
-    flex-direction: column;
-
+    min-height: 100vh;
     margin: 0;
-
 }
 
 
@@ -201,17 +196,11 @@ header .nav {
 
 
 main {
-
-    height: 0;
-
-    flex: 1;
+    min-height: calc(100vh - 4rem);
 
     display: grid;
-
     grid-template-rows: minmax(0, 1fr);
-
     column-gap: 2rem;
-
 }
 
 
@@ -1049,4 +1038,9 @@ input[type="radio"] {
 .uncompleted-card:hover {
     opacity: 1 !important;
     filter: grayscale(0) !important;
+}
+
+#app > header + * {
+    min-height: calc(100vh - 4rem);
+    box-sizing: border-box;
 }
