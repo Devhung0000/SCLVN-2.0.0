@@ -7,7 +7,7 @@ import { RegisterPage as Register } from './pages/Register.js'; // ✅ Đã sử
 import Submit from './pages/Submit.js';
 import Admin from './pages/Admin.js';
 import Profile from './pages/Profile.js';
-import PublicProfile from './PublicProfile.js';
+import PublicProfile from './pages/PublicProfile.js';
 
 export default [
     { path: '/', component: List },
@@ -19,5 +19,4 @@ export default [
     { path: '/submit', component: Submit },
     { path: '/admin', component: Admin },
     { path: '/profile', component: Profile },
-    { path: '/profile/:username', component: PublicProfile },
 ];
