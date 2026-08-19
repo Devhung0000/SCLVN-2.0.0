@@ -1,6 +1,11 @@
-import { auth, db } from '../firebase-init.js';
-import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.x.x/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore.js";
+// ✅ Gom tất cả imports về chung 1 file firebase-init.js
+import { 
+    auth, 
+    db, 
+    createUserWithEmailAndPassword, 
+    doc, 
+    setDoc 
+} from '../firebase-init.js';
 
 export function RegisterPage() {
   return `
