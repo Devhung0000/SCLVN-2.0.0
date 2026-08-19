@@ -20,7 +20,7 @@
 
         <style>
             /* ==========================================
-               1. RESET & BASE STYLES (Đã Merge)
+               1. RESET & BASE STYLES
                ========================================== */
             *, *::before, *::after {
                 box-sizing: border-box !important;
@@ -37,9 +37,6 @@
                 overflow-x: hidden !important;
             }
 
-            /* ==========================================
-               2. GRID LAYOUT KHÔNG BAO GIỜ LỖI CHE LẤP
-               ========================================== */
             body#app {
                 display: grid !important;
                 grid-template-columns: 65px 1fr !important;
@@ -49,7 +46,7 @@
             }
 
             /* ==========================================
-               3. SIDEBAR NAVIGATION
+               2. SIDEBAR NAVIGATION CỐ ĐỊNH
                ========================================== */
             aside.sidebar {
                 position: fixed !important;
@@ -181,7 +178,7 @@
             }
 
             /* ==========================================
-               4. MAIN CONTENT & PAGE OVERRIDES
+               3. MAIN CONTENT CONTAINER
                ========================================== */
             main.main-content {
                 grid-column: 2 !important;
@@ -194,13 +191,7 @@
                 overflow-x: hidden !important;
             }
 
-            /* Sửa triệt để các khung View con tràn viền */
-            main.main-content > * {
-                max-width: 100% !important;
-                width: 100% !important;
-            }
-
-            /* Sửa đè khung List/Leaderboard không bị dịch lệch */
+            /* Fix khung chứa các trang */
             .list-container, 
             .page-container, 
             .leaderboard-container, 
@@ -209,16 +200,126 @@
                 margin: 0 auto !important;
                 width: 100% !important;
                 max-width: 1200px !important;
-                position: static !important;
+            }
+
+            /* ==========================================
+               4. CSS KHẮC PHỤC LEVEL / LIST CARD ITEM
+               ========================================== */
+            .list, .level-list {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 12px !important;
+                width: 100% !important;
+            }
+
+            .level-card, .list-item, .card {
+                background: #121216 !important;
+                border: 1px solid #23232b !important;
+                border-radius: 10px !important;
+                padding: 16px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 16px !important;
+                transition: transform 0.2s ease, border-color 0.2s ease !important;
+            }
+
+            .level-card:hover, .list-item:hover {
+                border-color: #3f3f46 !important;
+                transform: translateY(-2px);
+            }
+
+            .level-rank, .rank {
+                font-size: 20px !important;
+                font-weight: 700 !important;
+                color: #a855f7 !important;
+                min-width: 45px !important;
+            }
+
+            .level-thumb, .level-image {
+                width: 120px !important;
+                height: 70px !important;
+                border-radius: 6px !important;
+                object-fit: cover !important;
+                flex-shrink: 0 !important;
+            }
+
+            .level-info {
+                flex: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 4px !important;
+            }
+
+            .level-name {
+                font-size: 16px !important;
+                font-weight: 600 !important;
+                color: #ffffff !important;
+            }
+
+            .level-author {
+                font-size: 13px !important;
+                color: #888888 !important;
+            }
+
+            /* ==========================================
+               5. CSS KHẮC PHỤC LEADERBOARD (BẢNG XẾP HẠNG)
+               ========================================== */
+            .leaderboard-table, table.leaderboard {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                background: #121216 !important;
+                border-radius: 10px !important;
+                overflow: hidden !important;
+                border: 1px solid #23232b !important;
+            }
+
+            .leaderboard-table th, .leaderboard-table td {
+                padding: 14px 18px !important;
+                text-align: left !important;
+                border-bottom: 1px solid #1e1e24 !important;
+            }
+
+            .leaderboard-table th {
+                background-color: #18181c !important;
+                color: #a1a1aa !important;
+                font-weight: 600 !important;
+                font-size: 13px !important;
+                text-transform: uppercase !important;
+            }
+
+            .leaderboard-row:hover {
+                background-color: #1a1a20 !important;
+            }
+
+            .player-cell {
+                display: flex !important;
+                align-items: center !important;
+                gap: 12px !important;
+            }
+
+            .player-avatar {
+                width: 36px !important;
+                height: 36px !important;
+                border-radius: 50% !important;
+                object-fit: cover !important;
+            }
+
+            .player-name {
+                font-weight: 600 !important;
+                color: #ffffff !important;
+            }
+
+            .points-cell, .score {
+                font-weight: 700 !important;
+                color: #a855f7 !important;
             }
         </style>
     </head>
     
     <body id="app">
-        <!-- Sidebar Navigation -->
         <aside class="sidebar" :class="{ dark: store.dark, 'darker': store.darker }">
             <div>
-                <!-- Logo -->
                 <div class="sidebar-logo">
                     <a href="https://thespamchallengelistvietnam2.pages.dev/">
                         <img src="/assets/the sclvn logo.png" alt="SCLVN Logo" />
@@ -229,7 +330,6 @@
                     </div>
                 </div>
 
-                <!-- Menu Links -->
                 <nav class="sidebar-nav">
                     <router-link class="sidebar-item" to="/">
                         <span class="sidebar-icon">📋</span>
@@ -258,7 +358,6 @@
                 </nav>
             </div>
 
-            <!-- Sidebar Footer -->
             <div class="sidebar-footer">
                 <button class="sidebar-item" @click.prevent="store.toggleDark()">
                     <span class="sidebar-icon">
@@ -305,7 +404,6 @@
             </div>
         </aside>
 
-        <!-- Main Content Wrapper -->
         <main class="main-content">
             <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
         </main>
