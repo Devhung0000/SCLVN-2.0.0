@@ -36,42 +36,43 @@
             html, body {
                 margin: 0 !important;
                 padding: 0 !important;
-                width: 100%;
-                min-height: 100vh;
-                background-color: #0b0b0e;
-                overflow-x: hidden;
+                width: 100% !important;
+                height: 100% !important;
+                background-color: #0b0b0e !important;
+                overflow-x: hidden !important;
             }
 
             body#app {
                 display: flex !important;
                 min-height: 100vh;
-                background-color: #0b0b0e;
+                background-color: #0b0b0e !important;
                 color: #ffffff;
                 position: relative;
             }
 
-            /* Sidebar cấu hình cố định bên trái */
+            /* --- FIX SIDEBAR CHẮC CHẮN NẰM TRÊN CÙNG & BẤM ĐƯỢC --- */
             .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                height: 100vh !important;
                 width: 65px;
-                background-color: #121216;
+                background-color: #121216 !important;
                 border-right: 1px solid #23232b;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
                 transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                overflow: hidden;
-                z-index: 9999;
-                padding: 12px 8px;
-                box-sizing: border-box;
+                overflow: hidden !important;
+                z-index: 999999 !important; /* Đẩy lên lớp cao nhất */
+                padding: 12px 8px !important;
+                box-sizing: border-box !important;
+                pointer-events: auto !important; /* Đảm bảo luôn click được */
             }
 
             /* Hover mở rộng Sidebar */
             .sidebar:hover {
-                width: 250px;
+                width: 250px !important;
             }
 
             .sidebar-logo {
@@ -119,6 +120,7 @@
                 text-decoration: none;
                 white-space: nowrap;
                 transition: all 0.2s ease;
+                cursor: pointer;
             }
 
             .sidebar-item:hover, .sidebar-item.router-link-exact-active {
@@ -177,18 +179,18 @@
                 flex-shrink: 0;
             }
 
-            /* Main Content tự căn chỉnh khoảng trống sau Sidebar */
+            /* --- FIX NỘI DUNG CHÍNH KHÔNG ĐÈ LÊN SIDEBAR --- */
             main.main-content {
-                margin-left: 65px !important;
+                margin-left: 65px !important; /* Nhường đúng 65px cho Sidebar */
                 width: calc(100% - 65px) !important;
                 min-height: 100vh;
                 padding: 2rem !important;
                 box-sizing: border-box !important;
-                flex: 1 !important;
-                display: block !important;
+                position: relative !important;
+                z-index: 1 !important; /* Thấp hơn Sidebar */
             }
 
-            /* Container dùng chung trên các trang */
+            /* Reset các container trang cũ tránh tràn lề */
             .page-container, .list-container, .leaderboard-container, .page-auth {
                 width: 100% !important;
                 max-width: 1200px !important;
