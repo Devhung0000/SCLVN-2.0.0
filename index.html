@@ -169,23 +169,21 @@
             }
 
             /* Fix tận gốc lỗi giao diện bị co rúc bên trái */
-            main.main-content {
-                margin-left: 65px !important;
-                width: calc(100vw - 65px) !important;
-                max-width: calc(100vw - 65px) !important;
+            .main-content {
+                margin-left: 65px;
+                width: calc(100% - 65px);
                 min-height: 100vh;
-                padding: 2rem !important;
-                box-sizing: border-box !important;
-                flex: 1 !important;
-                display: block !important;
+
+                padding: 0;
+
+                position: relative;
+
+                background: var(--color-background);
+                color: var(--color-on-background);
+
+                box-sizing: border-box;
             }
 
-            /* Ghi đè các khung List/Leaderboard cũ tránh giới hạn chiều rộng hẹp */
-            .page-container, .list-container, .leaderboard-container, .page-auth {
-                width: 100% !important;
-                max-width: 1200px !important;
-                margin: 0 auto !important;
-            }
         </style>
     </head>
     
@@ -283,8 +281,13 @@
             </div>
         </aside>
 
-        <main class="main-content">
-            <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
-        </main>
+        <div
+            class="main-content"
+            :class="{ dark: store.dark, 'darker': store.darker }"
+        >
+            <router-view
+                :class="{ dark: store.dark, 'darker': store.darker }"
+            ></router-view>
+        </div>
     </body>
 </html>

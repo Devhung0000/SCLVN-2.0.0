@@ -72,33 +72,6 @@ main {
     color: var(--color-on-background);
 }
 
-header {
-    display: flex;
-    padding-inline: calc(25vw - 10rem);
-    height: 4rem;
-    background-color: var(--color-primary);
-    color: var(--color-on-primary);
-}
-
-@media screen and (min-width: 1366px) {
-    header {
-        display: grid;
-        padding-inline: 0;
-    }
-}
-
-header .logo {
-    justify-self: end;
-    align-self: center;
-    display: flex;
-    align-items: flex-end;
-    display: inline-block;
-}
-
-header .nav {
-    flex: 1;
-}
-
 main {
     min-height: 100vh;
     height: auto;
@@ -585,7 +558,7 @@ input[type="radio"] {
    ========================= */
 
 :root {
-    --sidebar-width: 70px;
+    --sidebar-width: 65px;
 }
 
 #app {
@@ -594,7 +567,6 @@ input[type="radio"] {
 
 .main-content {
     margin-left: var(--sidebar-width);
-
     width: calc(100% - var(--sidebar-width));
     min-height: 100vh;
 
@@ -615,8 +587,10 @@ input[type="radio"] {
     box-sizing: border-box;
 }
 
+/* Chỉ List mới dùng layout 3 cột */
 main.page-list {
     display: grid;
+
     grid-template-columns:
         minmax(16rem, 0.6fr)
         1fr
