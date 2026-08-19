@@ -116,8 +116,13 @@
             </div>
         </aside>
 
-        <main class="main-content">
-            <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
-        </main>
+        <div
+            class="main-content"
+            :class="{ dark: store.dark, 'darker': store.darker }"
+        >
+            <router-view
+                :class="{ dark: store.dark, 'darker': store.darker }"
+            ></router-view>
+        </div>
     </body>
 </html>

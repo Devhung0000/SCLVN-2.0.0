@@ -13,9 +13,9 @@
     --color-background-list: #fbfbfbde;
 }
 
-main.dark,
-header.dark {
+.dark {
     color-scheme: dark;
+
     --color-background: #1c1b1f;
     --color-on-background: white;
     --color-background-hover: #2e2e2e;
@@ -26,13 +26,13 @@ header.dark {
     --color-error: #de0000;
     --color-on-error: white;
     --the-button-on-top: brightness(100%) saturate(100%);
-    --level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+    --level-button: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5));
     --color-background-list: #1c1b1fde;
 }
 
-main.darker,
-header.darker {
-    color-scheme: darker;
+.darker {
+    color-scheme: dark;
+
     --color-background: #070709;
     --color-on-background: white;
     --color-background-hover: #18181B;
@@ -43,7 +43,7 @@ header.darker {
     --color-error: #de0000;
     --color-on-error: white;
     --the-button-on-top: brightness(100%) saturate(100%);
-    --level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+    --level-button: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5));
     --color-background-list: #070709de;
 }
 
@@ -67,13 +67,9 @@ body {
     min-height: 100vh;
 }
 
-header,
 main {
     background-color: var(--color-background);
     color: var(--color-on-background);
-    display: grid;
-    grid-template-columns: minmax(16rem, 0.6fr) 1fr minmax(16em, 0.6fr);
-    column-gap: 2rem;
 }
 
 header {
@@ -104,14 +100,24 @@ header .nav {
 }
 
 main {
-    min-height: calc(100vh - 4rem);
-    display: grid;
-    grid-template-rows: minmax(0, 1fr);
-    column-gap: 2rem;
+    min-height: 100vh;
+    height: auto;
+
+    display: block;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: visible;
+
+    background: var(--color-background);
+    color: var(--color-on-background);
+
+    box-sizing: border-box;
 }
 
 main > div {
-    overflow-y: auto;
+    overflow: visible;
 }
 
 .spinner {
@@ -544,19 +550,18 @@ input[type="radio"] {
     filter: grayscale(0) !important;
 }
 
-#app > header + * {
-    min-height: calc(100vh - 4rem);
-    box-sizing: border-box;
-}
-
 /* ================= PROFILE PAGE ================= */
 .page-profile {
     width: 100%;
-    min-height: calc(100vh - 4rem);
+    min-height: 100vh;
+
     box-sizing: border-box;
+
     margin: 0 !important;
     padding: 40px;
+
     font-family: 'Poppins', sans-serif;
+
     display: block !important;
 }
 
@@ -573,4 +578,49 @@ input[type="radio"] {
 
 .page-profile > div:last-child {
     width: 100%;
+}
+
+/* =========================
+   VERTICAL SIDEBAR LAYOUT
+   ========================= */
+
+:root {
+    --sidebar-width: 70px;
+}
+
+#app {
+    min-height: 100vh;
+}
+
+.main-content {
+    margin-left: var(--sidebar-width);
+
+    width: calc(100% - var(--sidebar-width));
+    min-height: 100vh;
+
+    position: relative;
+
+    background: var(--color-background);
+    color: var(--color-on-background);
+
+    box-sizing: border-box;
+}
+
+.main-content > main {
+    width: 100%;
+    min-height: 100vh;
+
+    margin: 0;
+
+    box-sizing: border-box;
+}
+
+main.page-list {
+    display: grid;
+    grid-template-columns:
+        minmax(16rem, 0.6fr)
+        1fr
+        minmax(16rem, 0.6fr);
+
+    column-gap: 2rem;
 }
