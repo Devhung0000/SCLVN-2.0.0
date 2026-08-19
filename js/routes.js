@@ -3,11 +3,10 @@ import Leaderboard from './pages/Leaderboard.js';
 import Roulette from './pages/Roulette.js';
 import Statistics from './pages/Statistics.js';
 import Login from './pages/Login.js';
-import { RegisterPage as Register } from './pages/Register.js'; // ✅ Đã sửa thành Named Import
+import Register from './pages/Register.js'; // Import trang Đăng ký mới
 import Submit from './pages/Submit.js';
 import Admin from './pages/Admin.js';
 import Profile from './pages/Profile.js';
-import PublicProfile from './pages/PublicProfile.js';
 
 export default [
     { path: '/', component: List },
@@ -15,9 +14,8 @@ export default [
     { path: '/roulette', component: Roulette },
     { path: '/statistics', component: Statistics },
     { path: '/login', component: Login },
-    { path: '/register', component: Register },
+    { path: '/register', component: Register }, // Đã thêm đường dẫn /register
     { path: '/submit', component: Submit },
     { path: '/admin', component: Admin },
     { path: '/profile', component: Profile },
-    { path: '/profile/:username', component: PublicProfile },
 ];
