@@ -295,51 +295,18 @@
             </div>
         </aside>
 
-        <main class="main-content" :class="{ dark: store.dark, 'darker': store.darker }">
-            <!-- TOP BAR -->
+        <div class="main-content" :class="{ dark: store.dark, 'darker': store.darker }">
+
             <header class="topbar">
-                <div class="topbar-left">
-                    <a href="https://thespamchallengelistvietnam2.pages.dev/" class="topbar-brand">
-                        <img src="/assets/the sclvn logo.png" alt="SCLVN Logo" class="topbar-logo" />
-                        <div class="topbar-brand-text">
-                            <h2>SCLVN</h2>
-                            <span>Spam Challenge List Vietnam</span>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="topbar-center">
-                    <div class="topbar-search">
-                        <span class="topbar-search-icon">🔍</span>
-                        <input type="text" placeholder="Tìm kiếm..." />
-                        <span class="topbar-shortcut">Ctrl K</span>
-                    </div>
-                </div>
-
-                <div class="topbar-right">
-                    <router-link to="/submit" class="topbar-btn">Submit Record</router-link>
-
-                    <a href="https://discord.gg/Qcj5JSRKa" target="_blank" class="topbar-icon-btn">
-                        <img src="/assets/discord.svg" alt="Discord" />
-                    </a>
-
-                    <button class="topbar-icon-btn" @click.prevent="store.toggleDark()">
-                        <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" alt="Theme" />
-                    </button>
-
-                    <template v-if="store.user">
-                        <router-link to="/profile" class="topbar-user">
-                            <img :src="store.user.avatar || '/assets/the sclvn logo.png'" alt="Avatar" />
-                            <span>{{ store.user.username || 'Player' }}</span>
-                        </router-link>
-                    </template>
-                </div>
+                ...
             </header>
 
-            <!-- NỘI DUNG TRANG -->
             <div class="page-shell">
-                <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
+                <router-view
+                    :class="{ dark: store.dark, 'darker': store.darker }"
+                ></router-view>
             </div>
-        </main>
+
+        </div>
     </body>
 </html>

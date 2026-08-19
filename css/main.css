@@ -1,49 +1,28 @@
 /* ================= CSS VARIABLES & THEMES ================= */
 :root {
-    --color-background: #fbfbfb;
-    --color-on-background: black;
-    --color-background-hover: #eeeeef;
-    --color-on-background-hover: black;
-    --color-primary: #eeeeef;
-    --color-on-primary: black;
-    --color-error: #de0000;
-    --color-on-error: black;
-    --the-button-on-top: brightness(0) saturate(100%);
-    --level-button: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
-    --color-background-list: #fbfbfbde;
-}
-
-main.dark,
-header.dark {
     color-scheme: dark;
-    --color-background: #1c1b1f;
-    --color-on-background: white;
-    --color-background-hover: #2e2e2e;
-    --color-on-background-hover: white;
-    --color-primary: #2e2e2e;
-    --color-primary-disabled: #1f213c;
-    --color-on-primary: white;
-    --color-error: #de0000;
-    --color-on-error: white;
-    --the-button-on-top: brightness(100%) saturate(100%);
-    --level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-    --color-background-list: #1c1b1fde;
-}
 
-main.darker,
-header.darker {
-    color-scheme: darker;
     --color-background: #070709;
     --color-on-background: white;
+
     --color-background-hover: #18181B;
     --color-on-background-hover: white;
+
     --color-primary: #18181B;
     --color-primary-disabled: #1c1c1c;
     --color-on-primary: white;
+
     --color-error: #de0000;
     --color-on-error: white;
+
     --the-button-on-top: brightness(100%) saturate(100%);
-    --level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+
+    --level-button:
+        linear-gradient(
+            rgba(0, 0, 0, .5),
+            rgba(0, 0, 0, .5)
+        );
+
     --color-background-list: #070709de;
 }
 
@@ -597,23 +576,6 @@ body {
     overflow: hidden;
 }
 
-.sidebar {
-    width: 300px;
-    flex-shrink: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    background: rgba(10, 10, 14, 0.82);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
-    box-sizing: border-box;
-    overflow-y: auto;
-}
-
 .main-content {
     flex: 1;
     min-width: 0;
@@ -651,13 +613,6 @@ body {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 
     box-sizing: border-box;
-}
-
-.main-content.dark .topbar,
-.main-content.darker .topbar {
-    background: rgba(10, 10, 16, 0.58);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
 }
 
 .topbar-left,
@@ -715,10 +670,6 @@ body {
     color: rgba(255, 255, 255, 0.7);
 }
 
-.main-content:not(.dark):not(.darker) .topbar-brand-text span {
-    color: rgba(0, 0, 0, 0.55);
-}
-
 /* =========================
    SEARCH BAR
    ========================= */
@@ -743,11 +694,6 @@ body {
     box-sizing: border-box;
 }
 
-.main-content:not(.dark):not(.darker) .topbar-search {
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
 .topbar-search input {
     flex: 1;
     min-width: 0;
@@ -763,10 +709,6 @@ body {
     color: rgba(255, 255, 255, 0.65);
 }
 
-.main-content:not(.dark):not(.darker) .topbar-search input::placeholder {
-    color: rgba(0, 0, 0, 0.45);
-}
-
 .topbar-search-icon {
     font-size: 15px;
     opacity: 0.85;
@@ -779,11 +721,6 @@ body {
     background: rgba(255, 255, 255, 0.12);
     color: rgba(255, 255, 255, 0.75);
     white-space: nowrap;
-}
-
-.main-content:not(.dark):not(.darker) .topbar-shortcut {
-    background: rgba(0, 0, 0, 0.06);
-    color: rgba(0, 0, 0, 0.55);
 }
 
 /* =========================
@@ -818,11 +755,6 @@ body {
     background: rgba(255, 255, 255, 0.2);
 }
 
-.main-content:not(.dark):not(.darker) .topbar-btn {
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
 .topbar-icon-btn {
     width: 42px;
     height: 42px;
@@ -847,11 +779,6 @@ body {
     width: 20px;
     height: 20px;
     filter: var(--the-button-on-top);
-}
-
-.main-content:not(.dark):not(.darker) .topbar-icon-btn {
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .topbar-user {
@@ -884,11 +811,6 @@ body {
 .topbar-user span {
     font-size: 14px;
     font-weight: 600;
-}
-
-.main-content:not(.dark):not(.darker) .topbar-user {
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 /* =========================
