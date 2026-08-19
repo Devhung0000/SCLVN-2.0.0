@@ -6,7 +6,7 @@
         <meta property="og:url" content="https://thespamchallengelistvietnam.pages.dev/"/>
         <meta property="og:title" content="The Spam Challenge List Vietnam" />
         <meta property="og:description" content="This is a website for the hardest spam challenges in Vietnam!" />
-        <meta property="og:image" content="https://thespamchallengelistvietnam2.pages.dev//assets/the%20sclvn%20logo.png" />
+        <meta property="og:image" content="https://thespamchallengelistvietnam2.pages.dev/assets/the%20sclvn%20logo.png" />
         <title>The Spam Challenge List Vietnam</title>
 
         <link rel="icon" href="/assets/the sclvn logo.png" />
@@ -36,7 +36,7 @@
             html, body {
                 margin: 0 !important;
                 padding: 0 !important;
-                width: 100vw;
+                width: 100%;
                 min-height: 100vh;
                 background-color: #0b0b0e;
                 overflow-x: hidden;
@@ -47,6 +47,7 @@
                 min-height: 100vh;
                 background-color: #0b0b0e;
                 color: #ffffff;
+                position: relative;
             }
 
             /* Sidebar cấu hình cố định bên trái */
@@ -86,6 +87,7 @@
                 height: 36px;
                 border-radius: 8px;
                 flex-shrink: 0;
+                object-fit: cover;
             }
 
             .sidebar-logo-text {
@@ -127,10 +129,17 @@
             .sidebar-icon {
                 font-size: 18px;
                 width: 24px;
+                height: 24px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 flex-shrink: 0;
+            }
+
+            .sidebar-icon img {
+                max-width: 20px;
+                max-height: 20px;
+                object-fit: contain;
             }
 
             .sidebar-label {
@@ -168,11 +177,10 @@
                 flex-shrink: 0;
             }
 
-            /* Fix tận gốc lỗi giao diện bị co rúc bên trái */
+            /* Main Content tự căn chỉnh khoảng trống sau Sidebar */
             main.main-content {
                 margin-left: 65px !important;
-                width: calc(100vw - 65px) !important;
-                max-width: calc(100vw - 65px) !important;
+                width: calc(100% - 65px) !important;
                 min-height: 100vh;
                 padding: 2rem !important;
                 box-sizing: border-box !important;
@@ -180,7 +188,7 @@
                 display: block !important;
             }
 
-            /* Ghi đè các khung List/Leaderboard cũ tránh giới hạn chiều rộng hẹp */
+            /* Container dùng chung trên các trang */
             .page-container, .list-container, .leaderboard-container, .page-auth {
                 width: 100% !important;
                 max-width: 1200px !important;
@@ -196,7 +204,7 @@
                 <!-- Logo SCLVN -->
                 <div class="sidebar-logo">
                     <a href="https://thespamchallengelistvietnam2.pages.dev/">
-                        <img src="./assets/the sclvn logo.png" />
+                        <img src="/assets/the sclvn logo.png" alt="SCLVN Logo" />
                     </a>
                     <div class="sidebar-logo-text">
                         <h2 style="margin: 0; font-size: 18px; color: #fff;">SCLVN</h2>
@@ -238,15 +246,15 @@
                 <!-- Toggle Dark Mode -->
                 <button class="sidebar-item" @click.prevent="store.toggleDark()" style="background: none; border: none; cursor: pointer; width: 100%;">
                     <span class="sidebar-icon">
-                        <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" alt="" style="width: 20px; filter: var(--the-button-on-top)" />
+                        <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" alt="Theme" style="filter: var(--the-button-on-top)" />
                     </span>
                     <span class="sidebar-label">Đổi Giao Diện</span>
                 </button>
 
                 <!-- Discord Community -->
-                <a class="sidebar-item" href="https://discord.gg/Qcj5JSRKa" target="_blank">
+                <a class="sidebar-item" href="https://discord.gg/Qcj5JSRKa" target="_blank" rel="noopener noreferrer">
                     <span class="sidebar-icon">
-                        <img src="/assets/discord.svg" alt="Discord" style="width: 20px; filter: var(--the-button-on-top)" />
+                        <img src="/assets/discord.svg" alt="Discord" style="filter: var(--the-button-on-top)" />
                     </span>
                     <span class="sidebar-label">Discord Server</span>
                 </a>
@@ -261,7 +269,7 @@
 
                 <template v-else>
                     <div class="user-info-box">
-                        <img :src="store.user.avatar || '/assets/the sclvn logo.png'" class="user-avatar">
+                        <img :src="store.user.avatar || '/assets/the sclvn logo.png'" class="user-avatar" alt="Avatar">
                         <div class="sidebar-label" style="display: flex; flex-direction: column;">
                             <span style="color: #ffffff; font-weight: 700; font-size: 13px;">
                                 {{ store.user.username || store.user.displayName || 'Player' }}
