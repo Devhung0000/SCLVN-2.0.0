@@ -1,5 +1,5 @@
 import { store } from '../main.js';
-import { db, doc, updateDoc } from '../firebase-init.js';
+import { db, doc, updateDoc, setDoc, deleteDoc, collection, query, where, getDocs } from '../firebase-init.js';
 
 export default {
     template: `
@@ -141,9 +141,27 @@ export default {
             this.loading = true;
 
             try {
+                const newUsername = this.form.username.trim();
+                const newLower = newUsername.toLowerCase();
+                const oldLower = (this.store.user.username_lowercase || this.store.user.username || '').trim().toLowerCase();
+                const isRenaming = newLower !== oldLower;
+
+                // Nếu đổi tên khác tên hiện tại, kiểm tra xem đã có ai dùng tên đó chưa
+                if (isRenaming) {
+                    const usersRef = collection(db, 'users');
+                    const q = query(usersRef, where('username_lowercase', '==', newLower));
+                    const querySnap = await getDocs(q);
+                    const takenByOther = querySnap.docs.some(d => d.id !== this.store.user.uid);
+                    if (takenByOther) {
+                        alert('Tên Geometry Dash này đã được người khác sử dụng!');
+                        this.loading = false;
+                        return;
+                    }
+                }
+
                 const updatedData = {
-                    username: this.form.username.trim(),
-                    username_lowercase: this.form.username.trim().toLowerCase(),
+                    username: newUsername,
+                    username_lowercase: newLower,
                     avatar: this.previewAvatar,
                     socials: {
                         youtube: this.form.youtube.trim(),
@@ -155,8 +173,36 @@ export default {
 
                 await updateDoc(doc(db, 'users', this.store.user.uid), updatedData);
 
+                // Đồng bộ ngược lại collection "players" (public) - đây là nơi
+                // Leaderboard.js thực sự đọc avatar + social để hiển thị.
+                // Dùng username_lowercase làm doc id để khớp với logic claim lúc đăng ký.
+                await setDoc(doc(db, 'players', updatedData.username_lowercase), {
+                    name: updatedData.username,
+                    youtube: updatedData.socials.youtube,
+                    facebook: updatedData.socials.facebook,
+                    gdvn: updatedData.socials.gdvn,
+                    discord: updatedData.socials.discord,
+                    avatarUrl: updatedData.avatar,
+                    claimedBy: this.store.user.uid,
+                }, { merge: true });
+
+                // Nếu vừa đổi tên, dọn doc "players" cũ (chỉ xoá nếu đúng là do
+                // chính mình claim trước đó, tránh xoá nhầm data người khác)
+                if (isRenaming && oldLower) {
+                    try {
+                        const oldPlayerSnap = await getDocs(query(collection(db, 'players'), where('__name__', '==', oldLower)));
+                        const oldDoc = oldPlayerSnap.docs[0];
+                        if (oldDoc && oldDoc.data().claimedBy === this.store.user.uid) {
+                            await deleteDoc(doc(db, 'players', oldLower));
+                        }
+                    } catch (cleanupErr) {
+                        console.warn('Không dọn được doc players cũ:', cleanupErr);
+                    }
+                }
+
                 // Cập nhật lại State Store ngay lập tức
                 this.store.user.username = updatedData.username;
+                this.store.user.username_lowercase = updatedData.username_lowercase;
                 this.store.user.avatar = updatedData.avatar;
                 this.store.user.socials = updatedData.socials;
 
