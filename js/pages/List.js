@@ -128,27 +128,27 @@ export default {
                         <img src="../assets/discord.svg" alt="Discord Logo" />
                     </a>
                     <p>
-                    	<a href="https://discord.gg/Qcj5JSRKa">
-                        	Join the Discord server for more information about the list and Rules!
+                        <a href="https://discord.gg/Qcj5JSRKa">
+                            Join the Discord server for more information about the list and Rules!
                         </a>
                     </p>
 					<h2>Changelog</h2>
 
 			<!-- new guide -->
 
-			<!-- add level: <p class="cl">- <clw>name</clw> has been placed at <clw>#</clw>, above <clw>name</clw> and below <clw>name</clw></p> -->
-			<!-- raise level: <p class="cl">- <clw>name</clw> has been raised from <clw>#</clw> to <clw>#</clw>, above <clw>name</clw> and below <clw>name</clw></p> -->
-			<!-- lower level: <p class="cl">- <clw>name</clw> has been lowered from <clw>#</clw> to <clw>#</clw>, above <clw>name</clw> and below <clw>name</clw></p> -->
-			<!-- swap levels: <p class="cl">- <clw>name</clw> and <clw>name</clw> have been swapped, with <clw>name</clw> now sitting above at <clw>#</clw></p> -->
-			<!-- delete level: <p class="cl">- <clw>name</clw> have been removed</p> --> 
+			<!-- add level: <p class="cl">- <span class="clw">name</span> has been placed at <span class="clw">#</span>, above <span class="clw">name</span> and below <span class="clw">name</span></p> -->
+			<!-- raise level: <p class="cl">- <span class="clw">name</span> has been raised from <span class="clw">#</span> to <span class="clw">#</span>, above <span class="clw">name</span> and below <span class="clw">name</span></p> -->
+			<!-- lower level: <p class="cl">- <span class="clw">name</span> has been lowered from <span class="clw">#</span> to <span class="clw">#</span>, above <span class="clw">name</span> and below <span class="clw">name</span></p> -->
+			<!-- swap levels: <p class="cl">- <span class="clw">name</span> and <span class="clw">name</span> have been swapped, with <span class="clw">name</span> now sitting above at <span class="clw">#</span></p> -->
+			<!-- delete level: <p class="cl">- <span class="clw">name</span> have been removed</p> --> 
 
-                    <main style="display: flex; flex-direction: column; align-items: left; gap: 24px; text-align: left; overflow: hidden; overflow-y: auto; max-height: 300px; width: 700px; border: 3px solid var(--color-primary); border-radius: 5px;">
-            			<div style="display: flex; flex-direction: column; align-items: left; gap: 24px; overflow: visible; margin-left: 10px; margin-top: 12px">
+                    <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 24px; text-align: left; overflow: hidden; overflow-y: auto; max-height: 300px; width: 100%; max-width: 700px; border: 3px solid var(--color-primary); border-radius: 5px; padding: 12px;">
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px; overflow: visible;">
                             <h2>5/30/26</h2>
-                            <p class="cl">- <clw>mraow</clw> has been placed at <clw>#1</clw></p>
-							<p class="cl"></b>THẰNG HƯNG OWNER CỦA CÁI LIST NÀY LÀ THG NGU L</b></p>
-				</div>
-        			</main>
+                            <p class="cl">- <span class="clw">mraow</span> has been placed at <span class="clw">#1</span></p>
+                            <p class="cl"><b>THẮNG HƯNG OWNER CỦA CÁI LIST NÀY LÀ THG NGU L</b></p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="meta-container">
@@ -158,7 +158,7 @@ export default {
                     </div>
                     <div class="og">
                         <p class="type-label-md">Website layout and UI made by <a href="https://therakelist.pages.dev/" style="text-decoration: underline;" target="_blank">SCL[gwa]</a>. <br> The Official Spam Challenge List in Vietnam!</p>
-		    </div>
+                    </div>
                     <template v-if="editors">
                         <h2>List Moderators</h2>
                         <ol class="editors">
@@ -187,7 +187,7 @@ export default {
                         Submission Rules:
                     </h3>
                     <p>
-                        -The Website cannot display the entire rules, Join the server <a href="https://discord.gg/Qcj5JSRKa" style="text-decoration: underline;"target="_blank">here</a> to view the full rules!
+                        -The Website cannot display the entire rules, Join the server <a href="https://discord.gg/Qcj5JSRKa" style="text-decoration: underline;" target="_blank">here</a> to view the full rules!
                     </p>
                 </div>
             </div>
@@ -202,7 +202,7 @@ export default {
         fpsAsked: getFpsSelect(),
         engineSelected: "All",
         fpsSelected: "",
-		grat: "../assets/levels/",
+        grat: "../assets/levels/",
         fileFormat: "h",
         sdhfkjsdbhfkjs: "assets/levels/B R A I N S P A C E.png",
         levelSearch: null,
@@ -216,7 +216,7 @@ export default {
     computed: {
         getDemonDifficulty() {
             if (this.selected == null) {
-            	return 0;
+                return 0;
             } else {
                 if (this.list[this.selected][0].demonDifficulty == "Iraq Demon") {
                     this.fileFormat = '.svg';
@@ -234,13 +234,12 @@ export default {
                 } else if (this.list[this.selected][0].name == "Lucid Dreaming") {
                     return "https://upload.wikimedia.org/wikipedia/commons/7/72/Twemoji_1f634.svg";
                 }
-                // Playstation Vita credit: https://image.ceneostatic.pl/data/products/13107195/i-sony-playstation-vita-wifi.jpg can we even use this legally idk don't sue
                 return encodeURI(`assets/difficulties/${this.list[this.selected][0].demonDifficulty}${this.fileFormat}`);
             }
         },
         level() {
             if (this.selected == null) {
-            	return 0;
+                return 0;
             } else {
                 return this.list[this.selected][0];
             }
@@ -253,57 +252,40 @@ export default {
             }));
         },
         filteredListDisplay() {
-    let filtered = this.originalListWithIndex;
-    if (this.searchQuery.trim()) {
-        const searchTerm = this.searchQuery.toLowerCase();
-        filtered = filtered.filter(item => 
-            item.level?.name?.toLowerCase().includes(searchTerm)
-        );
-    }
-    if (this.engineAsked && this.engineAsked !== "All") {
-        const engineFilter = Array.isArray(this.engineAsked) ? this.engineAsked : [this.engineAsked];
-        filtered = filtered.filter(item =>
-            (item.level?.password || '')
-                .split('/')
-                .map(s => s.trim())
-                .some(pwd => engineFilter.includes(pwd))
-        );
-    }
-    if (this.fpsAsked && this.fpsAsked.trim() !== "") {
-        const fpsLower = this.fpsAsked.toLowerCase();
-        filtered = filtered.filter(item =>
-            (item.level?.password || '')
-                .split('/')
-                .map(s => s.trim().replace(/fps/i, '').toLowerCase())
-                .some(pwd => pwd === fpsLower)
-        );
-    }
+            let filtered = this.originalListWithIndex;
+            if (this.searchQuery.trim()) {
+                const searchTerm = this.searchQuery.toLowerCase();
+                filtered = filtered.filter(item => 
+                    item.level?.name?.toLowerCase().includes(searchTerm)
+                );
+            }
+            if (this.engineAsked && this.engineAsked !== "All") {
+                const engineFilter = Array.isArray(this.engineAsked) ? this.engineAsked : [this.engineAsked];
+                filtered = filtered.filter(item =>
+                    (item.level?.password || '')
+                        .split('/')
+                        .map(s => s.trim())
+                        .some(pwd => engineFilter.includes(pwd))
+                );
+            }
+            if (this.fpsAsked && this.fpsAsked.trim() !== "") {
+                const fpsLower = this.fpsAsked.toLowerCase();
+                filtered = filtered.filter(item =>
+                    (item.level?.password || '')
+                        .split('/')
+                        .map(s => s.trim().replace(/fps/i, '').toLowerCase())
+                        .some(pwd => pwd === fpsLower)
+                );
+            }
 
-    return filtered;
-},
-		originalPacksWithIndex() {
+            return filtered;
+        },
+        originalPacksWithIndex() {
             console.error(this.packs);
             return this.packs;
         },
         video() {
             if (!this.level.showcase) {
-				console.warn("! Level Names:");
-				for (let i = 0; i < this.list.length; i++) {
-                    console.warn(this.list[i][0].name);
-                }
-				console.warn("! Level Info:");
-				for (let i = 0; i < this.list.length; i++) {
-                    console.warn(this.list[i][0].name + "⓪" + this.list[i][0].verifier + "⓪" + this.list[i][0].author + "⓪" + this.list[i][0].engine + "⓪");
-                }
-				console.warn("! Level URL's:");
-                for (let i = 0; i < this.list.length; i++) {
-                    console.warn(this.list[i][0].id + "⓪" + this.list[i][0].itchLink + "⓪" + this.list[i][0].itchLink2 + "⓪");
-                }
-				console.warn("! Level Videos:");
-                for (let i = 0; i < this.list.length; i++) {
-                    console.warn(getYoutubeIdFromUrl(this.list[i][0].verification));
-                }
-				
                 return embed(this.level.verification);
             }
 
@@ -329,13 +311,11 @@ export default {
         },
     },
     async mounted() {
-        // Hide loading spinner
         this.list = await fetchList();
         this.editors = await fetchEditors();
-		this.packs = await fetchPacks();
+        this.packs = await fetchPacks();
         this.selected = await getSelectSelect(this.list);
 
-        // Error handling
         if (!this.list) {
             this.errors = [
                 "Failed to load list. Retry in a few minutes or notify list staff.",
@@ -356,15 +336,15 @@ export default {
         this.loading = false;
     },
     methods: {
-    applyFilters() {
-        this.engineAsked = this.engineSelected;
-        this.fpsAsked = this.fpsSelected.trim() || null;
-        try {
-            const parsed = JSON.parse(this.engineAsked);
-            if (Array.isArray(parsed)) this.engineAsked = parsed;
-        } catch (e) {
-        }
-    },
+        applyFilters() {
+            this.engineAsked = this.engineSelected;
+            this.fpsAsked = this.fpsSelected.trim() || null;
+            try {
+                const parsed = JSON.parse(this.engineAsked);
+                if (Array.isArray(parsed)) this.engineAsked = parsed;
+            } catch (e) {
+            }
+        },
         embed,
         score,
         getLevelThumbnail,
