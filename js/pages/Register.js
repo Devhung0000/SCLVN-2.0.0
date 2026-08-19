@@ -1,10 +1,11 @@
-// ✅ Gom tất cả imports về chung 1 file firebase-init.js
+// ✅ Import từ firebase-init.js (cần đảm bảo firebase-init đã export getDoc)
 import { 
     auth, 
     db, 
     createUserWithEmailAndPassword, 
     doc, 
-    setDoc 
+    setDoc,
+    getDoc 
 } from '../firebase-init.js';
 
 export function RegisterPage() {
@@ -34,7 +35,7 @@ export function RegisterPage() {
   `;
 }
 
-// Hàm gắn sự kiện Submit Form (Gọi sau khi render HTML ra màn hình)
+// Hàm gắn sự kiện Submit Form
 export function initRegisterEvents() {
   const form = document.getElementById('register-form');
   if (!form) return;
@@ -50,14 +51,33 @@ export function initRegisterEvents() {
     errorEl.style.display = 'none';
 
     try {
-      // 1. Tạo tài khoản trong Firebase Auth
+      const lowerUsername = username.toLowerCase();
+
+      // 1. KIỂM TRA TÊN GEOMETRY DASH ĐÃ TỒN TẠI CHƯA
+      const usernameRef = doc(db, "usernames", lowerUsername);
+      const usernameSnap = await getDoc(usernameRef);
+
+      if (usernameSnap.exists()) {
+        errorEl.style.display = 'block';
+        errorEl.textContent = 'Tên Geometry Dash này đã có người sử dụng!';
+        return;
+      }
+
+      // 2. Tạo tài khoản trong Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // 2. Lưu profile user vào Firestore Database
+      // 3. Tạo Mapping "usernames/username_lowercase" -> chứa Email (dùng để tra cứu lúc Login)
+      await setDoc(usernameRef, {
+        uid: user.uid,
+        email: email,
+        originalUsername: username
+      });
+
+      // 4. Lưu thông tin Profile chính trong "users/uid"
       await setDoc(doc(db, "users", user.uid), {
         username: username,
-        username_lowercase: username.toLowerCase(), // Lưu để sau này đăng nhập bằng Username
+        username_lowercase: lowerUsername,
         email: email,
         role: "player",
         createdAt: new Date().toISOString()
