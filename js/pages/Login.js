@@ -51,7 +51,7 @@ export default {
 
                     <!-- Form Đăng nhập -->
                     <template v-else>
-                        <input v-model="usernameOrEmail" class="btn" type="text" placeholder="Tên Geometry Dash hoặc Email" />
+                        <input v-model="usernameOrEmail" class="btn" type="text" placeholder="Tên Geometry Dash" />
                     </template>
 
                     <input v-model="password" class="btn" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" @keyup.enter="submit" />
@@ -78,28 +78,70 @@ export default {
             this.mode = this.mode === 'login' ? 'register' : 'login';
             this.error = '';
         },
+
+        // Tìm data cũ của player (avatar/social) trong collection "players"
+        // (được seed từ _players.json / được các user khác cập nhật qua trang Profile)
+        async findClaimablePlayer(lowerUsername) {
+            try {
+                const playerSnap = await getDoc(doc(db, 'players', lowerUsername));
+                if (playerSnap.exists()) {
+                    return playerSnap.data();
+                }
+            } catch (e) {
+                console.warn('Không kiểm tra được dữ liệu leaderboard cũ:', e);
+            }
+            return null;
+        },
+
         async saveUserToFirestore(uid, email, username, photoURL = '') {
             const userRef = doc(db, 'users', uid);
             const userSnap = await getDoc(userRef);
             const cleanUsername = username.trim();
+            const lowerUsername = cleanUsername.toLowerCase();
 
             if (!userSnap.exists()) {
+                // 1. Tìm xem tên này đã từng xuất hiện trên leaderboard/players chưa
+                const existingPlayer = await this.findClaimablePlayer(lowerUsername);
+
+                const socials = {
+                    youtube: existingPlayer?.youtube || '',
+                    facebook: existingPlayer?.facebook || '',
+                    gdvn: existingPlayer?.gdvn || '',
+                    discord: existingPlayer?.discord || '',
+                };
+                const avatar = photoURL || existingPlayer?.avatarUrl || '';
+
+                // 2. Tạo hồ sơ user (private, gắn với tài khoản đăng nhập)
                 await setDoc(userRef, {
                     uid,
                     email,
                     username: cleanUsername,
-                    username_lowercase: cleanUsername.toLowerCase(),
+                    username_lowercase: lowerUsername,
                     displayName: cleanUsername,
-                    avatarUrl: photoURL || '',
+                    avatar,
+                    socials,
                     role: 'player',
                     createdAt: new Date().toISOString(),
                 });
+
+                // 3. Đồng bộ / claim lại doc "players" (public, Leaderboard.js đọc từ đây)
+                //    merge:true để không mất dữ liệu cũ nếu tên đã có sẵn từ trước
+                await setDoc(doc(db, 'players', lowerUsername), {
+                    name: cleanUsername,
+                    youtube: socials.youtube,
+                    facebook: socials.facebook,
+                    gdvn: socials.gdvn,
+                    discord: socials.discord,
+                    avatarUrl: avatar,
+                    claimedBy: uid,
+                }, { merge: true });
+
             } else {
                 const existingData = userSnap.data();
                 if (!existingData.username) {
                     await setDoc(userRef, {
                         username: cleanUsername,
-                        username_lowercase: cleanUsername.toLowerCase(),
+                        username_lowercase: lowerUsername,
                         displayName: cleanUsername,
                     }, { merge: true });
                 }
