@@ -19,8 +19,8 @@ import {
 
 export default {
     data: () => ({
-        mode: 'login', // 'login' | 'register'
-        usernameOrEmail: '', // Dùng chung cho nhập Email hoặc Tên GD khi Đăng nhập
+        mode: 'login',
+        usernameOrEmail: '',
         email: '',
         password: '',
         displayName: '',
@@ -33,7 +33,7 @@ export default {
             <div style="width: 100%; max-width: 400px; display:flex; flex-direction:column; gap:1rem;">
 
                 <template v-if="store.user">
-                    <h1>Xin chào, {{ store.user.displayName }}!</h1>
+                    <h1>Xin chào, {{ store.user.displayName || 'Player' }}!</h1>
                     <p class="type-body-lg">Bạn đã đăng nhập bằng {{ store.user.email }}.</p>
                     <router-link class="btn" to="/submit">Đi tới trang Nộp Record</router-link>
                     <router-link v-if="store.user.role === 'admin'" class="btn" to="/admin">Đi tới trang Duyệt Record</router-link>
@@ -56,7 +56,7 @@ export default {
 
                     <input v-model="password" class="btn" type="password" placeholder="Mật khẩu (ít nhất 6 ký tự)" @keyup.enter="submit" />
 
-                    <p v-if="error" class="error" style="color: #ff4d4d;">{{ error }}</p>
+                    <p v-if="error" class="error" style="color: #ff4d4d; margin: 0;">{{ error }}</p>
 
                     <button class="btn" :disabled="loading" @click="submit">
                         {{ loading ? 'Đang xử lý...' : (mode === 'login' ? 'Đăng nhập' : 'Đăng ký') }}
@@ -78,73 +78,75 @@ export default {
             this.mode = this.mode === 'login' ? 'register' : 'login';
             this.error = '';
         },
-        async ensureUserDoc(uid, email, displayName) {
-            const ref = doc(db, 'users', uid);
-            const snap = await getDoc(ref);
-            const name = displayName || email.split('@')[0];
-            
-            if (!snap.exists()) {
-                await setDoc(ref, {
-                    email,
-                    username: name,
-                    username_lowercase: name.toLowerCase(),
-                    displayName: name,
-                    role: 'player',
-                    createdAt: new Date().toISOString(),
-                });
-            }
+        async saveUserToFirestore(uid, email, username) {
+            const userRef = doc(db, 'users', uid);
+            const lowerName = username.toLowerCase().trim();
+
+            await setDoc(userRef, {
+                uid: uid,
+                email: email,
+                username: username.trim(),
+                username_lowercase: lowerName,
+                displayName: username.trim(),
+                role: 'player',
+                createdAt: new Date().toISOString(),
+            }, { merge: true });
         },
         async submit() {
             this.error = '';
             this.loading = true;
+
             try {
                 if (this.mode === 'register') {
-                    const cleanUsername = this.displayName.trim();
-                    if (!cleanUsername) {
-                        throw new Error('Vui lòng nhập tên Geometry Dash (tên hiển thị).');
-                    }
-                    if (!this.email || !this.password) {
-                        throw new Error('Vui lòng nhập đầy đủ Email và Mật khẩu.');
-                    }
+                    const gdName = this.displayName.trim();
+                    const inputEmail = this.email.trim();
 
-                    // 1. Check trùng Tên GD trong Firestore trước khi cho Đăng ký
+                    if (!gdName) throw new Error('Vui lòng nhập Tên Geometry Dash.');
+                    if (!inputEmail || !this.password) throw new Error('Vui lòng nhập Email và Mật khẩu.');
+
+                    // 1. Kiểm tra xem Tên GD này đã có người đăng ký chưa
                     const usersRef = collection(db, 'users');
-                    const checkQuery = query(usersRef, where('username_lowercase', '==', cleanUsername.toLowerCase()));
-                    const checkSnap = await getDocs(checkQuery);
-                    
-                    if (!checkSnap.empty) {
+                    const q = query(usersRef, where('username_lowercase', '==', gdName.toLowerCase()));
+                    const querySnap = await getDocs(q);
+
+                    if (!querySnap.empty) {
                         throw new Error('Tên Geometry Dash này đã được sử dụng!');
                     }
 
-                    // 2. Tiến hành tạo Auth
-                    const cred = await createUserWithEmailAndPassword(auth, this.email, this.password);
-                    await updateProfile(cred.user, { displayName: cleanUsername });
-                    await this.ensureUserDoc(cred.user.uid, this.email, cleanUsername);
+                    // 2. Tạo Auth Account
+                    const cred = await createUserWithEmailAndPassword(auth, inputEmail, this.password);
+
+                    // 3. Update Profile & Lưu Firestore
+                    await updateProfile(cred.user, { displayName: gdName });
+                    await this.saveUserToFirestore(cred.user.uid, inputEmail, gdName);
+
                 } else {
-                    // Xử lý Đăng nhập bằng Tên GD hoặc Email
+                    // LUỒNG ĐĂNG NHẬP
                     const input = this.usernameOrEmail.trim();
-                    if (!input || !this.password) {
-                        throw new Error('Vui lòng nhập thông tin đăng nhập và mật khẩu.');
-                    }
+                    if (!input || !this.password) throw new Error('Vui lòng điền đầy đủ thông tin.');
 
                     let targetEmail = input;
 
-                    // Nếu không phải là email (không chứa '@'), tìm Email tương ứng qua Tên GD
+                    // Nếu input KHÔNG chứa ký tự '@' -> Đây là Tên GD -> Cần tìm Email tương ứng
                     if (!input.includes('@')) {
                         const usersRef = collection(db, 'users');
                         const q = query(usersRef, where('username_lowercase', '==', input.toLowerCase()));
-                        const querySnapshot = await getDocs(q);
+                        const querySnap = await getDocs(q);
 
-                        if (querySnapshot.empty) {
-                            throw new Error('Tên tài khoản Geometry Dash không tồn tại.');
+                        if (querySnap.empty) {
+                            throw new Error('Tên Geometry Dash không tồn tại.');
                         }
 
-                        targetEmail = querySnapshot.docs[0].data().email;
+                        // Lấy email từ document tìm được
+                        const userData = querySnap.docs[0].data();
+                        targetEmail = userData.email;
                     }
 
+                    // Tiến hành Đăng nhập Firebase Auth bằng Email
                     await signInWithEmailAndPassword(auth, targetEmail, this.password);
                 }
             } catch (e) {
+                console.error(e);
                 this.error = this.translateError(e);
             } finally {
                 this.loading = false;
@@ -156,8 +158,13 @@ export default {
             try {
                 const provider = new GoogleAuthProvider();
                 const result = await signInWithPopup(auth, provider);
-                await this.ensureUserDoc(result.user.uid, result.user.email, result.user.displayName);
+                const user = result.user;
+                
+                // Lấy tên google hoặc fallback lấy phần tên email
+                const defaultName = user.displayName || user.email.split('@')[0];
+                await this.saveUserToFirestore(user.uid, user.email, defaultName);
             } catch (e) {
+                console.error(e);
                 this.error = this.translateError(e);
             } finally {
                 this.loading = false;
@@ -168,11 +175,12 @@ export default {
         },
         translateError(e) {
             const code = e?.code || '';
+            if (e.message && !code) return e.message; // Trả về thông báo lỗi tùy chỉnh (custom throw Error)
             if (code.includes('email-already-in-use')) return 'Email này đã được đăng ký rồi.';
             if (code.includes('invalid-credential') || code.includes('wrong-password') || code.includes('user-not-found')) return 'Sai tên đăng nhập/email hoặc mật khẩu.';
-            if (code.includes('weak-password')) return 'Mật khẩu quá yếu (tối thiểu 6 ký tự).';
-            if (code.includes('invalid-email')) return 'Email không hợp lệ.';
-            return e.message || 'Có lỗi xảy ra, thử lại sau.';
+            if (code.includes('weak-password')) return 'Mật khẩu phải từ 6 ký tự trở lên.';
+            if (code.includes('invalid-email')) return 'Định dạng Email không hợp lệ.';
+            return e.message || 'Có lỗi xảy ra, xin thử lại.';
         },
     },
 };
