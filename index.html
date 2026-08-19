@@ -28,7 +28,6 @@
         <script src="https://unpkg.com/vue-router@4.0.14/dist/vue-router.global.prod.js"></script>
         <script type="module" src="/js/main.js"></script>
 
-        <!-- CSS trực tiếp cho Sidebar Hover Mở Rộng -->
         <style>
             body#app {
                 display: flex;
@@ -37,13 +36,13 @@
                 background-color: #0b0b0e;
             }
 
-            /* Cấu hình Sidebar cố định bên trái */
+            /* Sidebar cấu hình cố định bên trái */
             .sidebar {
                 position: fixed;
                 top: 0;
                 left: 0;
                 height: 100vh;
-                width: 65px; /* Chiều rộng thu gọn ban đầu */
+                width: 65px;
                 background-color: #121216;
                 border-right: 1px solid #23232b;
                 display: flex;
@@ -56,7 +55,7 @@
                 box-sizing: border-box;
             }
 
-            /* Khi di chuột vào Sidebar thì mở rộng ra 250px */
+            /* Hover để mở rộng Sidebar */
             .sidebar:hover {
                 width: 250px;
             }
@@ -89,12 +88,10 @@
                 opacity: 1;
             }
 
-            /* Danh sách Menu Items */
             .sidebar-nav {
                 display: flex;
                 flex-direction: column;
                 gap: 6px;
-                flex-1: 1;
             }
 
             .sidebar-item {
@@ -134,7 +131,6 @@
                 opacity: 1;
             }
 
-            /* User Profile & Actions ở đáy Sidebar */
             .sidebar-footer {
                 display: flex;
                 flex-direction: column;
@@ -159,7 +155,6 @@
                 flex-shrink: 0;
             }
 
-            /* Tự động đẩy nội dung Main sang phải để không bị Sidebar che */
             main.main-content {
                 margin-left: 65px;
                 flex: 1;
@@ -185,7 +180,7 @@
                     </div>
                 </div>
 
-                <!-- Các nút Chức Năng Chính -->
+                <!-- Các nút Menu -->
                 <nav class="sidebar-nav">
                     <router-link class="sidebar-item" to="/">
                         <span class="sidebar-icon">📋</span>
@@ -214,9 +209,9 @@
                 </nav>
             </div>
 
-            <!-- Nút Hành Động Phụ & User (Ở đáy Sidebar) -->
+            <!-- Footer Đáy Sidebar -->
             <div class="sidebar-footer">
-                <!-- Toggle Dark Mode -->
+                <!-- Dark Mode -->
                 <button class="sidebar-item" @click.prevent="store.toggleDark()" style="background: none; border: none; cursor: pointer; width: 100%;">
                     <span class="sidebar-icon">
                         <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" alt="" style="width: 20px; filter: var(--the-button-on-top)" />
@@ -232,7 +227,7 @@
                     <span class="sidebar-label">Discord Server</span>
                 </a>
 
-                <!-- User Profile / Login -->
+                <!-- Trạng thái Đăng nhập / User -->
                 <div v-if="!store.user">
                     <router-link to="/login" class="sidebar-item" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: #fff;">
                         <span class="sidebar-icon">🔑</span>
@@ -240,11 +235,13 @@
                     </router-link>
                 </div>
 
-                <div v-else style="display: flex; flex-direction: column; gap: 6px;">
+                <template v-else>
                     <div class="user-info-box">
                         <img :src="store.user.avatar || '/assets/the sclvn logo.png'" class="user-avatar">
                         <div class="sidebar-label" style="display: flex; flex-direction: column;">
-                            <span style="color: #ffffff; font-weight: 700; font-size: 13px;">{{ store.user.username }}</span>
+                            <span style="color: #ffffff; font-weight: 700; font-size: 13px;">
+                                {{ store.user.username || store.user.displayName || 'Player' }}
+                            </span>
                             <span v-if="store.user.role === 'admin'" style="color: #ef4444; font-size: 10px; font-weight: bold;">ADMIN</span>
                         </div>
                     </div>
@@ -258,11 +255,11 @@
                         <span class="sidebar-icon">🚪</span>
                         <span class="sidebar-label">Logout</span>
                     </button>
-                </div>
+                </template>
             </div>
         </aside>
 
-        <!-- Khung hiển thị nội dung chính -->
+        <!-- Main Content -->
         <main class="main-content">
             <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
         </main>
