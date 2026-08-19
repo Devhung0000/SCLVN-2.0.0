@@ -80,17 +80,21 @@ export default {
         },
         async saveUserToFirestore(uid, email, username) {
             const userRef = doc(db, 'users', uid);
-            const lowerName = username.toLowerCase().trim();
-
-            await setDoc(userRef, {
-                uid: uid,
-                email: email,
-                username: username.trim(),
-                username_lowercase: lowerName,
-                displayName: username.trim(),
-                role: 'player',
-                createdAt: new Date().toISOString(),
-            }, { merge: true });
+            const userSnap = await getDoc(userRef);
+            
+            // Giữ nguyên dữ liệu cũ nếu user đã tồn tại (dùng cho Google Sign-In)
+            if (!userSnap.exists()) {
+                const cleanUsername = username.trim();
+                await setDoc(userRef, {
+                    uid,
+                    email,
+                    username: cleanUsername,
+                    username_lowercase: cleanUsername.toLowerCase(),
+                    displayName: cleanUsername,
+                    role: 'player',
+                    createdAt: new Date().toISOString(),
+                });
+            }
         },
         async submit() {
             this.error = '';
@@ -104,7 +108,6 @@ export default {
                     if (!gdName) throw new Error('Vui lòng nhập Tên Geometry Dash.');
                     if (!inputEmail || !this.password) throw new Error('Vui lòng nhập Email và Mật khẩu.');
 
-                    // 1. Kiểm tra xem Tên GD này đã có người đăng ký chưa
                     const usersRef = collection(db, 'users');
                     const q = query(usersRef, where('username_lowercase', '==', gdName.toLowerCase()));
                     const querySnap = await getDocs(q);
@@ -113,21 +116,16 @@ export default {
                         throw new Error('Tên Geometry Dash này đã được sử dụng!');
                     }
 
-                    // 2. Tạo Auth Account
                     const cred = await createUserWithEmailAndPassword(auth, inputEmail, this.password);
-
-                    // 3. Update Profile & Lưu Firestore
                     await updateProfile(cred.user, { displayName: gdName });
                     await this.saveUserToFirestore(cred.user.uid, inputEmail, gdName);
 
                 } else {
-                    // LUỒNG ĐĂNG NHẬP
                     const input = this.usernameOrEmail.trim();
                     if (!input || !this.password) throw new Error('Vui lòng điền đầy đủ thông tin.');
 
                     let targetEmail = input;
 
-                    // Nếu input KHÔNG chứa ký tự '@' -> Đây là Tên GD -> Cần tìm Email tương ứng
                     if (!input.includes('@')) {
                         const usersRef = collection(db, 'users');
                         const q = query(usersRef, where('username_lowercase', '==', input.toLowerCase()));
@@ -137,12 +135,10 @@ export default {
                             throw new Error('Tên Geometry Dash không tồn tại.');
                         }
 
-                        // Lấy email từ document tìm được
                         const userData = querySnap.docs[0].data();
                         targetEmail = userData.email;
                     }
 
-                    // Tiến hành Đăng nhập Firebase Auth bằng Email
                     await signInWithEmailAndPassword(auth, targetEmail, this.password);
                 }
             } catch (e) {
@@ -160,7 +156,6 @@ export default {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 
-                // Lấy tên google hoặc fallback lấy phần tên email
                 const defaultName = user.displayName || user.email.split('@')[0];
                 await this.saveUserToFirestore(user.uid, user.email, defaultName);
             } catch (e) {
@@ -175,7 +170,7 @@ export default {
         },
         translateError(e) {
             const code = e?.code || '';
-            if (e.message && !code) return e.message; // Trả về thông báo lỗi tùy chỉnh (custom throw Error)
+            if (e.message && !code) return e.message;
             if (code.includes('email-already-in-use')) return 'Email này đã được đăng ký rồi.';
             if (code.includes('invalid-credential') || code.includes('wrong-password') || code.includes('user-not-found')) return 'Sai tên đăng nhập/email hoặc mật khẩu.';
             if (code.includes('weak-password')) return 'Mật khẩu phải từ 6 ký tự trở lên.';
