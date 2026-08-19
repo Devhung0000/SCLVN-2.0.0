@@ -133,6 +133,7 @@ onAuthStateChanged(auth, async (fbUser) => {
                 uid: fbUser.uid,
                 email: fbUser.email,
                 username: userData.username || fbUser.displayName || fbUser.email.split('@')[0],
+                username_lowercase: userData.username_lowercase || '',
                 avatar: userData.avatar || '',
                 socialLink: userData.socialLink || '',
                 // Object social đầy đủ (youtube/facebook/gdvn/discord), dùng bởi Profile.js
