@@ -1355,3 +1355,11 @@ input[type="radio"] {
     opacity: 1 !important;
     filter: grayscale(0) !important;
 }
+<<<<<<< HEAD
+=======
+
+#app > header + * {
+    min-height: calc(100vh - 4rem);
+    box-sizing: border-box;
+}
+>>>>>>> parent of 6e1aa94 (Update Profile UI)
