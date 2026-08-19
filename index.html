@@ -14,307 +14,19 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
         
+        <link rel="stylesheet" type="text/css" href="/css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="/css/typography.css" />
+        <link rel="stylesheet" type="text/css" href="/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="/css/pages/list.css" />
+        <link rel="stylesheet" type="text/css" href="/css/pages/leaderboard.css" />
+        <link rel="stylesheet" type="text/css" href="/css/pages/roulette.css" />
+        <link rel="stylesheet" type="text/css" href="/css/components/nav.css" />
+        <link rel="stylesheet" type="text/css" href="/css/components/btn.css" />
+        <link rel="stylesheet" type="text/css" href="/css/components/tabs.css" />
+        
         <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
         <script src="https://unpkg.com/vue-router@4.0.14/dist/vue-router.global.prod.js"></script>
         <script type="module" src="/js/main.js"></script>
-
-        <style>
-            /* ==========================================
-               1. RESET & BASE STYLES
-               ========================================== */
-            *, *::before, *::after {
-                box-sizing: border-box !important;
-                margin: 0;
-                padding: 0;
-            }
-
-            html, body {
-                width: 100% !important;
-                height: 100% !important;
-                background-color: #0b0b0e !important;
-                color: #ffffff !important;
-                font-family: 'Poppins', sans-serif !important;
-                overflow-x: hidden !important;
-            }
-
-            body#app {
-                display: grid !important;
-                grid-template-columns: 65px 1fr !important;
-                min-height: 100vh !important;
-                width: 100vw !important;
-                background-color: #0b0b0e !important;
-            }
-
-            /* ==========================================
-               2. SIDEBAR NAVIGATION CỐ ĐỊNH
-               ========================================== */
-            aside.sidebar {
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                height: 100vh !important;
-                width: 65px !important;
-                background-color: #121216 !important;
-                border-right: 1px solid #23232b !important;
-                display: flex !important;
-                flex-direction: column !important;
-                justify-content: space-between !important;
-                transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                z-index: 9999999 !important;
-                padding: 12px 8px !important;
-                overflow: hidden !important;
-                white-space: nowrap !important;
-            }
-
-            aside.sidebar:hover {
-                width: 240px !important;
-            }
-
-            .sidebar-logo {
-                display: flex !important;
-                align-items: center !important;
-                gap: 12px !important;
-                padding: 8px 6px !important;
-                margin-bottom: 20px !important;
-                height: 40px !important;
-            }
-
-            .sidebar-logo img {
-                width: 32px !important;
-                height: 32px !important;
-                border-radius: 8px !important;
-                flex-shrink: 0 !important;
-                object-fit: cover !important;
-            }
-
-            .sidebar-logo-text {
-                display: flex !important;
-                align-items: baseline !important;
-                gap: 6px !important;
-                opacity: 0 !important;
-                transition: opacity 0.2s ease !important;
-            }
-
-            aside.sidebar:hover .sidebar-logo-text {
-                opacity: 1 !important;
-            }
-
-            .sidebar-nav {
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 6px !important;
-            }
-
-            .sidebar-item {
-                display: flex !important;
-                align-items: center !important;
-                gap: 14px !important;
-                padding: 10px 12px !important;
-                border-radius: 8px !important;
-                color: #a1a1aa !important;
-                text-decoration: none !important;
-                transition: background-color 0.2s ease, color 0.2s ease !important;
-                cursor: pointer !important;
-                background: none !important;
-                border: none !important;
-                width: 100% !important;
-                font-family: inherit !important;
-            }
-
-            .sidebar-item:hover, .sidebar-item.router-link-exact-active {
-                background-color: #1e1e24 !important;
-                color: #ffffff !important;
-            }
-
-            .sidebar-icon {
-                font-size: 18px !important;
-                width: 24px !important;
-                height: 24px !important;
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-                flex-shrink: 0 !important;
-            }
-
-            .sidebar-icon img {
-                width: 20px !important;
-                height: 20px !important;
-                object-fit: contain !important;
-            }
-
-            .sidebar-label {
-                opacity: 0 !important;
-                transition: opacity 0.2s ease !important;
-                font-weight: 500 !important;
-                font-size: 14px !important;
-            }
-
-            aside.sidebar:hover .sidebar-label {
-                opacity: 1 !important;
-            }
-
-            .sidebar-footer {
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 6px !important;
-                padding-top: 12px !important;
-                border-top: 1px solid #23232b !important;
-            }
-
-            .user-info-box {
-                display: flex !important;
-                align-items: center !important;
-                gap: 12px !important;
-                padding: 6px !important;
-            }
-
-            .user-avatar {
-                width: 30px !important;
-                height: 30px !important;
-                border-radius: 50% !important;
-                object-fit: cover !important;
-                border: 1px solid #a855f7 !important;
-                flex-shrink: 0 !important;
-            }
-
-            /* ==========================================
-               3. MAIN CONTENT CONTAINER
-               ========================================== */
-            main.main-content {
-                grid-column: 2 !important;
-                width: 100% !important;
-                min-height: 100vh !important;
-                padding: 24px !important;
-                box-sizing: border-box !important;
-                position: relative !important;
-                z-index: 1 !important;
-                overflow-x: hidden !important;
-            }
-
-            /* Fix khung chứa các trang */
-            .list-container, 
-            .page-container, 
-            .leaderboard-container, 
-            .roulette-container, 
-            .page-auth {
-                margin: 0 auto !important;
-                width: 100% !important;
-                max-width: 1200px !important;
-            }
-
-            /* ==========================================
-               4. CSS KHẮC PHỤC LEVEL / LIST CARD ITEM
-               ========================================== */
-            .list, .level-list {
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 12px !important;
-                width: 100% !important;
-            }
-
-            .level-card, .list-item, .card {
-                background: #121216 !important;
-                border: 1px solid #23232b !important;
-                border-radius: 10px !important;
-                padding: 16px !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: space-between !important;
-                gap: 16px !important;
-                transition: transform 0.2s ease, border-color 0.2s ease !important;
-            }
-
-            .level-card:hover, .list-item:hover {
-                border-color: #3f3f46 !important;
-                transform: translateY(-2px);
-            }
-
-            .level-rank, .rank {
-                font-size: 20px !important;
-                font-weight: 700 !important;
-                color: #a855f7 !important;
-                min-width: 45px !important;
-            }
-
-            .level-thumb, .level-image {
-                width: 120px !important;
-                height: 70px !important;
-                border-radius: 6px !important;
-                object-fit: cover !important;
-                flex-shrink: 0 !important;
-            }
-
-            .level-info {
-                flex: 1 !important;
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 4px !important;
-            }
-
-            .level-name {
-                font-size: 16px !important;
-                font-weight: 600 !important;
-                color: #ffffff !important;
-            }
-
-            .level-author {
-                font-size: 13px !important;
-                color: #888888 !important;
-            }
-
-            /* ==========================================
-               5. CSS KHẮC PHỤC LEADERBOARD (BẢNG XẾP HẠNG)
-               ========================================== */
-            .leaderboard-table, table.leaderboard {
-                width: 100% !important;
-                border-collapse: collapse !important;
-                background: #121216 !important;
-                border-radius: 10px !important;
-                overflow: hidden !important;
-                border: 1px solid #23232b !important;
-            }
-
-            .leaderboard-table th, .leaderboard-table td {
-                padding: 14px 18px !important;
-                text-align: left !important;
-                border-bottom: 1px solid #1e1e24 !important;
-            }
-
-            .leaderboard-table th {
-                background-color: #18181c !important;
-                color: #a1a1aa !important;
-                font-weight: 600 !important;
-                font-size: 13px !important;
-                text-transform: uppercase !important;
-            }
-
-            .leaderboard-row:hover {
-                background-color: #1a1a20 !important;
-            }
-
-            .player-cell {
-                display: flex !important;
-                align-items: center !important;
-                gap: 12px !important;
-            }
-
-            .player-avatar {
-                width: 36px !important;
-                height: 36px !important;
-                border-radius: 50% !important;
-                object-fit: cover !important;
-            }
-
-            .player-name {
-                font-weight: 600 !important;
-                color: #ffffff !important;
-            }
-
-            .points-cell, .score {
-                font-weight: 700 !important;
-                color: #a855f7 !important;
-            }
-        </style>
     </head>
     
     <body id="app">
@@ -333,12 +45,12 @@
                 <nav class="sidebar-nav">
                     <router-link class="sidebar-item" to="/">
                         <span class="sidebar-icon">📋</span>
-                        <span class="sidebar-label">Danh sách</span>
+                        <span class="sidebar-label">List</span>
                     </router-link>
 
                     <router-link class="sidebar-item" to="/leaderboard">
                         <span class="sidebar-icon">🏆</span>
-                        <span class="sidebar-label">Bảng xếp hạng</span>
+                        <span class="sidebar-label">Leaderboard</span>
                     </router-link>
 
                     <router-link class="sidebar-item" to="/roulette">
@@ -348,10 +60,10 @@
 
                     <router-link class="sidebar-item" to="/submit">
                         <span class="sidebar-icon">📤</span>
-                        <span class="sidebar-label">Nộp hồ sơ</span>
+                        <span class="sidebar-label">Submit</span>
                     </router-link>
 
-                    <router-link v-if="store.user && store.user.role === 'admin'" class="sidebar-item" to="/admin" style="color: #ef4444 !important;">
+                    <router-link v-if="store.user && store.user.role === 'admin'" class="sidebar-item" to="/admin" style="color: #ef4444;">
                         <span class="sidebar-icon">🛡️</span>
                         <span class="sidebar-label">Duyệt Record</span>
                     </router-link>
@@ -363,20 +75,20 @@
                     <span class="sidebar-icon">
                         <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" alt="Theme" />
                     </span>
-                    <span class="sidebar-label">Đổi giao diện</span>
+                    <span class="sidebar-label">Dark Mode</span>
                 </button>
 
                 <a class="sidebar-item" href="https://discord.gg/Qcj5JSRKa" target="_blank" rel="noopener noreferrer">
                     <span class="sidebar-icon">
                         <img src="/assets/discord.svg" alt="Discord" />
                     </span>
-                    <span class="sidebar-label">Máy chủ Discord</span>
+                    <span class="sidebar-label">Discord</span>
                 </a>
 
                 <div v-if="!store.user">
-                    <router-link to="/login" class="sidebar-item" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%) !important; color: #fff !important;">
+                    <router-link to="/login" class="sidebar-item" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: #fff;">
                         <span class="sidebar-icon">🔑</span>
-                        <span class="sidebar-label">Đăng nhập / Đăng ký</span>
+                        <span class="sidebar-label">Login</span>
                     </router-link>
                 </div>
 
@@ -393,12 +105,12 @@
 
                     <router-link to="/profile" class="sidebar-item">
                         <span class="sidebar-icon">👤</span>
-                        <span class="sidebar-label">Hồ sơ</span>
+                        <span class="sidebar-label">Profile</span>
                     </router-link>
 
-                    <button @click="store.handleLogout()" class="sidebar-item" style="color: #ef4444 !important;">
+                    <button @click="store.handleLogout()" class="sidebar-item" style="color: #ef4444;">
                         <span class="sidebar-icon">🚪</span>
-                        <span class="sidebar-label">Đăng xuất</span>
+                        <span class="sidebar-label">Logout</span>
                     </button>
                 </template>
             </div>
