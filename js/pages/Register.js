@@ -63,25 +63,59 @@ export function initRegisterEvents() {
         return;
       }
 
-      // 2. Tạo tài khoản trong Firebase Auth
+      // 2. TÌM DATA CŨ CỦA TÊN NÀY TRÊN LEADERBOARD (collection "players")
+      //    Nếu trùng tên -> tự động claim avatar + social link cũ về tài khoản mới
+      let claimedSocials = { youtube: '', facebook: '', gdvn: '', discord: '' };
+      let claimedAvatar = '';
+      try {
+        const playerRef = doc(db, "players", lowerUsername);
+        const playerSnap = await getDoc(playerRef);
+        if (playerSnap.exists()) {
+          const p = playerSnap.data();
+          claimedSocials = {
+            youtube: p.youtube || '',
+            facebook: p.facebook || '',
+            gdvn: p.gdvn || '',
+            discord: p.discord || '',
+          };
+          claimedAvatar = p.avatarUrl || '';
+        }
+      } catch (e) {
+        console.warn('Không kiểm tra được dữ liệu leaderboard cũ:', e);
+      }
+
+      // 3. Tạo tài khoản trong Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // 3. Tạo Mapping "usernames/username_lowercase" -> chứa Email (dùng để tra cứu lúc Login)
+      // 4. Tạo Mapping "usernames/username_lowercase" -> chứa Email (dùng để tra cứu lúc Login)
       await setDoc(usernameRef, {
         uid: user.uid,
         email: email,
         originalUsername: username
       });
 
-      // 4. Lưu thông tin Profile chính trong "users/uid"
+      // 5. Lưu thông tin Profile chính trong "users/uid"
       await setDoc(doc(db, "users", user.uid), {
         username: username,
         username_lowercase: lowerUsername,
         email: email,
+        avatar: claimedAvatar,
+        socials: claimedSocials,
         role: "player",
         createdAt: new Date().toISOString()
       });
+
+      // 6. Đồng bộ / claim lại doc "players" (public, Leaderboard.js đọc từ đây)
+      await setDoc(doc(db, "players", lowerUsername), {
+        name: username,
+        youtube: claimedSocials.youtube,
+        facebook: claimedSocials.facebook,
+        gdvn: claimedSocials.gdvn,
+        discord: claimedSocials.discord,
+        avatarUrl: claimedAvatar,
+        claimedBy: user.uid,
+      }, { merge: true });
 
       alert("Đăng ký thành công!");
       window.location.hash = "#/"; // Chuyển về trang chủ
