@@ -33,15 +33,20 @@
                 box-sizing: border-box;
             }
 
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100vw;
+                min-height: 100vh;
+                background-color: #0b0b0e;
+                overflow-x: hidden;
+            }
+
             body#app {
                 display: flex !important;
                 min-height: 100vh;
-                margin: 0 !important;
-                padding: 0 !important;
                 background-color: #0b0b0e;
                 color: #ffffff;
-                width: 100vw;
-                overflow-x: hidden;
             }
 
             /* Sidebar cấu hình cố định bên trái */
@@ -63,7 +68,7 @@
                 box-sizing: border-box;
             }
 
-            /* Hover để mở rộng Sidebar */
+            /* Hover mở rộng Sidebar */
             .sidebar:hover {
                 width: 250px;
             }
@@ -163,22 +168,23 @@
                 flex-shrink: 0;
             }
 
-            /* Fix tận gốc lỗi giao diện bị hẹp/dồn vè bên trái */
+            /* Fix tận gốc lỗi giao diện bị co rúc bên trái */
             main.main-content {
                 margin-left: 65px !important;
-                flex: 1 !important;
-                width: calc(100% - 65px) !important;
-                max-width: calc(100% - 65px) !important;
+                width: calc(100vw - 65px) !important;
+                max-width: calc(100vw - 65px) !important;
                 min-height: 100vh;
-                padding: 24px !important;
+                padding: 2rem !important;
                 box-sizing: border-box !important;
-                overflow-y: auto;
+                flex: 1 !important;
+                display: block !important;
             }
 
-            /* Ghi đè triệt hạ các khung chứa con bị bóp méo từ CSS cũ */
-            main.main-content > * {
-                max-width: 100% !important;
-                box-sizing: border-box !important;
+            /* Ghi đè các khung List/Leaderboard cũ tránh giới hạn chiều rộng hẹp */
+            .page-container, .list-container, .leaderboard-container, .page-auth {
+                width: 100% !important;
+                max-width: 1200px !important;
+                margin: 0 auto !important;
             }
         </style>
     </head>
@@ -198,7 +204,7 @@
                     </div>
                 </div>
 
-                <!-- Các nút Menu -->
+                <!-- Các nút Menu Navigation -->
                 <nav class="sidebar-nav">
                     <router-link class="sidebar-item" to="/">
                         <span class="sidebar-icon">📋</span>
@@ -229,7 +235,7 @@
 
             <!-- Footer Đáy Sidebar -->
             <div class="sidebar-footer">
-                <!-- Dark Mode -->
+                <!-- Toggle Dark Mode -->
                 <button class="sidebar-item" @click.prevent="store.toggleDark()" style="background: none; border: none; cursor: pointer; width: 100%;">
                     <span class="sidebar-icon">
                         <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" alt="" style="width: 20px; filter: var(--the-button-on-top)" />
@@ -237,7 +243,7 @@
                     <span class="sidebar-label">Đổi Giao Diện</span>
                 </button>
 
-                <!-- Discord -->
+                <!-- Discord Community -->
                 <a class="sidebar-item" href="https://discord.gg/Qcj5JSRKa" target="_blank">
                     <span class="sidebar-icon">
                         <img src="/assets/discord.svg" alt="Discord" style="width: 20px; filter: var(--the-button-on-top)" />
@@ -245,7 +251,7 @@
                     <span class="sidebar-label">Discord Server</span>
                 </a>
 
-                <!-- Trạng thái Đăng nhập / User -->
+                <!-- Trạng thái Đăng nhập / User Profile -->
                 <div v-if="!store.user">
                     <router-link to="/login" class="sidebar-item" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: #fff;">
                         <span class="sidebar-icon">🔑</span>
@@ -277,7 +283,7 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Main Content Rộng Tràn Bên Phải Sidebar -->
         <main class="main-content">
             <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
         </main>
