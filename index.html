@@ -6,7 +6,7 @@
         <meta property="og:url" content="https://thespamchallengelistvietnam.pages.dev/"/>
         <meta property="og:title" content="The Spam Challenge List Vietnam" />
         <meta property="og:description" content="This is a website for the hardest spam challenges in Vietnam!" />
-        <meta property="og:image" content="https://thespamchallengelistvietnam2.pages.dev/assets/the%20sclvn%20logo.png" />
+        <meta property="og:image" content="https://thespamchallengelistvietnam2.pages.dev//assets/the%20sclvn%20logo.png" />
         <title>The Spam Challenge List Vietnam</title>
 
         <link rel="icon" href="/assets/the sclvn logo.png" />
@@ -27,21 +27,184 @@
         <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
         <script src="https://unpkg.com/vue-router@4.0.14/dist/vue-router.global.prod.js"></script>
         <script type="module" src="/js/main.js"></script>
+
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            html, body {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100vw;
+                min-height: 100vh;
+                background-color: #0b0b0e;
+                overflow-x: hidden;
+            }
+
+            body#app {
+                display: flex !important;
+                min-height: 100vh;
+                background-color: #0b0b0e;
+                color: #ffffff;
+            }
+
+            /* Sidebar cấu hình cố định bên trái */
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 65px;
+                background-color: #121216;
+                border-right: 1px solid #23232b;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                overflow: hidden;
+                z-index: 9999;
+                padding: 12px 8px;
+                box-sizing: border-box;
+            }
+
+            /* Hover mở rộng Sidebar */
+            .sidebar:hover {
+                width: 250px;
+            }
+
+            .sidebar-logo {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 8px 6px;
+                margin-bottom: 20px;
+            }
+
+            .sidebar-logo img {
+                width: 36px;
+                height: 36px;
+                border-radius: 8px;
+                flex-shrink: 0;
+            }
+
+            .sidebar-logo-text {
+                display: flex;
+                align-items: baseline;
+                gap: 6px;
+                opacity: 0;
+                white-space: nowrap;
+                transition: opacity 0.2s ease;
+            }
+
+            .sidebar:hover .sidebar-logo-text {
+                opacity: 1;
+            }
+
+            .sidebar-nav {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .sidebar-item {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 12px 14px;
+                border-radius: 8px;
+                color: #a1a1aa;
+                text-decoration: none;
+                white-space: nowrap;
+                transition: all 0.2s ease;
+            }
+
+            .sidebar-item:hover, .sidebar-item.router-link-exact-active {
+                background-color: #1e1e24;
+                color: #ffffff;
+            }
+
+            .sidebar-icon {
+                font-size: 18px;
+                width: 24px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+            .sidebar-label {
+                opacity: 0;
+                transition: opacity 0.2s ease;
+                font-weight: 500;
+                font-size: 14px;
+            }
+
+            .sidebar:hover .sidebar-label {
+                opacity: 1;
+            }
+
+            .sidebar-footer {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding-top: 12px;
+                border-top: 1px solid #23232b;
+            }
+
+            .user-info-box {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 6px;
+            }
+
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 1px solid #a855f7;
+                flex-shrink: 0;
+            }
+
+            /* Fix tận gốc lỗi giao diện bị co rúc bên trái */
+            main.main-content {
+                margin-left: 65px !important;
+                width: calc(100vw - 65px) !important;
+                max-width: calc(100vw - 65px) !important;
+                min-height: 100vh;
+                padding: 2rem !important;
+                box-sizing: border-box !important;
+                flex: 1 !important;
+                display: block !important;
+            }
+
+            /* Ghi đè các khung List/Leaderboard cũ tránh giới hạn chiều rộng hẹp */
+            .page-container, .list-container, .leaderboard-container, .page-auth {
+                width: 100% !important;
+                max-width: 1200px !important;
+                margin: 0 auto !important;
+            }
+        </style>
     </head>
     
     <body id="app">
+        <!-- Sidebar Bên Trái -->
         <aside class="sidebar" :class="{ dark: store.dark, 'darker': store.darker }">
             <div>
+                <!-- Logo SCLVN -->
                 <div class="sidebar-logo">
                     <a href="https://thespamchallengelistvietnam2.pages.dev/">
-                        <img src="/assets/the sclvn logo.png" alt="SCLVN Logo" />
+                        <img src="./assets/the sclvn logo.png" />
                     </a>
                     <div class="sidebar-logo-text">
-                        <h2 style="margin: 0; font-size: 16px; color: #fff;">SCLVN</h2>
-                        <span style="font-size: 11px; color: #888;">v2.0</span>
+                        <h2 style="margin: 0; font-size: 18px; color: #fff;">SCLVN</h2>
+                        <span style="font-size: 12px; color: #888;">v2.0</span>
                     </div>
                 </div>
 
+                <!-- Các nút Menu Navigation -->
                 <nav class="sidebar-nav">
                     <router-link class="sidebar-item" to="/">
                         <span class="sidebar-icon">📋</span>
@@ -60,7 +223,7 @@
 
                     <router-link class="sidebar-item" to="/submit">
                         <span class="sidebar-icon">📤</span>
-                        <span class="sidebar-label">Submit</span>
+                        <span class="sidebar-label">Submit Record</span>
                     </router-link>
 
                     <router-link v-if="store.user && store.user.role === 'admin'" class="sidebar-item" to="/admin" style="color: #ef4444;">
@@ -70,31 +233,35 @@
                 </nav>
             </div>
 
+            <!-- Footer Đáy Sidebar -->
             <div class="sidebar-footer">
-                <button class="sidebar-item" @click.prevent="store.toggleDark()">
+                <!-- Toggle Dark Mode -->
+                <button class="sidebar-item" @click.prevent="store.toggleDark()" style="background: none; border: none; cursor: pointer; width: 100%;">
                     <span class="sidebar-icon">
-                        <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" alt="Theme" />
+                        <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" alt="" style="width: 20px; filter: var(--the-button-on-top)" />
                     </span>
-                    <span class="sidebar-label">Dark Mode</span>
+                    <span class="sidebar-label">Đổi Giao Diện</span>
                 </button>
 
-                <a class="sidebar-item" href="https://discord.gg/Qcj5JSRKa" target="_blank" rel="noopener noreferrer">
+                <!-- Discord Community -->
+                <a class="sidebar-item" href="https://discord.gg/Qcj5JSRKa" target="_blank">
                     <span class="sidebar-icon">
-                        <img src="/assets/discord.svg" alt="Discord" />
+                        <img src="/assets/discord.svg" alt="Discord" style="width: 20px; filter: var(--the-button-on-top)" />
                     </span>
-                    <span class="sidebar-label">Discord</span>
+                    <span class="sidebar-label">Discord Server</span>
                 </a>
 
+                <!-- Trạng thái Đăng nhập / User Profile -->
                 <div v-if="!store.user">
                     <router-link to="/login" class="sidebar-item" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: #fff;">
                         <span class="sidebar-icon">🔑</span>
-                        <span class="sidebar-label">Login</span>
+                        <span class="sidebar-label">Login / Register</span>
                     </router-link>
                 </div>
 
                 <template v-else>
                     <div class="user-info-box">
-                        <img :src="store.user.avatar || '/assets/the sclvn logo.png'" class="user-avatar" alt="Avatar">
+                        <img :src="store.user.avatar || '/assets/the sclvn logo.png'" class="user-avatar">
                         <div class="sidebar-label" style="display: flex; flex-direction: column;">
                             <span style="color: #ffffff; font-weight: 700; font-size: 13px;">
                                 {{ store.user.username || store.user.displayName || 'Player' }}
@@ -108,7 +275,7 @@
                         <span class="sidebar-label">Profile</span>
                     </router-link>
 
-                    <button @click="store.handleLogout()" class="sidebar-item" style="color: #ef4444;">
+                    <button @click="store.handleLogout()" class="sidebar-item" style="background: none; border: none; cursor: pointer; width: 100%; color: #ef4444;">
                         <span class="sidebar-icon">🚪</span>
                         <span class="sidebar-label">Logout</span>
                     </button>
@@ -116,6 +283,7 @@
             </div>
         </aside>
 
+        <!-- Main Content Rộng Tràn Bên Phải Sidebar -->
         <main class="main-content">
             <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
         </main>
