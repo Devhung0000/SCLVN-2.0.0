@@ -1,33 +1,30 @@
-/* ==========================================================================
-   1. CSS VARIABLES & THEMES
-   ========================================================================== */
+/* ================= CSS VARIABLES & THEMES ================= */
 :root {
     --color-background: #fbfbfb;
-    --color-on-background: #000000;
+    --color-on-background: black;
     --color-background-hover: #eeeeef;
-    --color-on-background-hover: #000000;
+    --color-on-background-hover: black;
     --color-primary: #eeeeef;
-    --color-on-primary: #000000;
+    --color-on-primary: black;
     --color-error: #de0000;
-    --color-on-error: #000000;
+    --color-on-error: black;
     --the-button-on-top: brightness(0) saturate(100%);
     --level-button: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
     --color-background-list: #fbfbfbde;
-    --sidebar-width: 65px;
 }
 
 main.dark,
 header.dark {
     color-scheme: dark;
     --color-background: #1c1b1f;
-    --color-on-background: #ffffff;
+    --color-on-background: white;
     --color-background-hover: #2e2e2e;
-    --color-on-background-hover: #ffffff;
+    --color-on-background-hover: white;
     --color-primary: #2e2e2e;
     --color-primary-disabled: #1f213c;
-    --color-on-primary: #ffffff;
+    --color-on-primary: white;
     --color-error: #de0000;
-    --color-on-error: #ffffff;
+    --color-on-error: white;
     --the-button-on-top: brightness(100%) saturate(100%);
     --level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
     --color-background-list: #1c1b1fde;
@@ -37,22 +34,20 @@ main.darker,
 header.darker {
     color-scheme: darker;
     --color-background: #070709;
-    --color-on-background: #ffffff;
+    --color-on-background: white;
     --color-background-hover: #18181B;
-    --color-on-background-hover: #ffffff;
+    --color-on-background-hover: white;
     --color-primary: #18181B;
     --color-primary-disabled: #1c1c1c;
-    --color-on-primary: #ffffff;
+    --color-on-primary: white;
     --color-error: #de0000;
-    --color-on-error: #ffffff;
+    --color-on-error: white;
     --the-button-on-top: brightness(100%) saturate(100%);
     --level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
     --color-background-list: #070709de;
 }
 
-/* ==========================================================================
-   2. BASE STYLES & RESET
-   ========================================================================== */
+/* ================= BASE STYLES ================= */
 * {
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
@@ -68,53 +63,25 @@ body {
     overflow-x: hidden;
 }
 
-body#app {
-    display: flex !important;
+body {
     min-height: 100vh;
-    background-color: #0b0b0e;
-    position: relative;
 }
 
 header,
 main {
     background-color: var(--color-background);
     color: var(--color-on-background);
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.6fr) 1fr minmax(16em, 0.6fr);
+    column-gap: 2rem;
 }
 
-/* ==========================================================================
-   3. SIDEBAR NAVIGATION (FIX CỐ ĐỊNH & HOVER MƯỢT)
-   ========================================================================== */
-aside.sidebar,
-nav.sidebar,
-.sidebar {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    height: 100vh !important;
-    width: var(--sidebar-width) !important;
-    z-index: 999999 !important;
-    background-color: #0d0d0e !important;
-    pointer-events: auto !important;
-    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-}
-
-aside.sidebar:hover {
-    width: 240px !important;
-}
-
-/* ==========================================================================
-   4. MAIN CONTENT & HEADER LAYOUT
-   ========================================================================== */
 header {
     display: flex;
     padding-inline: calc(25vw - 10rem);
     height: 4rem;
     background-color: var(--color-primary);
     color: var(--color-on-primary);
-    margin-left: var(--sidebar-width);
-    width: calc(100% - var(--sidebar-width));
 }
 
 @media screen and (min-width: 1366px) {
@@ -127,6 +94,8 @@ header {
 header .logo {
     justify-self: end;
     align-self: center;
+    display: flex;
+    align-items: flex-end;
     display: inline-block;
 }
 
@@ -134,31 +103,17 @@ header .nav {
     flex: 1;
 }
 
-/* Main Container: Tự né Sidebar 65px */
-main,
-main.main-content {
+main {
     min-height: calc(100vh - 4rem);
-    margin-left: var(--sidebar-width) !important;
-    width: calc(100% - var(--sidebar-width)) !important;
     display: grid;
-    grid-template-columns: minmax(16rem, 0.6fr) 1fr minmax(16em, 0.6fr);
     grid-template-rows: minmax(0, 1fr);
     column-gap: 2rem;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 1;
 }
 
 main > div {
     overflow-y: auto;
 }
 
-#app > header + * {
-    min-height: calc(100vh - 4rem);
-    box-sizing: border-box;
-}
-
-/* UI Utilities */
 .spinner {
     display: flex;
     align-items: center;
@@ -167,7 +122,7 @@ main > div {
 }
 
 .make-it-red {
-    color: #de0000;
+    color: red;
 }
 
 input[type="checkbox"],
@@ -203,15 +158,7 @@ input[type="radio"] {
     color: var(--color-on-background);
 }
 
-/* Logo Discord trên trang List */
-.nav__icon img {
-    max-width: 120px !important;
-    height: auto !important;
-}
-
-/* ==========================================================================
-   5. LEADERBOARD COMPONENTS
-   ========================================================================== */
+/* ================= LEADERBOARD ROW (LEFT COLUMN) ================= */
 .board-row {
     display: flex !important;
     align-items: center !important;
@@ -261,7 +208,7 @@ input[type="radio"] {
 .player-name-text {
     font-size: 1.05rem !important;
     font-weight: bold !important;
-    color: #ffffff !important;
+    color: #fff !important;
     white-space: nowrap !important;
 }
 
@@ -283,9 +230,7 @@ input[type="radio"] {
     border: 1px solid rgba(255, 215, 0, 0.3) !important;
 }
 
-/* ==========================================================================
-   6. PROFILE CARD & SOCIALS
-   ========================================================================== */
+/* ================= PROFILE CARD (RIGHT COLUMN) ================= */
 .profile-header-card {
     display: flex !important;
     justify-content: space-between !important;
@@ -311,6 +256,7 @@ input[type="radio"] {
     font-weight: 800 !important;
 }
 
+/* Dòng chứa điểm Pts */
 .player-stats-row {
     display: flex !important;
     align-items: center !important;
@@ -329,6 +275,7 @@ input[type="radio"] {
     box-shadow: 0 0 12px rgba(255, 183, 3, 0.2) !important;
 }
 
+/* Dòng Discord nằm dưới Pts */
 .discord-text-row {
     display: flex !important;
     align-items: center !important;
@@ -356,7 +303,7 @@ input[type="radio"] {
     color: #ffffff !important;
 }
 
-/* Avatar Box */
+/* --- Khung Avatar & Social Icons --- */
 .profile-avatar-box {
     flex-shrink: 0 !important;
     display: flex !important;
@@ -375,7 +322,7 @@ input[type="radio"] {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Social Row */
+/* Social icons + Discord Tag nằm hàng ngang dưới Avatar */
 .player-socials-row {
     display: flex !important;
     flex-direction: row !important;
@@ -386,6 +333,7 @@ input[type="radio"] {
     flex-wrap: wrap !important;
 }
 
+/* Khung Discord Tag nhỏ gọn */
 .discord-tag {
     position: relative !important;
     display: inline-flex !important;
@@ -427,7 +375,7 @@ input[type="radio"] {
     left: 50% !important;
     transform: translateX(-50%) !important;
     background: #5865F2 !important;
-    color: #ffffff !important;
+    color: #fff !important;
     font-size: 0.7rem !important;
     font-weight: bold !important;
     padding: 2px 8px !important;
@@ -444,6 +392,7 @@ input[type="radio"] {
     100% { opacity: 0; transform: translate(-50%, -5px); }
 }
 
+/* Icon Youtube, Facebook, GDVN */
 .player-socials-row .social-icon {
     width: 22px !important;
     height: 22px !important;
@@ -458,6 +407,7 @@ input[type="radio"] {
     transform: scale(1.2) !important;
 }
 
+/* Icon tùy chỉnh cho GDVN */
 .social-icon.gdvn-icon {
     width: auto !important;
     height: 26px !important;
@@ -470,9 +420,7 @@ input[type="radio"] {
     transform: scale(1.1) !important;
 }
 
-/* ==========================================================================
-   7. PROFILE SECTIONS & LEVEL CARDS
-   ========================================================================== */
+/* ================= PROFILE SECTIONS & LEVEL CARDS ================= */
 .profile-section {
     margin-bottom: 25px !important;
     text-align: left !important;
@@ -501,7 +449,7 @@ input[type="radio"] {
     background-position: center !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
     text-decoration: none !important;
-    color: #ffffff !important;
+    color: #fff !important;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
     position: relative !important;
     overflow: hidden !important;
@@ -548,7 +496,7 @@ input[type="radio"] {
     border: 1px solid rgba(76, 201, 240, 0.3) !important;
 }
 
-/* Filter Tabs */
+/* ================= FILTER TABS ================= */
 .filter-tabs {
     display: flex !important;
     gap: 10px !important;
@@ -559,7 +507,7 @@ input[type="radio"] {
 .filter-tabs button {
     background: rgba(255, 255, 255, 0.08) !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    color: #cccccc !important;
+    color: #ccc !important;
     padding: 8px 16px !important;
     border-radius: 8px !important;
     font-size: 0.9rem !important;
@@ -570,18 +518,18 @@ input[type="radio"] {
 
 .filter-tabs button:hover {
     background: rgba(255, 255, 255, 0.18) !important;
-    color: #ffffff !important;
+    color: #fff !important;
 }
 
 .filter-tabs button.active {
     background: #ffd700 !important;
-    color: #000000 !important;
+    color: #000 !important;
     border-color: #ffd700 !important;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.4) !important;
 }
 
 .empty-msg {
-    color: #888888 !important;
+    color: #888 !important;
     font-style: italic !important;
     padding: 10px 0 !important;
 }
@@ -596,9 +544,12 @@ input[type="radio"] {
     filter: grayscale(0) !important;
 }
 
-/* ==========================================================================
-   8. PAGE SPECIFIC OVERRIDES (PROFILE & ROULETTE)
-   ========================================================================== */
+#app > header + * {
+    min-height: calc(100vh - 4rem);
+    box-sizing: border-box;
+}
+
+/* ================= PROFILE PAGE ================= */
 .page-profile {
     width: 100%;
     min-height: calc(100vh - 4rem);
@@ -622,47 +573,4 @@ input[type="radio"] {
 
 .page-profile > div:last-child {
     width: 100%;
-}
-
-/* Roulette Page */
-main.page-roulette,
-.page-roulette {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
-    width: calc(100% - var(--sidebar-width)) !important;
-    min-height: 100vh !important;
-    padding: 25px !important;
-    gap: 30px !important;
-    box-sizing: border-box !important;
-}
-
-.roulette-container {
-    width: 100% !important;
-    max-width: 1200px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 20px !important;
-    box-sizing: border-box !important;
-}
-
-.roulette-sidebar, 
-.roulette-controls {
-    min-width: 220px !important;
-    max-width: 280px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 15px !important;
-}
-
-.roulette-results, 
-.roulette-main {
-    flex: 1 !important;
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
 }
