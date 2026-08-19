@@ -14,216 +14,231 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
         
-        <link rel="stylesheet" type="text/css" href="/css/reset.css" />
-        <link rel="stylesheet" type="text/css" href="/css/typography.css" />
-        <link rel="stylesheet" type="text/css" href="/css/main.css" />
-        <link rel="stylesheet" type="text/css" href="/css/pages/list.css" />
-        <link rel="stylesheet" type="text/css" href="/css/pages/leaderboard.css" />
-        <link rel="stylesheet" type="text/css" href="/css/pages/roulette.css" />
-        <link rel="stylesheet" type="text/css" href="/css/components/nav.css" />
-        <link rel="stylesheet" type="text/css" href="/css/components/btn.css" />
-        <link rel="stylesheet" type="text/css" href="/css/components/tabs.css" />
-        
         <script src="https://unpkg.com/vue@3.2.31/dist/vue.global.js"></script>
         <script src="https://unpkg.com/vue-router@4.0.14/dist/vue-router.global.prod.js"></script>
         <script type="module" src="/js/main.js"></script>
 
         <style>
-            * {
-                box-sizing: border-box;
+            /* ==========================================
+               1. RESET & BASE STYLES (Đã Merge)
+               ========================================== */
+            *, *::before, *::after {
+                box-sizing: border-box !important;
+                margin: 0;
+                padding: 0;
             }
 
             html, body {
-                margin: 0 !important;
-                padding: 0 !important;
                 width: 100% !important;
                 height: 100% !important;
                 background-color: #0b0b0e !important;
+                color: #ffffff !important;
+                font-family: 'Poppins', sans-serif !important;
                 overflow-x: hidden !important;
             }
 
+            /* ==========================================
+               2. GRID LAYOUT KHÔNG BAO GIỜ LỖI CHE LẤP
+               ========================================== */
             body#app {
-                display: flex !important;
-                min-height: 100vh;
+                display: grid !important;
+                grid-template-columns: 65px 1fr !important;
+                min-height: 100vh !important;
+                width: 100vw !important;
                 background-color: #0b0b0e !important;
-                color: #ffffff;
-                position: relative;
             }
 
-            /* --- FIX SIDEBAR CHẮC CHẮN NẰM TRÊN CÙNG & BẤM ĐƯỢC --- */
-            .sidebar {
+            /* ==========================================
+               3. SIDEBAR NAVIGATION
+               ========================================== */
+            aside.sidebar {
                 position: fixed !important;
                 top: 0 !important;
                 left: 0 !important;
                 height: 100vh !important;
-                width: 65px;
+                width: 65px !important;
                 background-color: #121216 !important;
-                border-right: 1px solid #23232b;
+                border-right: 1px solid #23232b !important;
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: space-between !important;
-                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                overflow: hidden !important;
-                z-index: 999999 !important; /* Đẩy lên lớp cao nhất */
+                transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                z-index: 9999999 !important;
                 padding: 12px 8px !important;
-                box-sizing: border-box !important;
-                pointer-events: auto !important; /* Đảm bảo luôn click được */
+                overflow: hidden !important;
+                white-space: nowrap !important;
             }
 
-            /* Hover mở rộng Sidebar */
-            .sidebar:hover {
-                width: 250px !important;
+            aside.sidebar:hover {
+                width: 240px !important;
             }
 
             .sidebar-logo {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 8px 6px;
-                margin-bottom: 20px;
+                display: flex !important;
+                align-items: center !important;
+                gap: 12px !important;
+                padding: 8px 6px !important;
+                margin-bottom: 20px !important;
+                height: 40px !important;
             }
 
             .sidebar-logo img {
-                width: 36px;
-                height: 36px;
-                border-radius: 8px;
-                flex-shrink: 0;
-                object-fit: cover;
+                width: 32px !important;
+                height: 32px !important;
+                border-radius: 8px !important;
+                flex-shrink: 0 !important;
+                object-fit: cover !important;
             }
 
             .sidebar-logo-text {
-                display: flex;
-                align-items: baseline;
-                gap: 6px;
-                opacity: 0;
-                white-space: nowrap;
-                transition: opacity 0.2s ease;
+                display: flex !important;
+                align-items: baseline !important;
+                gap: 6px !important;
+                opacity: 0 !important;
+                transition: opacity 0.2s ease !important;
             }
 
-            .sidebar:hover .sidebar-logo-text {
-                opacity: 1;
+            aside.sidebar:hover .sidebar-logo-text {
+                opacity: 1 !important;
             }
 
             .sidebar-nav {
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 6px !important;
             }
 
             .sidebar-item {
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                padding: 12px 14px;
-                border-radius: 8px;
-                color: #a1a1aa;
-                text-decoration: none;
-                white-space: nowrap;
-                transition: all 0.2s ease;
-                cursor: pointer;
+                display: flex !important;
+                align-items: center !important;
+                gap: 14px !important;
+                padding: 10px 12px !important;
+                border-radius: 8px !important;
+                color: #a1a1aa !important;
+                text-decoration: none !important;
+                transition: background-color 0.2s ease, color 0.2s ease !important;
+                cursor: pointer !important;
+                background: none !important;
+                border: none !important;
+                width: 100% !important;
+                font-family: inherit !important;
             }
 
             .sidebar-item:hover, .sidebar-item.router-link-exact-active {
-                background-color: #1e1e24;
-                color: #ffffff;
+                background-color: #1e1e24 !important;
+                color: #ffffff !important;
             }
 
             .sidebar-icon {
-                font-size: 18px;
-                width: 24px;
-                height: 24px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-shrink: 0;
+                font-size: 18px !important;
+                width: 24px !important;
+                height: 24px !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                flex-shrink: 0 !important;
             }
 
             .sidebar-icon img {
-                max-width: 20px;
-                max-height: 20px;
-                object-fit: contain;
+                width: 20px !important;
+                height: 20px !important;
+                object-fit: contain !important;
             }
 
             .sidebar-label {
-                opacity: 0;
-                transition: opacity 0.2s ease;
-                font-weight: 500;
-                font-size: 14px;
+                opacity: 0 !important;
+                transition: opacity 0.2s ease !important;
+                font-weight: 500 !important;
+                font-size: 14px !important;
             }
 
-            .sidebar:hover .sidebar-label {
-                opacity: 1;
+            aside.sidebar:hover .sidebar-label {
+                opacity: 1 !important;
             }
 
             .sidebar-footer {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                padding-top: 12px;
-                border-top: 1px solid #23232b;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 6px !important;
+                padding-top: 12px !important;
+                border-top: 1px solid #23232b !important;
             }
 
             .user-info-box {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 6px;
+                display: flex !important;
+                align-items: center !important;
+                gap: 12px !important;
+                padding: 6px !important;
             }
 
             .user-avatar {
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                object-fit: cover;
-                border: 1px solid #a855f7;
-                flex-shrink: 0;
+                width: 30px !important;
+                height: 30px !important;
+                border-radius: 50% !important;
+                object-fit: cover !important;
+                border: 1px solid #a855f7 !important;
+                flex-shrink: 0 !important;
             }
 
-            /* --- FIX NỘI DUNG CHÍNH KHÔNG ĐÈ LÊN SIDEBAR --- */
+            /* ==========================================
+               4. MAIN CONTENT & PAGE OVERRIDES
+               ========================================== */
             main.main-content {
-                margin-left: 65px !important; /* Nhường đúng 65px cho Sidebar */
-                width: calc(100% - 65px) !important;
-                min-height: 100vh;
-                padding: 2rem !important;
+                grid-column: 2 !important;
+                width: 100% !important;
+                min-height: 100vh !important;
+                padding: 24px !important;
                 box-sizing: border-box !important;
                 position: relative !important;
-                z-index: 1 !important; /* Thấp hơn Sidebar */
+                z-index: 1 !important;
+                overflow-x: hidden !important;
             }
 
-            /* Reset các container trang cũ tránh tràn lề */
-            .page-container, .list-container, .leaderboard-container, .page-auth {
+            /* Sửa triệt để các khung View con tràn viền */
+            main.main-content > * {
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            /* Sửa đè khung List/Leaderboard không bị dịch lệch */
+            .list-container, 
+            .page-container, 
+            .leaderboard-container, 
+            .roulette-container, 
+            .page-auth {
+                margin: 0 auto !important;
                 width: 100% !important;
                 max-width: 1200px !important;
-                margin: 0 auto !important;
+                position: static !important;
             }
         </style>
     </head>
     
     <body id="app">
-        <!-- Sidebar Bên Trái -->
+        <!-- Sidebar Navigation -->
         <aside class="sidebar" :class="{ dark: store.dark, 'darker': store.darker }">
             <div>
-                <!-- Logo SCLVN -->
+                <!-- Logo -->
                 <div class="sidebar-logo">
                     <a href="https://thespamchallengelistvietnam2.pages.dev/">
                         <img src="/assets/the sclvn logo.png" alt="SCLVN Logo" />
                     </a>
                     <div class="sidebar-logo-text">
-                        <h2 style="margin: 0; font-size: 18px; color: #fff;">SCLVN</h2>
-                        <span style="font-size: 12px; color: #888;">v2.0</span>
+                        <h2 style="margin: 0; font-size: 16px; color: #fff;">SCLVN</h2>
+                        <span style="font-size: 11px; color: #888;">v2.0</span>
                     </div>
                 </div>
 
-                <!-- Các nút Menu Navigation -->
+                <!-- Menu Links -->
                 <nav class="sidebar-nav">
                     <router-link class="sidebar-item" to="/">
                         <span class="sidebar-icon">📋</span>
-                        <span class="sidebar-label">List</span>
+                        <span class="sidebar-label">Danh sách</span>
                     </router-link>
 
                     <router-link class="sidebar-item" to="/leaderboard">
                         <span class="sidebar-icon">🏆</span>
-                        <span class="sidebar-label">Leaderboard</span>
+                        <span class="sidebar-label">Bảng xếp hạng</span>
                     </router-link>
 
                     <router-link class="sidebar-item" to="/roulette">
@@ -233,39 +248,36 @@
 
                     <router-link class="sidebar-item" to="/submit">
                         <span class="sidebar-icon">📤</span>
-                        <span class="sidebar-label">Submit Record</span>
+                        <span class="sidebar-label">Nộp hồ sơ</span>
                     </router-link>
 
-                    <router-link v-if="store.user && store.user.role === 'admin'" class="sidebar-item" to="/admin" style="color: #ef4444;">
+                    <router-link v-if="store.user && store.user.role === 'admin'" class="sidebar-item" to="/admin" style="color: #ef4444 !important;">
                         <span class="sidebar-icon">🛡️</span>
                         <span class="sidebar-label">Duyệt Record</span>
                     </router-link>
                 </nav>
             </div>
 
-            <!-- Footer Đáy Sidebar -->
+            <!-- Sidebar Footer -->
             <div class="sidebar-footer">
-                <!-- Toggle Dark Mode -->
-                <button class="sidebar-item" @click.prevent="store.toggleDark()" style="background: none; border: none; cursor: pointer; width: 100%;">
+                <button class="sidebar-item" @click.prevent="store.toggleDark()">
                     <span class="sidebar-icon">
-                        <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" alt="Theme" style="filter: var(--the-button-on-top)" />
+                        <img :src="store.dark ? '/assets/light.svg' : '/assets/dark.svg'" alt="Theme" />
                     </span>
-                    <span class="sidebar-label">Đổi Giao Diện</span>
+                    <span class="sidebar-label">Đổi giao diện</span>
                 </button>
 
-                <!-- Discord Community -->
                 <a class="sidebar-item" href="https://discord.gg/Qcj5JSRKa" target="_blank" rel="noopener noreferrer">
                     <span class="sidebar-icon">
-                        <img src="/assets/discord.svg" alt="Discord" style="filter: var(--the-button-on-top)" />
+                        <img src="/assets/discord.svg" alt="Discord" />
                     </span>
-                    <span class="sidebar-label">Discord Server</span>
+                    <span class="sidebar-label">Máy chủ Discord</span>
                 </a>
 
-                <!-- Trạng thái Đăng nhập / User Profile -->
                 <div v-if="!store.user">
-                    <router-link to="/login" class="sidebar-item" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: #fff;">
+                    <router-link to="/login" class="sidebar-item" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%) !important; color: #fff !important;">
                         <span class="sidebar-icon">🔑</span>
-                        <span class="sidebar-label">Login / Register</span>
+                        <span class="sidebar-label">Đăng nhập / Đăng ký</span>
                     </router-link>
                 </div>
 
@@ -282,18 +294,18 @@
 
                     <router-link to="/profile" class="sidebar-item">
                         <span class="sidebar-icon">👤</span>
-                        <span class="sidebar-label">Profile</span>
+                        <span class="sidebar-label">Hồ sơ</span>
                     </router-link>
 
-                    <button @click="store.handleLogout()" class="sidebar-item" style="background: none; border: none; cursor: pointer; width: 100%; color: #ef4444;">
+                    <button @click="store.handleLogout()" class="sidebar-item" style="color: #ef4444 !important;">
                         <span class="sidebar-icon">🚪</span>
-                        <span class="sidebar-label">Logout</span>
+                        <span class="sidebar-label">Đăng xuất</span>
                     </button>
                 </template>
             </div>
         </aside>
 
-        <!-- Main Content Rộng Tràn Bên Phải Sidebar -->
+        <!-- Main Content Wrapper -->
         <main class="main-content">
             <router-view :class="{ dark: store.dark, 'darker': store.darker }"></router-view>
         </main>
