@@ -128,13 +128,15 @@ onAuthStateChanged(auth, async (fbUser) => {
         try {
             const snap = await getDoc(doc(db, 'users', fbUser.uid));
             const userData = snap.exists() ? snap.data() : {};
-            
+
             store.user = {
                 uid: fbUser.uid,
                 email: fbUser.email,
                 username: userData.username || fbUser.displayName || fbUser.email.split('@')[0],
                 avatar: userData.avatar || '',
                 socialLink: userData.socialLink || '',
+                // Object social đầy đủ (youtube/facebook/gdvn/discord), dùng bởi Profile.js
+                socials: userData.socials || { youtube: '', facebook: '', gdvn: '', discord: '' },
                 role: userData.role || 'player',
             };
         } catch (e) {
@@ -145,6 +147,7 @@ onAuthStateChanged(auth, async (fbUser) => {
                 username: fbUser.email.split('@')[0],
                 avatar: '',
                 socialLink: '',
+                socials: { youtube: '', facebook: '', gdvn: '', discord: '' },
                 role: 'player',
             };
         }
