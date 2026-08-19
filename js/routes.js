@@ -7,7 +7,6 @@ import { RegisterPage as Register } from './pages/Register.js'; // ✅ Đã sử
 import Submit from './pages/Submit.js';
 import Admin from './pages/Admin.js';
 import Profile from './pages/Profile.js';
-import PublicProfile from './pages/PublicProfile.js';
 
 export default [
     { path: '/', component: List },
