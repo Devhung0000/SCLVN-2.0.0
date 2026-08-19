@@ -78,22 +78,31 @@ export default {
             this.mode = this.mode === 'login' ? 'register' : 'login';
             this.error = '';
         },
-        async saveUserToFirestore(uid, email, username) {
+        async saveUserToFirestore(uid, email, username, photoURL = '') {
             const userRef = doc(db, 'users', uid);
             const userSnap = await getDoc(userRef);
-            
-            // Giữ nguyên dữ liệu cũ nếu user đã tồn tại (dùng cho Google Sign-In)
+            const cleanUsername = username.trim();
+
             if (!userSnap.exists()) {
-                const cleanUsername = username.trim();
                 await setDoc(userRef, {
                     uid,
                     email,
                     username: cleanUsername,
                     username_lowercase: cleanUsername.toLowerCase(),
                     displayName: cleanUsername,
+                    avatarUrl: photoURL || '',
                     role: 'player',
                     createdAt: new Date().toISOString(),
                 });
+            } else {
+                const existingData = userSnap.data();
+                if (!existingData.username) {
+                    await setDoc(userRef, {
+                        username: cleanUsername,
+                        username_lowercase: cleanUsername.toLowerCase(),
+                        displayName: cleanUsername,
+                    }, { merge: true });
+                }
             }
         },
         async submit() {
@@ -156,8 +165,11 @@ export default {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 
-                const defaultName = user.displayName || user.email.split('@')[0];
-                await this.saveUserToFirestore(user.uid, user.email, defaultName);
+                const inputName = this.displayName.trim();
+                const defaultName = inputName || user.displayName || user.email.split('@')[0];
+
+                await updateProfile(user, { displayName: defaultName });
+                await this.saveUserToFirestore(user.uid, user.email, defaultName, user.photoURL);
             } catch (e) {
                 console.error(e);
                 this.error = this.translateError(e);
