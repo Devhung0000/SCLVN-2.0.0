@@ -11,6 +11,7 @@
     --the-button-on-top: brightness(0) saturate(100%);
     --level-button: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
     --color-background-list: #fbfbfbde;
+    --sidebar-width: 65px;
 }
 
 main.dark,
@@ -67,13 +68,21 @@ body {
     min-height: 100vh;
 }
 
+/* Fix Cố định Sidebar Nav bên trái không cho đè */
+nav, .nav, .sidebar, header .nav {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width) !important;
+    height: 100vh !important;
+    z-index: 1000 !important;
+    background-color: #0d0d0e;
+}
+
 header,
 main {
     background-color: var(--color-background);
     color: var(--color-on-background);
-    display: grid;
-    grid-template-columns: minmax(16rem, 0.6fr) 1fr minmax(16em, 0.6fr);
-    column-gap: 2rem;
 }
 
 header {
@@ -82,6 +91,8 @@ header {
     height: 4rem;
     background-color: var(--color-primary);
     color: var(--color-on-primary);
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
 }
 
 @media screen and (min-width: 1366px) {
@@ -94,8 +105,6 @@ header {
 header .logo {
     justify-self: end;
     align-self: center;
-    display: flex;
-    align-items: flex-end;
     display: inline-block;
 }
 
@@ -103,11 +112,16 @@ header .nav {
     flex: 1;
 }
 
+/* Tự động lùi khung Nội dung chính sang phải để né Sidebar */
 main {
     min-height: calc(100vh - 4rem);
+    margin-left: var(--sidebar-width) !important;
+    width: calc(100% - var(--sidebar-width)) !important;
     display: grid;
+    grid-template-columns: minmax(16rem, 0.6fr) 1fr minmax(16em, 0.6fr);
     grid-template-rows: minmax(0, 1fr);
     column-gap: 2rem;
+    box-sizing: border-box;
 }
 
 main > div {
@@ -574,24 +588,52 @@ input[type="radio"] {
 .page-profile > div:last-child {
     width: 100%;
 }
-/* Fix giao diện Roulette */
-.page-roulette, 
+
+/* ================= FIX ROULETTE PAGE LAYOUT ================= */
+main.page-roulette,
+.page-roulette {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    width: calc(100% - var(--sidebar-width)) !important;
+    min-height: 100vh !important;
+    padding: 25px !important;
+    gap: 30px !important;
+    box-sizing: border-box !important;
+}
+
 .roulette-container {
     width: 100% !important;
     max-width: 1200px !important;
-    margin: 0 auto !important;
-    padding: 20px !important;
+    margin: 0 !important;
+    padding: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     gap: 20px !important;
     box-sizing: border-box !important;
 }
 
-/* Fix bảng kết quả Roulette */
+.roulette-sidebar, 
+.roulette-controls {
+    min-width: 220px !important;
+    max-width: 280px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+}
+
 .roulette-results, 
 .roulette-main {
+    flex: 1 !important;
     width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    align-items: center !important;
+    align-items: flex-start !important;
+}
+
+/* Logo Discord trên trang List khống chế kích thước */
+.nav__icon img {
+    max-width: 120px !important;
+    height: auto !important;
 }
