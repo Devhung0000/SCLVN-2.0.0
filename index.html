@@ -44,8 +44,12 @@
                 overflow-x: hidden;
             }
 
-            /* Sidebar cấu hình cố định bên trái */
-            .sidebar {
+            /* Sidebar cấu hình cố định bên trái
+               (đổi tên .sidebar -> .app-sidebar vì Roulette.js có 1 div class="sidebar"
+               HOÀN TOÀN KHÁC (khung Main List/Extended List/Start/Import/Export) - hai
+               class trùng tên khiến khung đó bị ép thành ô 65px cố định, che mất nội
+               dung, đây là lý do trang Roulette bị mất khung bên trái) */
+            .app-sidebar {
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -64,7 +68,7 @@
             }
 
             /* Hover để mở rộng Sidebar */
-            .sidebar:hover {
+            .app-sidebar:hover {
                 width: 250px;
             }
 
@@ -92,7 +96,7 @@
                 transition: opacity 0.2s ease;
             }
 
-            .sidebar:hover .sidebar-logo-text {
+            .app-sidebar:hover .sidebar-logo-text {
                 opacity: 1;
             }
 
@@ -135,7 +139,7 @@
                 font-size: 14px;
             }
 
-            .sidebar:hover .sidebar-label {
+            .app-sidebar:hover .sidebar-label {
                 opacity: 1;
             }
 
@@ -163,8 +167,20 @@
                 flex-shrink: 0;
             }
 
-            /* Fix tận gốc lỗi giao diện bị hẹp/dồn vè bên trái */
+            /* Fix tận gốc lỗi giao diện bị hẹp/dồn vè bên trái
+               NGUYÊN NHÂN THẬT SỰ: main.css có rule "header, main { display:grid;
+               grid-template-columns: minmax(16rem,.6fr) 1fr minmax(16em,.6fr); }"
+               áp dụng cho MỌI thẻ <main>. main.main-content cũng là 1 thẻ <main>
+               nên bị dính luôn 3 cột đó, và vì nó chỉ có ĐÚNG 1 con (router-view)
+               nên con đó bị nhét gọn vào cột 1 (hẹp), 2 cột còn lại bỏ trống ->
+               đúng hiện tượng "nội dung dồn về bên trái, chừa khoảng trắng lớn".
+               Phải ép display:block để main-content không còn là grid nữa; các
+               trang con (.page-list, .page-roulette...) vẫn giữ display:grid
+               riêng của chúng vì đó là thẻ main KHÁC, không bị ảnh hưởng. */
             main.main-content {
+                display: block !important;
+                background-color: transparent !important;
+                color: inherit !important;
                 margin-left: 65px !important;
                 flex: 1 !important;
                 width: calc(100% - 65px) !important;
@@ -173,6 +189,15 @@
                 padding: 24px !important;
                 box-sizing: border-box !important;
                 overflow-y: auto;
+                transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            /* Khi sidebar mở rộng (hover) tới 250px, đẩy main-content sang phải
+               tương ứng để 2 khối không đè lên nhau nữa */
+            body:has(.app-sidebar:hover) main.main-content {
+                margin-left: 250px !important;
+                width: calc(100% - 250px) !important;
+                max-width: calc(100% - 250px) !important;
             }
 
             /* Ghi đè triệt hạ các khung chứa con bị bóp méo từ CSS cũ */
@@ -185,7 +210,7 @@
     
     <body id="app">
         <!-- Sidebar Bên Trái -->
-        <aside class="sidebar" :class="{ dark: store.dark, 'darker': store.darker }">
+        <aside class="app-sidebar" :class="{ dark: store.dark, 'darker': store.darker }">
             <div>
                 <!-- Logo SCLVN -->
                 <div class="sidebar-logo">
