@@ -1,1293 +1,503 @@
 /* ================= CSS VARIABLES & THEMES ================= */
-
 :root {
-
     --color-background: #fbfbfb;
-    --color-on-background: #000000;
-
     --color-on-background: black;
-
     --color-background-hover: #eeeeef;
-    --color-on-background-hover: #000000;
-
     --color-on-background-hover: black;
-
     --color-primary: #eeeeef;
-    --color-on-primary: #000000;
-
     --color-on-primary: black;
-
     --color-error: #de0000;
-    --color-on-error: #000000;
-
     --color-on-error: black;
-
     --the-button-on-top: brightness(0) saturate(100%);
-
     --level-button: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
-
     --color-background-list: #fbfbfbde;
-    --accent-gold: #ffd700;
-    --border-color: rgba(255, 255, 255, 0.15);
-
 }
-
-
 
 main.dark,
-
 header.dark {
-
     color-scheme: dark;
-
     --color-background: #1c1b1f;
-    --color-on-background: #ffffff;
-
     --color-on-background: white;
-
     --color-background-hover: #2e2e2e;
-    --color-on-background-hover: #ffffff;
-
     --color-on-background-hover: white;
-
     --color-primary: #2e2e2e;
-
     --color-primary-disabled: #1f213c;
-    --color-on-primary: #ffffff;
-
     --color-on-primary: white;
-
     --color-error: #de0000;
-    --color-on-error: #ffffff;
-
     --color-on-error: white;
-
     --the-button-on-top: brightness(100%) saturate(100%);
-
     --level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-
     --color-background-list: #1c1b1fde;
-
 }
-
-
 
 main.darker,
-
 header.darker {
-
     color-scheme: darker;
-
     --color-background: #070709;
-    --color-on-background: #ffffff;
-
     --color-on-background: white;
-
     --color-background-hover: #18181B;
-    --color-on-background-hover: #ffffff;
-
     --color-on-background-hover: white;
-
     --color-primary: #18181B;
-
     --color-primary-disabled: #1c1c1c;
-    --color-on-primary: #ffffff;
-
     --color-on-primary: white;
-
     --color-error: #de0000;
-    --color-on-error: #ffffff;
-    --the-button-on-top: brightness(100%) saturate(100%);
-
     --color-on-error: white;
-
-    --the-button-on-top: filter: brightness(100%) saturate(100%);
-
+    --the-button-on-top: brightness(100%) saturate(100%);
     --level-button: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-
     --color-background-list: #070709de;
-
 }
-
-
 
 /* ================= BASE STYLES ================= */
-*, *::before, *::after {
-    box-sizing: border-box;
-    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
-
 * {
-
     font-family: 'Poppins', sans-serif;
-
+    box-sizing: border-box;
 }
 
-html, body {
-
-
 html,
-
 body {
-
     height: 100%;
     margin: 0;
     padding: 0;
-
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+    overflow-x: hidden;
 }
-
-
 
 body {
-
-    display: flex;
-
-    flex-direction: column;
-    background-color: var(--color-background);
-    color: var(--color-on-background);
-
-    margin: 0;
-
+    min-height: 100vh;
 }
-
-header, main {
-
 
 header,
-
 main {
-
     background-color: var(--color-background);
-
     color: var(--color-on-background);
-
     display: grid;
-    grid-template-columns: minmax(16rem, 0.6fr) 1fr minmax(16rem, 0.6fr);
-
     grid-template-columns: minmax(16rem, 0.6fr) 1fr minmax(16em, 0.6fr);
-
     column-gap: 2rem;
-
 }
-
-
 
 header {
-
     display: flex;
-
     padding-inline: calc(25vw - 10rem);
-
     height: 4rem;
-
     background-color: var(--color-primary);
-
     color: var(--color-on-primary);
-
 }
-
-
 
 @media screen and (min-width: 1366px) {
-
     header {
-
         display: grid;
-
         padding-inline: 0;
-
     }
-
 }
-
-
 
 header .logo {
-
     justify-self: end;
-
     align-self: center;
-
     display: flex;
-
     align-items: flex-end;
-
     display: inline-block;
-
 }
-
-
 
 header .nav {
-
     flex: 1;
-
 }
-
-
 
 main {
-
-    height: 0;
-
-    flex: 1;
-
+    min-height: calc(100vh - 4rem);
     display: grid;
-
     grid-template-rows: minmax(0, 1fr);
-
     column-gap: 2rem;
-
 }
-
-
 
 main > div {
-
     overflow-y: auto;
-
 }
-
-
 
 .spinner {
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     grid-column: span 3;
-
 }
-
-
 
 .make-it-red {
-    color: var(--color-error);
-
     color: red;
-
 }
-
-
 
 input[type="checkbox"],
-
 input[type="radio"] {
-
     height: 1.25rem;
-
     width: 1.25rem;
-
     cursor: pointer;
-
     margin: 0;
-
 }
-
-
 
 /* Scrollbar Customization */
-
 ::-webkit-scrollbar {
     width: 4px;
-
-    width: 3px;
-
 }
-
-
 
 ::-webkit-scrollbar-track {
-
     background: transparent;
-    margin-block: 10px;
-
     margin-top: 10px;
-
     margin-bottom: 10px;
-
 }
-
-
 
 ::-webkit-scrollbar-thumb {
-    background-color: #444;
+    background-color: #555;
     border-radius: 2px;
-
-    background-color: #ccc;
-
-    border-radius: 1.5px;
-
 }
-
-
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #666;
+    background-color: #777;
 }
 
-/* ================= LEADERBOARD ROW (LEFT COLUMN) ================= */
-.board-row {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    height: 55px;
-    padding: 0 16px;
-    gap: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    border-radius: 12px;
-    margin-bottom: 6px;
-}
-    background-color: #ddd;
-
-.board-row:hover {
-    background-color: var(--color-background-hover);
-    transform: translateX(4px);
-}
-
-.board-row.active {
-    background-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-}
-
-.user-icon-container {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    flex-shrink: 0;
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-.board-user-icon {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
 ::picker(select) {
-
-.board-row .user {
-    flex: 1;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
     background: var(--color-background);
-
-.player-name-text {
-    font-size: 1rem;
-    font-weight: 600;
     color: var(--color-on-background);
 }
 
-.board-row .total {
-    margin-left: auto;
-    flex-shrink: 0;
-}
-
-.score-badge {
-    display: inline-block;
-    white-space: nowrap;
-    font-family: 'Consolas', monospace;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: var(--accent-gold);
-    background: rgba(0, 0, 0, 0.4);
-    padding: 4px 10px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 215, 0, 0.3);
-}
-
-/* ================= PROFILE CARD (RIGHT COLUMN) ================= */
-.profile-header-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 20px 25px;
-    margin-bottom: 25px;
-}
-
-.profile-info {
-    flex: 1;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
 /* ================= LEADERBOARD ROW (LEFT COLUMN) ================= */
-
-.player-title {
-    margin: 0 0 10px 0;
-    font-size: 1.8rem;
-    font-weight: 800;
-}
 .board-row {
-
-.player-stats-row {
-    display: flex;
-    align-items: center;
-}
     display: flex !important;
-
-.stat-badge.score-gold {
-    font-family: 'Consolas', monospace;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #ffb703;
-    background: rgba(255, 183, 3, 0.15);
-    border: 1px solid rgba(255, 183, 3, 0.4);
-    padding: 6px 14px;
-    border-radius: 8px;
-    box-shadow: 0 0 12px rgba(255, 183, 3, 0.2);
-}
     align-items: center !important;
-
-.profile-avatar-box {
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 10px;
-}
     justify-content: flex-start !important;
-
-.profile-user-avatar {
-    width: 110px;
-    height: 110px;
-    border-radius: 12px;
-    object-fit: cover;
-    border: 2px solid var(--border-color);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
     width: 100% !important;
-
-.player-socials-row {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-    width: 100%;
-    flex-wrap: wrap;
-}
     height: 55px !important;
-
-/* Discord Tag */
-.discord-tag {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(88, 101, 242, 0.18);
-    border: 1px solid rgba(88, 101, 242, 0.45);
-    padding: 4px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
-    user-select: none;
-}
     padding: 0 16px !important;
-
-.discord-tag:hover {
-    background: rgba(88, 101, 242, 0.35);
-    border-color: #5865F2;
-    transform: translateY(-2px);
-}
     gap: 14px !important;
-
-.discord-icon {
-    width: 16px;
-    height: 16px;
-    object-fit: contain;
-}
     box-sizing: border-box !important;
-
-.discord-username {
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: #e2e8f0;
-}
     cursor: pointer !important;
-
-.copy-toast {
-    position: absolute;
-    top: -28px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #5865F2;
-    color: #ffffff;
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 4px;
-    white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    animation: fadeInOut 1.5s forwards;
-}
     transition: all 0.2s ease-in-out !important;
-
-@keyframes fadeInOut {
-    0% { opacity: 0; transform: translate(-50%, 5px); }
-    15%, 85% { opacity: 1; transform: translate(-50%, 0); }
-    100% { opacity: 0; transform: translate(-50%, -5px); }
-}
     border-radius: 12px !important;
-
-.player-socials-row .social-icon {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-    opacity: 0.85;
-    transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.player-socials-row .social-icon:hover {
-    opacity: 1;
-    transform: scale(1.2);
-}
-
-.social-icon.gdvn-icon {
-    width: auto;
-    height: 24px;
-    max-width: 60px;
-    border-radius: 4px;
-    object-fit: contain;
-}
-
-.social-icon.gdvn-icon:hover {
-    transform: scale(1.1);
-}
 .board-row:hover {
-
-/* ================= PROFILE SECTIONS & LEVEL CARDS ================= */
-.profile-section {
-    margin-bottom: 25px;
-    text-align: left;
-}
     background-color: rgba(255, 255, 255, 0.15) !important;
-
-.section-title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #e0e0e0;
-    margin-bottom: 12px;
-}
     filter: brightness(1.2) !important;
-
-.level-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
-}
     transform: translateX(4px) !important;
-
-.level-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 18px;
-    border-radius: 12px;
-    background-size: cover;
-    background-position: center;
-    border: 1px solid var(--border-color);
-    text-decoration: none;
-    color: #ffffff;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.level-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(255, 215, 0, 0.6);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
-}
-
-.level-card.hardest-card {
-    padding: 18px 22px;
-    border: 2px solid rgba(255, 215, 0, 0.5);
-}
-
-.level-card-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
 .board-row.active {
-
     background-color: rgba(255, 255, 255, 0.22) !important;
-
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.4) !important;
-
 }
-
-
 
 .user-icon-container {
-
     width: 40px !important;
-
     height: 40px !important;
-
     min-width: 40px !important;
-
     flex-shrink: 0 !important;
-
     border-radius: 6px !important;
-
     overflow: hidden !important;
-
 }
-
-
 
 .board-user-icon {
-
     width: 100% !important;
-
     height: 100% !important;
-
     object-fit: cover !important;
-
 }
-
-
 
 .board-row .user {
-
     flex: 1 !important;
-
     text-align: left !important;
-
     white-space: nowrap !important;
-
 }
-
-
 
 .player-name-text {
-
     font-size: 1.05rem !important;
-
     font-weight: bold !important;
-
     color: #fff !important;
-
     white-space: nowrap !important;
-
 }
-
-
 
 .board-row .total {
-
     margin-left: auto !important;
-
     flex-shrink: 0 !important;
-
 }
-
-
 
 .score-badge {
-
     display: inline-block !important;
-
     white-space: nowrap !important;
-
     font-family: 'Consolas', monospace !important;
-
     font-size: 0.9rem !important;
-
     font-weight: bold !important;
-
     color: #ffd700 !important;
-
     background: rgba(0, 0, 0, 0.35) !important;
-
     padding: 5px 12px !important;
-
     border-radius: 8px !important;
-
     border: 1px solid rgba(255, 215, 0, 0.3) !important;
-
 }
-
-
 
 /* ================= PROFILE CARD (RIGHT COLUMN) ================= */
-
 .profile-header-card {
-
     display: flex !important;
-
     justify-content: space-between !important;
-
     align-items: center !important;
-
     background: rgba(255, 255, 255, 0.05) !important;
-
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-
     border-radius: 16px !important;
-
     padding: 20px 25px !important;
-
     margin-bottom: 25px !important;
-
 }
-
-
 
 .profile-info {
-
     flex: 1 !important;
-
     text-align: left !important;
-
     display: flex !important;
-
     flex-direction: column !important;
-
     align-items: flex-start !important;
-
 }
-
-
 
 .player-title {
-
     margin: 0 0 10px 0 !important;
-
     font-size: 2rem !important;
-
     font-weight: 800 !important;
-
 }
-
-
 
 /* Dòng chứa điểm Pts */
-
 .player-stats-row {
-
     display: flex !important;
-
     align-items: center !important;
-
-    margin-bottom: 8px !important;
-
     margin-bottom: 0 !important;
-
 }
-
-
 
 .stat-badge.score-gold {
-
     font-family: 'Consolas', 'Courier New', monospace !important;
-
     font-size: 1.2rem !important;
-
     font-weight: bold !important;
-
     color: #ffb703 !important;
-
     background: rgba(255, 183, 3, 0.15) !important;
-
     border: 1px solid rgba(255, 183, 3, 0.4) !important;
-
     padding: 6px 14px !important;
-
     border-radius: 8px !important;
-
     box-shadow: 0 0 12px rgba(255, 183, 3, 0.2) !important;
-
 }
 
-
-
-/* Dòng Discord nằm dưới Pts (TRÂN TRẦN, KHÔNG KHUNG) */
-
+/* Dòng Discord nằm dưới Pts */
 .discord-text-row {
-
     display: flex !important;
-
     align-items: center !important;
-
     gap: 8px !important;
-
     padding-left: 2px !important;
-
     margin-top: 4px !important;
-
     background: transparent !important;
-
     border: none !important;
-
 }
-
-
 
 .discord-text-icon,
-
 .discord-badge-icon {
-
     width: 20px !important;
-
     height: 20px !important;
-
     max-width: 20px !important;
-
     max-height: 20px !important;
-
     object-fit: contain !important;
-
     flex-shrink: 0 !important;
-
 }
-
-
 
 .discord-text-id {
-
     font-family: 'Poppins', sans-serif !important;
-
     font-size: 1.05rem !important;
-
     font-weight: 600 !important;
-
     color: #ffffff !important;
-
 }
-
-
 
 /* --- Khung Avatar & Social Icons --- */
-
 .profile-avatar-box {
-
     flex-shrink: 0 !important;
-
     display: flex !important;
-
     flex-direction: column !important;
-
-    align-items: center !important;
-
     align-items: flex-end !important;
-
     gap: 10px !important;
-
 }
-
-
 
 .profile-user-avatar {
-
     width: 130px !important;
-
     height: 130px !important;
-
     border-radius: 12px !important;
-
     object-fit: cover !important;
-
     display: block !important;
-
     border: 2px solid rgba(255, 255, 255, 0.2) !important;
-
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-
 }
-
-
-
-/* Social icons nằm hàng ngang dưới Avatar */
 
 /* Social icons + Discord Tag nằm hàng ngang dưới Avatar */
-
 .player-socials-row {
-
     display: flex !important;
-
     flex-direction: row !important;
-
     align-items: center !important;
-
-    justify-content: center !important;
-
-    gap: 12px !important;
-
     justify-content: flex-end !important;
-
     gap: 10px !important;
-
     width: 100% !important;
-
     flex-wrap: wrap !important;
-
 }
 
-
-
-/* Khung Discord Tag nhỏ gọn, bắt mắt */
-
+/* Khung Discord Tag nhỏ gọn */
 .discord-tag {
-
     position: relative !important;
-
     display: inline-flex !important;
-
     align-items: center !important;
-
     gap: 6px !important;
-
     background: rgba(88, 101, 242, 0.18) !important;
-
     border: 1px solid rgba(88, 101, 242, 0.45) !important;
-
     padding: 4px 10px !important;
-
     border-radius: 10px !important;
-
     cursor: pointer !important;
-
     transition: all 0.2s ease !important;
-
     user-select: none !important;
-
 }
-
-
 
 .discord-tag:hover {
-
     background: rgba(88, 101, 242, 0.35) !important;
-
     border-color: #5865F2 !important;
-
     transform: translateY(-2px) !important;
-
 }
-
-
 
 .discord-icon {
-
     width: 16px !important;
-
     height: 16px !important;
-
     object-fit: contain !important;
-
     flex-shrink: 0 !important;
-
 }
-
-
 
 .discord-username {
-
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-
     font-weight: 600 !important;
-
     font-size: 0.85rem !important;
-
     color: #e2e8f0 !important;
-
     letter-spacing: 0.2px !important;
-
 }
-
-
 
 .copy-toast {
-
     position: absolute !important;
-
     top: -28px !important;
-
     left: 50% !important;
-
     transform: translateX(-50%) !important;
-
     background: #5865F2 !important;
-
     color: #fff !important;
-
     font-size: 0.7rem !important;
-
     font-weight: bold !important;
-
     padding: 2px 8px !important;
-
     border-radius: 4px !important;
-
     white-space: nowrap !important;
-
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-
     animation: fadeInOut 1.5s forwards !important;
-
 }
-
-
 
 @keyframes fadeInOut {
-
     0% { opacity: 0; transform: translate(-50%, 5px); }
-
     15% { opacity: 1; transform: translate(-50%, 0); }
-
     85% { opacity: 1; transform: translate(-50%, 0); }
-
     100% { opacity: 0; transform: translate(-50%, -5px); }
-
 }
-
-
 
 /* Icon Youtube, Facebook, GDVN */
-
 .player-socials-row .social-icon {
-
     width: 22px !important;
-
     height: 22px !important;
-
     object-fit: contain !important;
-
-    opacity: 0.8 !important;
-
     opacity: 0.85 !important;
-
     transition: transform 0.2s ease, opacity 0.2s ease !important;
-
     display: block !important;
-
 }
-
-
 
 .player-socials-row .social-icon:hover {
-
     opacity: 1 !important;
-
-    transform: scale(1.25) !important;
-
     transform: scale(1.2) !important;
-
 }
-
-
 
 /* Icon tùy chỉnh cho GDVN */
-
 .social-icon.gdvn-icon {
-
     width: auto !important;
-
-    height: 28px !important;
-
     height: 26px !important;
-
     max-width: 60px !important;
-
     border-radius: 4px !important;
-
     object-fit: contain !important;
-
 }
-
-
 
 .social-icon.gdvn-icon:hover {
-
-    transform: scale(1.15) !important;
-
     transform: scale(1.1) !important;
-
 }
-
-
 
 /* ================= PROFILE SECTIONS & LEVEL CARDS ================= */
-
 .profile-section {
-
     margin-bottom: 25px !important;
-
     text-align: left !important;
-
 }
-
-
 
 .section-title {
-
     font-size: 1.15rem !important;
-
     font-weight: 700 !important;
-
     color: #e0e0e0 !important;
-
     margin-bottom: 12px !important;
-
 }
-
-
 
 .level-grid {
-
     display: grid !important;
-
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
-
     gap: 12px !important;
-
 }
-
-
 
 .level-card {
-
     display: flex !important;
-
     justify-content: space-between !important;
-
     align-items: center !important;
-
     padding: 14px 18px !important;
-
     border-radius: 12px !important;
-
     background-size: cover !important;
-
     background-position: center !important;
-
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
-
     text-decoration: none !important;
-
     color: #fff !important;
-
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-
     position: relative !important;
-
     overflow: hidden !important;
-
 }
-
-
 
 .level-card:hover {
-
     transform: translateY(-3px) scale(1.02) !important;
-
     border-color: rgba(255, 215, 0, 0.6) !important;
-
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 215, 0, 0.2) !important;
-
 }
-
-
 
 .level-card.hardest-card {
-
     padding: 18px 22px !important;
-
     border: 2px solid rgba(255, 215, 0, 0.5) !important;
-
 }
-
-
 
 .level-card-info {
-
     display: flex !important;
-
     align-items: center !important;
-
     gap: 10px !important;
-
 }
-
-
 
 .level-rank {
-    font-family: 'Consolas', monospace;
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: var(--accent-gold);
-
     font-family: 'Consolas', monospace !important;
-
     font-weight: bold !important;
-
     font-size: 1.1rem !important;
-
     color: #ffd700 !important;
-
 }
-
-
 
 .level-title {
-    font-weight: 700;
-    font-size: 1rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-
     font-weight: 700 !important;
-
     font-size: 1.05rem !important;
-
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
-
 }
-
-
 
 .level-card-score {
-    font-family: 'Consolas', monospace;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #4cc9f0;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 4px 10px;
-    border-radius: 6px;
-    border: 1px solid rgba(76, 201, 240, 0.3);
+    font-family: 'Consolas', monospace !important;
+    font-size: 0.95rem !important;
+    font-weight: bold !important;
+    color: #4cc9f0 !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+    border: 1px solid rgba(76, 201, 240, 0.3) !important;
 }
 
-    font-family: 'Consolas', monospace !important;
-
-    font-size: 0.95rem !important;
-
-    font-weight: bold !important;
-
-    color: #4cc9f0 !important;
-
-    background: rgba(0, 0, 0, 0.6) !important;
-
-    padding: 4px 10px !important;
-
-    border-radius: 6px !important;
-
-    border: 1px solid rgba(76, 201, 240, 0.3) !important;
-
-} 
 /* ================= FILTER TABS ================= */
 .filter-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
     display: flex !important;
     gap: 10px !important;
     margin-bottom: 20px !important;
@@ -1295,15 +505,6 @@ input[type="radio"] {
 }
 
 .filter-tabs button {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid var(--border-color);
-    color: #ccc;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
     background: rgba(255, 255, 255, 0.08) !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
     color: #ccc !important;
@@ -1316,17 +517,11 @@ input[type="radio"] {
 }
 
 .filter-tabs button:hover {
-    background: rgba(255, 255, 255, 0.18);
-    color: #ffffff;
     background: rgba(255, 255, 255, 0.18) !important;
     color: #fff !important;
 }
 
 .filter-tabs button.active {
-    background: var(--accent-gold);
-    color: #000000;
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
     background: #ffd700 !important;
     color: #000 !important;
     border-color: #ffd700 !important;
@@ -1334,24 +529,48 @@ input[type="radio"] {
 }
 
 .empty-msg {
-    color: #888;
-    font-style: italic;
-    padding: 10px 0;
     color: #888 !important;
     font-style: italic !important;
     padding: 10px 0 !important;
 }
 
 .uncompleted-card {
-    opacity: 0.75;
-    filter: grayscale(0.3);
     opacity: 0.75 !important;
     filter: grayscale(0.2) !important;
 }
 
 .uncompleted-card:hover {
-    opacity: 1;
-    filter: grayscale(0);
     opacity: 1 !important;
     filter: grayscale(0) !important;
+}
+
+#app > header + * {
+    min-height: calc(100vh - 4rem);
+    box-sizing: border-box;
+}
+
+/* ================= PROFILE PAGE ================= */
+.page-profile {
+    width: 100%;
+    min-height: calc(100vh - 4rem);
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 40px;
+    font-family: 'Poppins', sans-serif;
+    display: block !important;
+}
+
+.page-profile > div {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.page-profile > div:first-child {
+    max-width: 700px;
+}
+
+.page-profile > div:last-child {
+    width: 100%;
 }
