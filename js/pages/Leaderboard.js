@@ -52,7 +52,7 @@ export default {
                                     class="board-user-icon" 
                                     :src="getAvatar(ientry.user)" 
                                     alt=""
-                                    @error="$event.target.style.display='none'"
+                                    @error="$event.target.src='assets/avatars/default.png'"
                                 />
                             </div>
 
@@ -150,7 +150,7 @@ export default {
                             </div>
                         </div>
 
-                        <!-- 4 Nút Điều Hướng Tab Filter -->
+                        <!-- Filter Tabs -->
                         <div class="filter-tabs">
                             <button :class="{ active: tab === 'hardest' }" @click="tab = 'hardest'">
                                 🏆 Hardest
@@ -166,7 +166,7 @@ export default {
                             </button>
                         </div>
 
-                        <!-- TAB 1: HARDEST LEVEL CARD -->
+                        <!-- TAB 1: HARDEST -->
                         <div v-if="tab === 'hardest'" class="profile-section">
                             <div v-if="hardestLevel">
                                 <a 
@@ -190,7 +190,7 @@ export default {
                             <p v-else class="empty-msg">Chưa có level nào hoàn thành.</p>
                         </div>
 
-                        <!-- TAB 2: COMPLETED LEVELS -->
+                        <!-- TAB 2: COMPLETED -->
                         <div v-if="tab === 'completed'" class="profile-section">
                             <div v-if="entry.completed && entry.completed.length > 0" class="level-grid">
                                 <a 
@@ -214,7 +214,7 @@ export default {
                             <p v-else class="empty-msg">Không có level đã hoàn thành.</p>
                         </div>
 
-                        <!-- TAB 3: UNCOMPLETED LEVELS -->
+                        <!-- TAB 3: UNCOMPLETED -->
                         <div v-if="tab === 'uncompleted'" class="profile-section">
                             <div v-if="uncompletedLevels.length > 0" class="level-grid">
                                 <a 
@@ -233,7 +233,7 @@ export default {
                             <p v-else class="empty-msg">Đã hoàn thành toàn bộ danh sách!</p>
                         </div>
 
-                        <!-- TAB 4: VERIFIED LEVELS -->
+                        <!-- TAB 4: VERIFIED -->
                         <div v-if="tab === 'verified'" class="profile-section">
                             <div v-if="entry.verified && entry.verified.length > 0" class="level-grid">
                                 <a 
@@ -278,7 +278,6 @@ export default {
         uncompletedLevels() {
             if (!this.entry || !this.list || this.list.length === 0) return [];
             
-            // Hàm chuẩn hóa tên level loại bỏ ký tự đặc biệt để so sánh chính xác 100%
             const normalizeName = (str) => {
                 if (!str) return '';
                 return str.toString()
@@ -287,7 +286,6 @@ export default {
                     .replace(/[^a-z0-9]/g, '');
             };
 
-            // Tập hợp các level player đã beat / verified / progress
             const beatenSet = new Set([
                 ...(this.entry.verified || []).map(l => normalizeName(l.level || l.name)),
                 ...(this.entry.completed || []).map(l => normalizeName(l.level || l.name)),
@@ -298,8 +296,6 @@ export default {
 
             this.list.forEach((item, index) => {
                 let rawName = typeof item === 'string' ? item : (item.name || item.level || item.path || '');
-                
-                // Chuyển tên file slug thành tên đẹp hiển thị
                 let displayName = rawName.replace(/\.json$/i, '').replace(/[-_]/g, ' ');
                 if (typeof item === 'object' && item.name) {
                     displayName = item.name;
@@ -324,13 +320,10 @@ export default {
     },
     async mounted() {
         try {
-            // Lấy dữ liệu Bảng xếp hạng (đã đọc từ Firestore bên trong content.js)
             const [leaderboard, err] = await fetchLeaderboard();
             this.leaderboard = leaderboard || [];
             this.err = err || [];
 
-            // Lấy danh sách tên level + hạng, dùng lại fetchList() thay vì
-            // fetch trực tiếp data/_list.json (không còn tồn tại dưới dạng file tĩnh)
             const list = await fetchList();
             this.list = (list || [])
                 .map(([level, err], index) => (level ? { name: level.name, rank: index + 1 } : null))
@@ -340,7 +333,6 @@ export default {
             console.error("Lỗi khởi tạo Leaderboard:", e);
         }
 
-        // Lấy social links người chơi từ Firestore (thay cho data/_players.json)
         try {
             const socialsArray = await fetchPlayers();
             const map = {};
@@ -376,12 +368,11 @@ export default {
             }
             return `/#/level/${this.getLevelSlug(score.level || score.name)}`;
         },
-        // Ưu tiên avatarUrl do chính player tự nhập (Firestore),
-        // nếu không có thì dùng file ảnh tĩnh cũ trong assets/avatars/
         getAvatar(user) {
-            const social = this.playerSocials[(user || '').toLowerCase()];
+            if (!user) return 'assets/avatars/default.png';
+            const social = this.playerSocials[user.toLowerCase()];
             if (social && social.avatarUrl) return social.avatarUrl;
-            return 'assets/avatars/' + user + '.png';
+            return `assets/avatars/${user}.png`;
         },
         copyDiscord(username) {
             if (!username) return;
