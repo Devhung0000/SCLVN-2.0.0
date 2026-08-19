@@ -3,7 +3,7 @@ import { db, doc, updateDoc } from '../firebase-init.js';
 
 export default {
     template: `
-        <main class="page-profile" style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: 'Poppins', sans-serif;">
+        <main class="page-profile">
             <div v-if="!store.user" style="text-align: center; color: #a1a1aa; padding: 60px 20px; background: #18181b; border-radius: 12px; border: 1px solid #27272a;">
                 <h2 style="font-size: 20px; margin-bottom: 15px; color: #fff;">Vui lòng đăng nhập để xem và chỉnh sửa Profile!</h2>
                 <router-link to="/login" class="nav__cta type-label-lg ripple" style="background: #a855f7; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; display: inline-block;">Đi tới trang Đăng nhập</router-link>
